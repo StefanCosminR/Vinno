@@ -1,0 +1,16 @@
+{
+  "manifest_version": 2,
+  "name": "Vinno",
+  "version": "0.0.1",
+  "browser_action": {
+    "default_popup": "src/html/popup.html",
+    "default_title": "Let's annotate"
+  },
+  "offline_enabled": true,
+  "permissions": [
+    "activeTab",
+    "geolocation",
+    "storage"
+  ],
+  "options_page": "src/html/options.html"
+}
