@@ -2,7 +2,7 @@
   "manifest_version": 2,
   "name": "Vinno",
   "version": "0.0.1",
-  "browser_action": {
+  "page_action": {
     "default_popup": "src/html/popup.html",
     "default_title": "Let's annotate"
   },
@@ -10,7 +10,24 @@
   "permissions": [
     "activeTab",
     "geolocation",
-    "storage"
+    "storage",
+    "https://www.google.ro/*"
   ],
-  "options_page": "src/html/options.html"
+  "options_page": "src/html/options.html",
+  "content_scripts": [
+    {
+      "matches": [
+        "http://*/*",
+        "https://*/*"
+      ],
+      "js": [
+        "src/scripts/content.js"
+      ],
+      "run_at": "document_end"
+    }
+  ],
+  "background": {
+    "scripts": ["src/scripts/background.js"],
+    "persistent": false
+  }
 }
