@@ -40,6 +40,8 @@ function insertAnnotator(destinationElement, htmlTemplate) {
     let domTemplate = getAnnotatorTemplate();
 
     insertAnnotatorInShadowContainer(container, domTemplate);
+
+    return container;
 }
 
 function removeAnnotator() {
