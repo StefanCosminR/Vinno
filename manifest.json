@@ -12,7 +12,8 @@
     "geolocation",
     "storage",
     "https://www.google.ro/*",
-    "https://stackoverflow.com/*"
+    "https://stackoverflow.com/*",
+    "https://www.audionetwork.com/*"
   ],
   "options_page": "src/html/options.html",
   "content_scripts": [
@@ -23,6 +24,16 @@
       "js": [
         "src/scripts/content-utils.js",
         "src/scripts/content-stackoverflow.js"
+      ],
+      "run_at": "document_end"
+    },
+    {
+      "matches": [
+        "https://www.audionetwork.com/*"
+      ],
+      "js": [
+        "src/scripts/content-utils.js",
+        "src/scripts/content-audionetwork.js"
       ],
       "run_at": "document_end"
     }
