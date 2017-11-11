@@ -11,17 +11,18 @@
     "activeTab",
     "geolocation",
     "storage",
-    "https://www.google.ro/*"
+    "https://www.google.ro/*",
+    "https://stackoverflow.com/*"
   ],
   "options_page": "src/html/options.html",
   "content_scripts": [
     {
       "matches": [
-        "http://*/*",
-        "https://*/*"
+        "https://stackoverflow.com/*"
       ],
       "js": [
-        "src/scripts/content.js"
+        "src/scripts/content-utils.js",
+        "src/scripts/content-stackoverflow.js"
       ],
       "run_at": "document_end"
     }
