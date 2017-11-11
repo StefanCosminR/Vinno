@@ -23,8 +23,8 @@ Documentation links:
 - http://www.trilulilu.ro (Video)
 - https://8tracks.com (Video)
 - https://soundcloud.com (Audio) 
-- https://tunein.com/radio/home (Audio)
-- https://www.audionetwork.com (Audio) - Filip
+- https://tunein.com/radio/home (Audio) - Filip
+- https://www.audionetwork.com (Audio)
 - https://www.mixcloud.com (Audio) - Elisa
  
 

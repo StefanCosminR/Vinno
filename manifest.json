@@ -13,7 +13,7 @@
     "storage",
     "https://www.google.ro/*",
     "https://stackoverflow.com/*",
-    "https://www.audionetwork.com/*"
+    "https://tunein.com/radio/*"
   ],
   "options_page": "src/html/options.html",
   "content_scripts": [
@@ -29,11 +29,11 @@
     },
     {
       "matches": [
-        "https://www.audionetwork.com/*"
+        "https://tunein.com/radio/*"
       ],
       "js": [
         "src/scripts/content-utils.js",
-        "src/scripts/content-audionetwork.js"
+        "src/scripts/content-tunein.js"
       ],
       "run_at": "document_end"
     }

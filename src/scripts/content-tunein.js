@@ -18,9 +18,8 @@ chrome.runtime.sendMessage("getEmbeddedHtml", function (response) {
 			each_annotation_moment = all_annotations_moments[iterator];
 			each_annotation_comment = all_annotations_comments[iterator];
 
-
-			var empty_time_bar = document.getElementsByClassName("anw-player__bar__progress--seek jp-seek-bar");
-			var full_time_bar = document.getElementsByClassName("anw-player__bar__progress--play jp-play-bar");
+			// var empty_time_bar = document.getElementsByClassName("anw-player__bar__progress--seek jp-seek-bar");
+			// var full_time_bar = document.getElementsByClassName("anw-player__bar__progress--play jp-play-bar");
 			console.log(each_annotation_moment);
 			console.log(each_annotation_comment);
 		}

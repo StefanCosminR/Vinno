@@ -7,7 +7,7 @@ chrome.tabs.onUpdated.addListener(function (tab_id, data, tab) {
         if (tab.url.indexOf("stackoverflow") !== -1) {
             chrome.pageAction.show(tab_id);
         }
-        else if (tab.url.indexOf("audionetwork") !== -1) {
+        else if (tab.url.indexOf("tunein") !== -1) {
             chrome.pageAction.show(tab_id);
         }
     }
