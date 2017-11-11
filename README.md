@@ -14,3 +14,17 @@ Documentation links:
 - Options page
 - Decide what we should put in the popup that appears when we click the extension
 - Add view where we should see all annotation in current page
+
+### List of available sites:
+- https://vimeo.com (Video)
+- https://www.youtube.com (Video)
+- http://www.musixhub.com (Video)
+- https://www.smule.com/listen (Video)
+- http://www.trilulilu.ro (Video)
+- https://8tracks.com (Video)
+- https://soundcloud.com (Audio) 
+- https://tunein.com/radio/home (Audio)
+- https://www.audionetwork.com (Audio)
+- https://www.mixcloud.com (Audio)
+ 
+
