@@ -18,13 +18,13 @@ Documentation links:
 ### List of available sites:
 - https://vimeo.com (Video)
 - https://www.youtube.com (Video)
-- http://www.musixhub.com (Video)
+- http://www.musixhub.com (Video) - Elisa
 - https://www.smule.com/listen (Video)
 - http://www.trilulilu.ro (Video)
 - https://8tracks.com (Video)
 - https://soundcloud.com (Audio) 
 - https://tunein.com/radio/home (Audio)
 - https://www.audionetwork.com (Audio)
-- https://www.mixcloud.com (Audio)
+- https://www.mixcloud.com (Audio) - Elisa
  
 
