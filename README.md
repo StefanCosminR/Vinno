@@ -17,7 +17,7 @@ Documentation links:
 
 ### List of available sites:
 - https://vimeo.com (Video)
-- https://www.youtube.com (Video)
+- https://www.youtube.com (Video) - Stefan
 - http://www.musixhub.com (Video) - Elisa
 - https://www.smule.com/listen (Video)
 - http://www.trilulilu.ro (Video)
