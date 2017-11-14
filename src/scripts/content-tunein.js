@@ -1,31 +1,48 @@
 chrome.runtime.sendMessage("getEmbeddedHtml", function (response) {
 
+	function add_insert_annotation_button()
+	{
+		var authentification_bar = document.getElementsByClassName("auth-links__container___rSeFg")[0];
+		
+		var new_annotate_button = document.createElement("a");
+		var new_annotate_span = document.createElement("span");
+		var new_annotate_separator = document.createElement("i");
+
+		new_annotate_separator.setAttribute("class", "icons__icon-dot___GHWpv auth-links__divider___1pb-I");
+		authentification_bar.appendChild(new_annotate_separator);
+
+		new_annotate_span.setAttribute("style", "font-family:inherit;");
+		new_annotate_span.innerText = "Add Annotation";
+		new_annotate_button.appendChild(new_annotate_span);
+
+		new_annotate_button.setAttribute("class", "auth-links__whiteLink___3tT0y auth-links__link___GsWd7 auth-links__baseMuiTransition___1AQHm");
+		new_annotate_button.setAttribute("role", "button");
+		new_annotate_button.setAttribute("id", "add_annotation_button");
+		authentification_bar.appendChild(new_annotate_button);
+
+		var created_button = document.getElementById("add_annotation_button");
+		created_button.addEventListener("click", function() { console.log("ADDED"); });
+	}
+
 	function estimate_time_in_seconds(time)
 	{
 		var each_part_of_time = time.split(":")
 		return Number(each_part_of_time[0]) * 60 + Number(each_part_of_time[1])
 	}
 
-	function mouse_inside_annotation(div)
+	function add_listener_for_annotation(annotation, comment, time_moments)
 	{
-		console.log("IN");
-		console.log(div);
+		annotation.addEventListener("mouseover", function() { 
+			console.log("OVER");
 
-	    // let destinationElement = document.getElementById('scrubber');
-	    // destinationElement.style.position = 'relative';
+			console.log(comment);
+		}); 
 
-	    // let container = insertAnnotator(destinationElement, response.html);
+		annotation.addEventListener("mouseout", function() { 
+			console.log("OUT");
 
-	    // container.style.position = 'absolute';
-	    // container.style.zIndex = 1000;
-	}
-
-	function mouse_outside_annotation(div)
-	{
-		console.log("OUT");
-		console.log(div);
-
-		// removeAnnotator();
+			console.log(comment); 
+		});
 	}
 
 	function fill_with_annotations(full_time)
@@ -39,8 +56,8 @@ chrome.runtime.sendMessage("getEmbeddedHtml", function (response) {
 			each_annotation_moment = all_annotations_moments[iterator];
 			each_annotation_comment = all_annotations_comments[iterator];
 
-			var new_annotate = document.createElement("div");
-			new_annotate.setAttribute("id", each_annotation_comment);
+			var new_annotation = document.createElement("div");
+			new_annotation.setAttribute("id", each_annotation_comment);
 
 			var new_annotate_start_time_in_seconds = estimate_time_in_seconds(each_annotation_moment[0])
 			var new_annotate_finish_time_in_seconds = estimate_time_in_seconds(each_annotation_moment[1])
@@ -49,14 +66,13 @@ chrome.runtime.sendMessage("getEmbeddedHtml", function (response) {
 			var final_push_pixels = (new_annotate_finish_time_in_seconds - new_annotate_start_time_in_seconds) / estimate_time_in_seconds(full_time) * 100;
 			var style_for_new_annotate = "position: absolute; height: 100%; transition: margin 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms; left: " + start_push_pixels + "px;right:60px; background-color: rgb(255, 0, 0); width: calc(" + final_push_pixels +"%); "
 			
-			new_annotate.setAttribute("style", style_for_new_annotate);
+			new_annotation.setAttribute("style", style_for_new_annotate);
 
-			full_time_bar.appendChild(new_annotate);
+			full_time_bar.appendChild(new_annotation);
 
-			var created_annotate = document.getElementById(each_annotation_comment);
-			console.log(created_annotate);
-			created_annotate.addEventListener("mouseover", mouse_inside_annotation(each_annotation_comment));
-			created_annotate.addEventListener("mouseout", mouse_outside_annotation(each_annotation_comment));
+			var created_annotation = document.getElementById(each_annotation_comment);
+
+			add_listener_for_annotation(created_annotation, each_annotation_comment, each_annotation_moment);
 		}
 	}
 
@@ -70,6 +86,10 @@ chrome.runtime.sendMessage("getEmbeddedHtml", function (response) {
 	all_annotations_moments.push(["07:00", "13:00"]);
 	all_annotations_comments.push("It is ok!");
 
+	all_annotations_moments.push(["25:00", "40:00"]);
+	all_annotations_comments.push("Time to dance!");
+
+	add_insert_annotation_button();
 
 	var trigger = setInterval(function(){ 
 	    var full_time = document.getElementById("scrubberDuration");
