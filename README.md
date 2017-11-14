@@ -16,7 +16,7 @@ Documentation links:
 - Add view where we should see all annotation in current page
 
 ### List of available sites:
-- https://vimeo.com (Video)
+- https://vimeo.com (Video) - Alexandru
 - https://www.youtube.com (Video) - Stefan
 - http://www.musixhub.com (Video) - Elisa
 - https://www.smule.com/listen (Video)
