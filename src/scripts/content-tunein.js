@@ -2,6 +2,8 @@ chrome.runtime.sendMessage("getEmbeddedHtml", function (response) {
 
 	function main_function() 
 	{
+		show_added_annotations_until_now();
+
 	    var all_annotations_moments = []
 	    var all_annotations_comments = []
 
@@ -22,6 +24,18 @@ chrome.runtime.sendMessage("getEmbeddedHtml", function (response) {
 		    	clearInterval(trigger);
 	        }
 		}, 1000);
+	}
+
+	function show_added_annotations_until_now()
+	{
+		var holder = document.getElementById("content");	
+	    var container = insertAnnotator(holder, response.html);
+	   
+
+		container.style.position = "fixed";
+		container.style.top = "30%";
+		container.style.right = "0%";
+		container.style.zIndex = 1000;
 	}
 
 	function add_insert_annotation_button()
@@ -52,10 +66,14 @@ chrome.runtime.sendMessage("getEmbeddedHtml", function (response) {
 			document.getElementById("playerActionButton").click();
 
 			var current_time_passed = document.getElementById("scrubberElapsed").innerHTML;
-			var current_location = document.getElementById("scrubber").childNodes[0].childNodes[0].childNodes[2];
-
-		    let container = insertAnnotator(current_location, response.html);
 			
+			var holder = document.getElementById("content");	
+		    var container = insertAnnotator(holder, response.html);
+		   
+			container.style.position = "fixed";
+			container.style.bottom = "10%";
+			container.style.left = "25%";
+			container.style.zIndex = 100;
 
 			// removeAnnotator();
 			// document.getElementById("playerActionButton").click();
@@ -100,23 +118,21 @@ chrome.runtime.sendMessage("getEmbeddedHtml", function (response) {
 		annotation.addEventListener("mouseover", function() { 
 			console.log("OVER ANNOTATION LINE");
 
-		    let container = insertAnnotator(annotation, response.html);
-		    container.style.top = "-200px";
-			container.style.position = "absolute";
-			container.style.zIndex = 1000;
+			var holder = document.getElementById("content");	
+		    var container = insertAnnotator(holder, response.html);
+		   
+			container.style.position = "fixed";
+			container.style.bottom = "10%";
+			container.style.left = "25%";
+			container.style.zIndex = 100;
 
-			container.addEventListener("mouseover", function() { 
-				console.log("OVER ANNOTATION CONTENT");
-
-				var holder = document.getElementById("content").childNodes[0].childNodes[0].childNodes[2];
-			}); 
-
-			container.addEventListener("mouseout", function() { 
-				console.log("OUT ANNOTATION CONTENT");
-
-				removeAnnotator();
-			});
 		}); 
+
+		annotation.addEventListener("mouseout", function() { 
+			console.log("OUT ANNOTATION LINE");
+
+			removeAnnotator();
+		});
 	}
 
 	main_function();
