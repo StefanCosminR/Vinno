@@ -11,9 +11,6 @@ chrome.runtime.sendMessage("getEmbeddedHtml", function (response) {
 		all_annotations_moments.push(["07:00", "13:00"]);
 		all_annotations_comments.push("It is ok!");
 
-		all_annotations_moments.push(["25:00", "40:00"]);
-		all_annotations_comments.push("Time to dance!");
-
 		add_insert_annotation_button();
 
 		var trigger = setInterval(function(){ 
@@ -58,10 +55,7 @@ chrome.runtime.sendMessage("getEmbeddedHtml", function (response) {
 			var current_location = document.getElementById("scrubber").childNodes[0].childNodes[0].childNodes[2];
 
 		    let container = insertAnnotator(current_location, response.html);
-			container.style.position = 'absolute';
-			container.style.zIndex = 1000;
-
-
+			
 
 			// removeAnnotator();
 			// document.getElementById("playerActionButton").click();
@@ -70,7 +64,7 @@ chrome.runtime.sendMessage("getEmbeddedHtml", function (response) {
 
 	function fill_with_annotations(full_time, annotations_moments, annotations_comments)
 	{
-		for(var iterator = 0; iterator < annotations_moments.length; iterator++)
+		for (var iterator = 0; iterator < annotations_moments.length; iterator++)
 			add_annotation_to_the_list(annotations_moments[iterator],  annotations_comments[iterator], full_time);
 	}
 
@@ -104,19 +98,25 @@ chrome.runtime.sendMessage("getEmbeddedHtml", function (response) {
 	function add_listener_for_annotation(annotation, comment, time_moments)
 	{
 		annotation.addEventListener("mouseover", function() { 
-			console.log("OVER");
+			console.log("OVER ANNOTATION LINE");
 
 		    let container = insertAnnotator(annotation, response.html);
 		    container.style.top = "-200px";
 			container.style.position = "absolute";
 			container.style.zIndex = 1000;
+
+			container.addEventListener("mouseover", function() { 
+				console.log("OVER ANNOTATION CONTENT");
+
+				var holder = document.getElementById("content").childNodes[0].childNodes[0].childNodes[2];
+			}); 
+
+			container.addEventListener("mouseout", function() { 
+				console.log("OUT ANNOTATION CONTENT");
+
+				removeAnnotator();
+			});
 		}); 
-
-		annotation.addEventListener("mouseout", function() { 
-			console.log("OUT");
-
-			removeAnnotator();
-		});
 	}
 
 	main_function();
