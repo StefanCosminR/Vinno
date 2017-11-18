@@ -1,11 +1,118 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Management Vinno</title>
+<style>
+
+body {
+    font-family: 'Libre Franklin';
+    margin: 200;
+}
+
+.header{
+  margin: 10px;
+  color: #1B9AAA;
+  font-size: 25px;
+  font-weight: bold;
+}
+.subheader
+{
+  margin: 10px;
+  color: #050505;
+  font-size: 18px;
+  font-weight: bold;
+}
+ul.listitem > li {
+  font-size: 15px;
+  margin: 20px;
+  font-style: italic;
+  font-weight: 600;
+}
+
+ul.menulist {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  width: 25%;
+  background-color: #f1f1f1;
+  position: fixed;
+  height: 100%;
+  overflow: auto;
+}
+
+ul.menulist > li {
+  display: block;
+  color: #777799;
+  font-size: 20px;
+  padding: 8px 16px;
+  text-decoration: none;
+}
+
+ul.menulist > li.active {
+  background-color: #4CAF50;
+  color: white;
+}
+
+a {
+  color: #050505;
+  font-size: 20px;
+  font-weight: bold;
+}
+
+a:visited {
+  color: #1B9AAA;
+  font-size: 20px;
+  font-weight: bold;
+}
+
+a:hover {
+  color: #1B9AAA;
+  font-size: 20px;
+  font-weight: bold;
+}
+
+a:active {
+  color: #1B9AAA;
+  font-size: 20px;
+  font-weight: bold;
+}
+
+ul.menulist > li:hover:not(.active) {
+    background-color: #DDDBCB;
+  color: white;
+}
+.link {
+  color: #4CAF50;
+  font-size: 15px;
+  font-style: italic;
+}
+
+</style>
 </head>
 <body>
-<h1>Management page</h1>
+
+<ul class="menulist">
+  <li><a class="sites" href="#home">Sites and annotations</a></li>
+  <li><a href="#picture">Pictures, Videos and Texts</a></li>
+  <li><a href="#statistics">Recent activity and Statistics</a></li>
+  <li><a href="#settings">General settings</a></li>
+</ul>
+
+<div style="margin-left:25%;padding:1px 16px;height:1000px;">
+  <h2 class="header">Manage sites and annotations</h2><br/>
+  <h3 class="subheader">Manage by sites</h3>
+  <ul class="listitem">
+    <li>https://vimeo.com Click <a href="" class="link">here</a> to see annotations for this site!</li>
+    <li>https://soundcloud.com Click <a href="" class="link">here</a> to see annotations for this site!</li>
+    <li>https://youtube.com Click <a href="" class="link">here</a> to see annotations for this site!</li>
+  </ul>
+  <h3 class="subheader">Manage by annotations</h3>
+  <ul class="listitem">
+    <li> "Some annotation here...." Click <a href="" class="link">here</a> to see more!</li>
+    <li> " Some other annotation here..." Click <a href="" class="link">here</a> to see more!</li>
+    <li> " Interesting stuff at min. 45:09" Click <a href="" class="link">here</a> to see more!</li>
+  </ul>
+
+</div>
 
 </body>
 </html>

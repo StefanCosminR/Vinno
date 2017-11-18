@@ -13,6 +13,7 @@
     "storage",
     "https://www.google.ro/*",
     "https://stackoverflow.com/*",
+    "https://tunein.com/radio/*",
     "https://www.youtube.com/*"
   ],
   "options_page": "src/html/options.html",
@@ -37,6 +38,18 @@
         "src/scripts/content-youtube.js"
       ],
       "run_at": "document_end"
+    },
+    {
+      "matches": [
+        "https://tunein.com/radio/*"
+      ],
+      "js": [
+        "src/scripts/content-utils.js",
+        "src/scripts/dependenciesResolver.js",
+        "src/scripts/content-tunein.js"
+      ],
+      "run_at": "document_end",
+      "all_frames": true
     }
   ],
   "background": {
