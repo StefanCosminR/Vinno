@@ -1,0 +1,44 @@
+<div class="floating-panel__container">
+    <div class="floating-panel__top-menu">
+        <div class="floating-panel__drag-handle">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 455.959 55.959"><title>handle</title>
+                <rect width="455.959" height="55.959" rx="27.979" ry="27.979"
+                      style="fill:#999;"/>
+            </svg>
+        </div>
+    </div>
+    <div class="floating-panel__content"></div>
+</div>
+
+<style>
+    * {
+        box-sizing: border-box;
+    }
+
+    .floating-panel__container {
+        height: 100%;
+        background: lightgrey;
+        border-radius: 10px;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .floating-panel__top-menu {
+        height: 30px;
+        background: #d3d3d3;
+        /*border-bottom: 1px solid rgba(0, 0, 0, 0.4);*/
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .floating-panel__drag-handle {
+        width: 5em;
+    }
+
+    .floating-panel__content {
+        height: 100%;
+        background: #ffffff;
+    }
+
+</style>
