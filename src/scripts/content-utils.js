@@ -1,50 +1,80 @@
-const annotatorShadowContainerId = 'annotator-shadow-container';
-const annotatorTemplateId = 'annotator-template';
+/** ----------------- ANNOTATOR ----------------- */
 
-function createShadowContainer(destination) {
-    let newContent = document.createElement('div');
-    newContent.setAttribute('id', annotatorShadowContainerId);
-
-    destination.appendChild(newContent);
+function insertAnnotator(destionationElement, htmlTemplate) {
+    return insertNode(destionationElement, htmlTemplate, 'annotator-template', 'annotator-shadow-container');
 }
 
-function getShadowContainer() {
-    return document.getElementById(annotatorShadowContainerId);
-}
-
-function insertTemplateInBody(template) {
-    let templateContainer = document.createElement('template');
-    templateContainer.setAttribute('id', annotatorTemplateId);
-    templateContainer.innerHTML = template;
-    document.getElementsByTagName('body')[0].appendChild(templateContainer);
-}
-
-function getAnnotatorTemplate() {
-    return document.getElementById(annotatorTemplateId);
-}
-
-
-function insertAnnotatorInShadowContainer(container, element) {
-    let root = container.createShadowRoot();
-    root.appendChild(document.importNode(element.content, true));
-}
-
-
-function insertAnnotator(destinationElement, htmlTemplate) {
-    createShadowContainer(destinationElement);
-
-    let container = getShadowContainer();
-
-    insertTemplateInBody(htmlTemplate);
-
-    let domTemplate = getAnnotatorTemplate();
-
-    insertAnnotatorInShadowContainer(container, domTemplate);
-
-    return container;
-}
-
-function removeAnnotator() {
-    let element = document.getElementById(annotatorShadowContainerId);
+function removeAnnotator(containerId) {
+    let element = document.getElementById(containerId);
     element.parentNode.removeChild(element);
 }
+
+
+
+
+
+/** ----------------- FLOATING PANEL ----------------- */
+
+function insertFloatingPanel(template) {
+    let body = document.getElementsByTagName('body')[0];
+    let [container, root] =insertNode(body, template, 'floating-panel-template', 'floating-panel');
+    container.setAttribute('class', 'floating-panel__container');
+    let css = `
+    position: fixed;
+    top: 70px;
+    right: 50px;
+    z-index: 6000;
+    width: 400px;
+    height: 80vh;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 17px 16px 124px -20px rgba(0,0,0,0.75);
+    `;
+    container.setAttribute('style', css);
+}
+
+
+
+
+
+/** ----------------- GENERAL ----------------- */
+
+function insertNode(destinationElement, htmlTemplate, htmlTemplateId, containerId) {
+    let container = createNodeContainerOnElement(destinationElement, containerId);
+    let domTemplate = insertTemplateInBody(htmlTemplate, htmlTemplateId);
+    let shadowDom = convertNodeToShadowDom(container);
+    insertNodeInShadowDom(shadowDom, domTemplate);
+
+    return [container, shadowDom];
+}
+
+function insertTemplateInBody(template, templateId) {
+    let templateContainer = document.getElementById(templateId);
+    if(templateContainer) {
+        console.warn('A template with this ID already exists, overriding it');
+        templateContainer.innerHTML = template;
+        return templateContainer;
+    } else {
+        templateContainer = document.createElement('template');
+        templateContainer.setAttribute('id', templateId);
+        templateContainer.innerHTML = template;
+        return document.getElementsByTagName('body')[0].appendChild(templateContainer);
+    }
+}
+
+function createNodeContainerOnElement(destionationElement, containerId) {
+    let newContent = document.createElement('div');
+
+    newContent.setAttribute('id', containerId);
+
+    return destionationElement.appendChild(newContent);
+}
+
+function convertNodeToShadowDom(node) {
+    return node.createShadowRoot();
+}
+
+function insertNodeInShadowDom(shadowDom, node) {
+    shadowDom.appendChild(document.importNode(node.content, true));
+}
+
