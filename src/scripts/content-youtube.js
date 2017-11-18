@@ -1,16 +1,14 @@
 let embeddedHtml;
 let annotatorActions;
-let floatingPanel;
 
 getAllDependencies()
     .then(dependencies => {
         embeddedHtml = dependencies.annotatorPopup;
         annotatorActions = dependencies.annotationActionsMenu;
-        floatingPanel = dependencies.floatingPanel;
 
         // addDotOnProgressBar();
         // addAnnotatorActions(annotatorActions);
-        insertFloatingPanel(floatingPanel);
+        insertFloatingPanel(dependencies.floatingPanel);
     });
 
 
