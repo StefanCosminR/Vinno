@@ -17,7 +17,7 @@ function removeAnnotator(containerId) {
 
 function insertFloatingPanel(template) {
     let body = document.getElementsByTagName('body')[0];
-    let [container, root] =insertNode(body, template, 'floating-panel-template', 'floating-panel');
+    let [container, root] = insertNode(body, template, 'floating-panel-template', 'floating-panel');
     container.setAttribute('class', 'floating-panel__container');
     let css = `
     position: fixed;
