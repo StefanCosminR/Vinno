@@ -3,8 +3,12 @@
  */
 
 chrome.tabs.onUpdated.addListener(function (tab_id, data, tab) {
+
     if (tab && tab.url) {
         if (tab.url.indexOf("stackoverflow") !== -1) {
+            chrome.pageAction.show(tab_id);
+        }
+        if (tab.url.indexOf('youtube') !== -1) {
             chrome.pageAction.show(tab_id);
         }
     }
@@ -18,6 +22,16 @@ chrome.runtime.onMessage.addListener(
         if (request === "getEmbeddedHtml") {
             let xmlHttp = new XMLHttpRequest();
             xmlHttp.open('GET', "../src/html/annotatorTemplate.html", false);
+            xmlHttp.send(null);
+            sendResponse({html: xmlHttp.responseText});
+        } else if(request === 'getAnnotatorActions') {
+            let xmlHttp = new XMLHttpRequest();
+            xmlHttp.open('GET', '../src/html/quickAnnotate.html', false);
+            xmlHttp.send(null);
+            sendResponse({html: xmlHttp.responseText});
+        } else if(request === 'getFloatingPanel') {
+            let xmlHttp = new XMLHttpRequest();
+            xmlHttp.open('GET', "../src/html/floatingPanel.html", false);
             xmlHttp.send(null);
             sendResponse({html: xmlHttp.responseText});
         }
