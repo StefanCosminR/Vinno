@@ -37,12 +37,16 @@ function insertFloatingPanel(template) {
         container.style.right = document.documentElement.clientWidth - event.clientX - 200 + 'px';
     }
 
-    root.querySelector('.floating-panel__drag-handle').addEventListener('mousedown', function() {
+    let floatingPanelDragHandle = root.querySelector('.floating-panel__drag-handle');
+
+    floatingPanelDragHandle.addEventListener('mousedown', function () {
         document.addEventListener('mousemove', mouseMoveListener);
+        floatingPanelDragHandle.style.cursor = '-webkit-grabbing';
     });
 
-    document.addEventListener('mouseup', function() {
+    document.addEventListener('mouseup', function () {
         document.removeEventListener('mousemove', mouseMoveListener);
+        floatingPanelDragHandle.style.cursor = '-webkit-grab';
     });
 }
 
@@ -63,7 +67,7 @@ function insertNode(destinationElement, htmlTemplate, htmlTemplateId, containerI
 
 function insertTemplateInBody(template, templateId) {
     let templateContainer = document.getElementById(templateId);
-    if(templateContainer) {
+    if (templateContainer) {
         console.warn('A template with this ID already exists, overriding it');
         templateContainer.innerHTML = template;
         return templateContainer;
