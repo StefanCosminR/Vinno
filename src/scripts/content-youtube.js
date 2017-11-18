@@ -69,7 +69,3 @@ function extractPxFromTranslateX(str) {
         return m[0].substr(1);
     }
 }
-
-function addFloatingPanel(floatingPanel) {
-    let body = document.getElementsByTagName('body')[0];
-}
