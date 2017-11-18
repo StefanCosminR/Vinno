@@ -1,0 +1,35 @@
+<div class="quick__annotate">
+    <button class="quick__button">
+        <svg fill="#000000" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+            <path d="M0 0h24v24H0z" fill="none"/>
+            <path d="M11 5v5.59H7.5l4.5 4.5 4.5-4.5H13V5h-2zm-5 9c0 3.31 2.69 6 6 6s6-2.69 6-6h-2c0 2.21-1.79 4-4 4s-4-1.79-4-4H6z"/>
+        </svg>
+    </button>
+</div>
+
+<style>
+    * {
+        box-sizing: border-box;
+    }
+
+    .quick__annotate {
+        display: flex;
+        flex-direction: row;
+
+    }
+
+    .quick__button {
+        cursor: pointer;
+        padding: 9px 13px;
+        text-shadow: 0 1px 0 #3d768a;
+        /*background-color: rgba(255, 255, 255, 0.43);*/
+        background-blend-mode: multiply;
+        background-color: #fff;
+        border-radius: 10px;
+        border: none;
+    }
+
+    .quick__button:hover {
+        background-color: rgba(255, 255, 255, 0.65);
+    }
+</style>
