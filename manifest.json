@@ -1,7 +1,7 @@
 {
   "manifest_version": 2,
   "name": "Vinno",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "page_action": {
     "default_popup": "src/html/popup.html",
     "default_title": "Let's annotate"
@@ -12,7 +12,8 @@
     "geolocation",
     "storage",
     "https://www.google.ro/*",
-    "https://stackoverflow.com/*"
+    "https://stackoverflow.com/*",
+    "https://www.youtube.com/*"
   ],
   "options_page": "src/html/options.html",
   "content_scripts": [
@@ -23,6 +24,17 @@
       "js": [
         "src/scripts/content-utils.js",
         "src/scripts/content-stackoverflow.js"
+      ],
+      "run_at": "document_end"
+    },
+    {
+      "matches": [
+        "https://www.youtube.com/*"
+      ],
+      "js": [
+        "src/scripts/content-utils.js",
+        "src/scripts/dependenciesResolver.js",
+        "src/scripts/content-youtube.js"
       ],
       "run_at": "document_end"
     }
