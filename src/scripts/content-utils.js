@@ -31,6 +31,19 @@ function insertFloatingPanel(template) {
     box-shadow: 17px 16px 124px -20px rgba(0,0,0,0.75);
     `;
     container.setAttribute('style', css);
+
+
+    function mouseMoveListener(event) {
+        container.style.right = document.documentElement.clientWidth - event.clientX - 200 + 'px';
+    }
+
+    root.querySelector('.floating-panel__drag-handle').addEventListener('mousedown', function() {
+        document.addEventListener('mousemove', mouseMoveListener);
+    });
+
+    document.addEventListener('mouseup', function() {
+        document.removeEventListener('mousemove', mouseMoveListener);
+    });
 }
 
 
