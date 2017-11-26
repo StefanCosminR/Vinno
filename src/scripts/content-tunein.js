@@ -2,7 +2,7 @@ getAllDependencies()
 	.then(dependencies => {
         function main_function()
         {
-            show_added_annotations_until_now();
+            show_added_annotations_until_now(dependencies);
 
             var all_annotations_moments = []
             var all_annotations_comments = []
@@ -26,16 +26,12 @@ getAllDependencies()
             }, 1000);
         }
 
-        function show_added_annotations_until_now()
+        function show_added_annotations_until_now(dependencies)
         {
-            var holder = document.getElementById("content");
-            var container = insertAnnotator(holder, dependencies.annotatorPopup);
+            embeddedHtml = dependencies.annotatorPopup;
+            annotatorActions = dependencies.annotationActionsMenu;
 
-
-            container.style.position = "fixed";
-            container.style.top = "30%";
-            container.style.right = "0%";
-            container.style.zIndex = 1000;
+            insertFloatingPanel(dependencies.floatingPanel);
         }
 
         function add_insert_annotation_button()
