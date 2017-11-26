@@ -14,7 +14,8 @@
     "https://www.google.ro/*",
     "https://stackoverflow.com/*",
     "https://tunein.com/radio/*",
-    "https://www.youtube.com/*"
+    "https://www.youtube.com/*",
+    "https://www.vimeo.com/*"
   ],
   "options_page": "src/html/options.html",
   "content_scripts": [
@@ -50,6 +51,17 @@
       ],
       "run_at": "document_end",
       "all_frames": true
+    },
+    {
+      "matches": [
+        "https://www.vimeo.com/*"
+      ],
+      "js": [
+        "src/scripts/content-utils.js",
+        "src/scripts/dependenciesResolver.js",
+        "src/scripts/content-vimeo.js"
+      ],
+      "run_at": "document_end"
     }
   ],
   "background": {
