@@ -64,7 +64,7 @@ getAllDependencies()
                 var current_time_passed = document.getElementById("scrubberElapsed").innerHTML;
 
                 var holder = document.getElementById("content");
-                var container = insertAnnotator(holder, dependencies.annotatorPopup);
+                var [container, root] = insertAnnotator(holder, dependencies.annotatorPopup);
 
                 container.style.position = "fixed";
                 container.style.bottom = "10%";
@@ -115,7 +115,7 @@ getAllDependencies()
                 console.log("OVER ANNOTATION LINE");
 
                 var holder = document.getElementById("content");
-                var container = insertAnnotator(holder, dependencies.annotatorPopup);
+                var [container, root] = insertAnnotator(holder, dependencies.annotatorPopup);
 
                 container.style.position = "fixed";
                 container.style.bottom = "10%";
