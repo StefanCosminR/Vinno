@@ -6,6 +6,14 @@ function getEmbeddedHtml() {
     })
 }
 
+function getAnnotationDisplay() {
+    return new Promise((resolve, reject) => {
+    chrome.runtime.sendMessage("getAnnotationDisplay", function (response) {
+        resolve(response.html);
+    });
+})
+}
+
 function getAnnotationActions() {
     return new Promise((resolve, reject) => {
         chrome.runtime.sendMessage('getAnnotatorActions', function(response) {
@@ -37,6 +45,10 @@ function getAllDependencies() {
             })
             .then(response => {
                 dependencies.floatingPanel = response;
+                return getAnnotationDisplay();
+            })
+            .then(response => {
+                dependencies.annotatorDisplay = response;
                 resolve(dependencies);
             })
             .catch(err => reject(err));

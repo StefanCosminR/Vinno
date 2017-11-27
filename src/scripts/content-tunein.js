@@ -2,7 +2,7 @@ getAllDependencies()
 	.then(dependencies => {
         function main_function()
         {
-            show_added_annotations_until_now(dependencies);
+            // show_added_annotations_until_now(dependencies);
 
             var all_annotations_moments = []
             var all_annotations_comments = []
@@ -52,6 +52,7 @@ getAllDependencies()
             new_annotate_button.setAttribute("class", "auth-links__whiteLink___3tT0y auth-links__link___GsWd7 auth-links__baseMuiTransition___1AQHm");
             new_annotate_button.setAttribute("role", "button");
             new_annotate_button.setAttribute("id", "add_annotation_button");
+
             authentification_bar.appendChild(new_annotate_button);
 
             var created_button = document.getElementById("add_annotation_button");
@@ -71,7 +72,7 @@ getAllDependencies()
                 container.style.left = "25%";
                 container.style.zIndex = 100;
 
-                // removeAnnotator();
+                // removeAnnotator("annotator-shadow-container");
                 // document.getElementById("playerActionButton").click();
             });
         }
@@ -105,8 +106,8 @@ getAllDependencies()
 
         function estimate_time_in_seconds(time)
         {
-            var each_part_of_time = time.split(":")
-            return Number(each_part_of_time[0]) * 60 + Number(each_part_of_time[1])
+            var each_part_of_time = time.split(":");
+            return Number(each_part_of_time[0]) * 60 + Number(each_part_of_time[1]);
         }
 
         function add_listener_for_annotation(annotation, comment, time_moments)
@@ -115,7 +116,7 @@ getAllDependencies()
                 console.log("OVER ANNOTATION LINE");
 
                 var holder = document.getElementById("content");
-                var [container, root] = insertAnnotator(holder, dependencies.annotatorPopup);
+                var [container, root] = insertAnnotatorDisplay(holder, dependencies.annotatorDisplay);
 
                 container.style.position = "fixed";
                 container.style.bottom = "10%";
@@ -127,7 +128,7 @@ getAllDependencies()
             annotation.addEventListener("mouseout", function() {
                 console.log("OUT ANNOTATION LINE");
 
-                removeAnnotator();
+                removeAnnotator("annotator-shadow-container-display");
             });
         }
 

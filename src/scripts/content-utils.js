@@ -4,6 +4,10 @@ function insertAnnotator(destionationElement, htmlTemplate) {
     return insertNode(destionationElement, htmlTemplate, 'annotator-template', 'annotator-shadow-container');
 }
 
+function insertAnnotatorDisplay(destionationElement, htmlTemplate) {
+    return insertNode(destionationElement, htmlTemplate, 'annotator-template-display', 'annotator-shadow-container-display');
+}
+
 function removeAnnotator(containerId) {
     let element = document.getElementById(containerId);
     element.parentNode.removeChild(element);
