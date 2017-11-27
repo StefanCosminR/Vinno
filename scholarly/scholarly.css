@@ -6,6 +6,7 @@
     font-family: "Libre Baskerville", Times, serif;
     background: #f7f7f7;
     color: #434343;
+    margin: 0;
   }
 
   body > section, article {
@@ -13,9 +14,29 @@
     margin: 0 auto 120px auto;
     max-width: 900px;
   }
+  header {
+    border-top: 8px solid #36b4a7;
+    border-bottom: 2px solid #BDD5E9;
+    box-shadow: 2px 0 4px #BCBCBC;
+    margin-bottom: 64px;
+    background: #fff;
+  }
+  header p.title, header p.subtitle {
+    max-width: 900px;
+    padding: 0 10px;
+    font-variant: small-caps;
+    margin: 0 auto;
+  }
+  header p.title {
+    font-size: 32px;
+    margin-top: 16px;
+  }
+  header p.subtitle {
+    margin-bottom: 8px;
+  }
 
   section:target h2, section:target h3, article:target h1 {
-    color: #2196f3;
+    color: #36b4a7;
   }
 
   article {
@@ -60,20 +81,20 @@
   }
 
   a {
-    color: #2196f3;
+    color: #36b4a7;
   }
   a, :link, :visited {
     text-decoration: none;
-    color: #2196f3;
+    color: #36b4a7;
   }
   a:active {
-    color: #64b5f6;
+    color: #70f1e0;
   }
 
   footer {
     font-size: 15px;
     box-shadow: -1px 0px 2px #BCBCBC;
-    background: #BDD5E9;
+    background: rgb(189, 233, 222);
     /*border-top: 2px solid #F9EABD;*/
     position: fixed;
     bottom: 0;
@@ -86,5 +107,5 @@
     text-align: center;
   }
   footer a:link, footer a:visited {
-    color: white;
+    color: green;
   }
