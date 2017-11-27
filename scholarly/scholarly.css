@@ -91,6 +91,49 @@
     color: #70f1e0;
   }
 
+  article > section:first-of-type {
+    margin-top: 30px;
+  }
+  /* the authors' list */
+  article > section:first-of-type ol::before {
+    display: block;
+    float: left;
+    width: 150px;
+    margin-left: -150px;
+    font-variant: small-caps;
+    color: #9E9E9E;
+  }
+  article > section:first-of-type ol:first-of-type::before {
+    content: 'Authors';
+  }
+  article > section:first-of-type ol:not(:first-of-type)::before {
+    content: 'Affiliations';
+  }
+  article > section:first-of-type ol {
+    list-style-type: none;
+    margin-left: 150px;
+    counter-reset: affiliations;
+  }
+  article > section:first-of-type ol:not(:first-of-type) li::before {
+    counter-increment: affiliations;
+    content: counter(affiliations, lower-latin) '.';
+    font-size: 12px;
+    display: inline;
+  }
+  article > section:first-of-type li {
+    display: inline;
+  }
+  article > section:first-of-type li::after {
+    content: ',';
+  }
+  article > section:first-of-type li:last-child::after {
+    content: normal;
+  }
+  article > section:first-of-type a[property="sa:roleAffiliation"] {
+    font-size: 12px;
+    vertical-align: super;
+  }
+
   footer {
     font-size: 15px;
     box-shadow: -1px 0px 2px #BCBCBC;
