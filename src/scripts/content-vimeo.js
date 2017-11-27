@@ -2,9 +2,14 @@ let embeddedHTML;
 let annotatorActions;
 
 addAnnotatorActions = function(template) {
-    var target = document.getElementsByClassName("clip-categories")[0];
+    let target = document.getElementsByClassName("clip-categories")[0];
+    let [container, root] = insertAnnotator(target, template);
 
-    console.log(target);
+    container.style.position = "relative";
+
+    //root.querySelector(".")
+
+    
 }
 
 getAllDependencies()
