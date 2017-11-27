@@ -26,6 +26,11 @@ chrome.runtime.onMessage.addListener(
             xmlHttp.open('GET', "../src/html/annotatorTemplate.html", false);
             xmlHttp.send(null);
             sendResponse({html: xmlHttp.responseText});
+        } else if(request === 'getAnnotationDisplay') {
+            let xmlHttp = new XMLHttpRequest();
+            xmlHttp.open('GET', '../src/html/annotatorDisplay.html', false);
+            xmlHttp.send(null);
+            sendResponse({html: xmlHttp.responseText});
         } else if(request === 'getAnnotatorActions') {
             let xmlHttp = new XMLHttpRequest();
             xmlHttp.open('GET', '../src/html/quickAnnotate.html', false);
