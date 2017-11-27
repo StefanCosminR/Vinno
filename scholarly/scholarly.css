@@ -34,9 +34,48 @@
   header p.subtitle {
     margin-bottom: 8px;
   }
+  caption {
+    font-family: "Libre Baskerville", Times, serif;
+    text-align: left;
+    padding: 16px;
+    margin-top: 16px;
+    width: 100%;
+    box-sizing: border-box;
+    caption-side: bottom;
+    font-style: italic;
+    /* we're removing the border (28+4=32) + horizontal padding (88+108=196px) = 228px */
+    max-width: calc(100vw - 228px)
+  }
+  
+  figure {
+    text-align: center;
+    box-sizing: border-box;
+    margin: 24px 0px;
+    padding-top: 32px;
+  }
+  figcaption {
+    text-align: left;
+    font: normal normal 300 13px/18px;
+    color: #9E9E9E;
+    margin: 24px 0px 32px 0px;
+    padding: 0 0px 24px 0;
+    letter-spacing: .35px;
+    border-bottom: 1px solid #eee;
+    font-style: italic;
+    hyphens: auto;
+  }
+  figure[typeof="sa:Image"] {
+    border-top: 1px solid #eee;
+  }
 
   section:target h2, section:target h3, article:target h1 {
     color: #36b4a7;
+  }
+
+  article img {
+    max-width: 100%;
+    width: auto;
+    height: auto;
   }
 
   article {
