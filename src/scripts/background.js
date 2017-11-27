@@ -10,7 +10,10 @@ chrome.tabs.onUpdated.addListener(function (tab_id, data, tab) {
         else if (tab.url.indexOf("tunein") !== -1) {
             chrome.pageAction.show(tab_id);
         }
-        if (tab.url.indexOf('youtube') !== -1) {
+        else if (tab.url.indexOf('youtube') !== -1) {
+            chrome.pageAction.show(tab_id);
+        }
+        else if (tab.url.indexOf("vimeo") !== -1) {
             chrome.pageAction.show(tab_id);
         }
     }

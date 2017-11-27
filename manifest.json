@@ -54,7 +54,7 @@
     },
     {
       "matches": [
-        "https://www.vimeo.com/*"
+        "https://vimeo.com/*"
       ],
       "js": [
         "src/scripts/content-utils.js",
