@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <style>
+  body {
+    font-family: "Times New Roman", Times, serif;
+    margin: 200;
+  }
+  ul.menu {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    text-align: center;
+    width: 230px;
+    background-color: #f1f1f1;
+  }
+  li a {
+    display: block;
+    font-size: 18px;
+    font-weight: bold;
+    color: #000;
+    padding: 10px;
+    border: 0.2px;
+    border-style: solid;
+    border-color: #050505;
+    text-decoration: none;
+  }
+  /* Change the link color on hover */
+  li a:hover {
+    background-color: #1B9AAA;
+    color: #050505;
+  }
+  .header{
+    margin: 5px 5px 5px 30px;
+    color: #1B9AAA;
+    font-size: 25px;
+    font-weight: bold;
+  }
+  .subheader
+  {
+    margin: 10px;
+    color: #050505;
+    padding-bottom: 13px;
+    font-size: 22px;
+    font-weight: bold;
+  }
+  .float-left {
+    float: left;
+  }
+  .icons {
+    margin: 5px 5px 5px 30px;
+    color: #1B9AAA;
+    font-size: 30px;
+  }
+  .medium-icons {
+    margin: 5px 5px 5px 70px;
+    color: #1B9AAA;
+    font-size: 20px;
+  }
+  .small-icons {
+    margin: 5px 5px 5px 70px;
+    color: #1B9AAA;
+    font-size: 14px;
+  }
+  a.link {
+    /*margin-left: 50px;*/
+    height: 10px;
+    padding: 10px;
+    font-size: 16px;
+    width: 80%;
+    color: #1B9AAA;
+  }
+  a.link:hover {
+    /*margin-left: 50px;*/
+    height: 10px;
+    padding: 10px;
+    font-size: 16px;
+    width: 80%;
+    color: black;
+    text-shadow: 2px 2px 5px #1B9AAA;
+  }
+  .links {
+    margin: 6px;
+    color: #050505;
+    /*padding-bottom: 16px;*/
+    font-size: 17px;
+    font-weight: bold;
+  }
+  .center {
+    text-align: center;
+  }
+  .left {
+    text-align: left;
+  }
+  .text-annotation {
+    font-size: 16px;
+    margin-left: 130px;
+    height: 8px;
+    margin-top: 7px;
+  }
+  .delete {
+    /*margin-left: 2px;*/
+    height: 10px;
+    padding: 10px;
+    font-size: 16px;
+    width: 80%;
+    color: #1B9AAA;
+  }
+  .container {
+    border: 0.2px;
+    border-style: solid;
+    border-color: #050505;
+    width: 962px;
+    padding: 11px;
+  }
+  a.delete:hover {
+    height: 10px;
+    padding: 10px;
+    font-size: 16px;
+    width: 80%;
+    color: black;
+    text-shadow: 2px 2px 5px #1B9AAA;
+  }
+  .label {
+      font-size: 17px;
+  }
+  .options {
+    margin-left: 32px;
+  }
+  .option-class {
+    margin: 20px;
+  }
+  </style>
+</head>
+<body>
+<div>
+  <ul class="float-left menu navigation">
+    <li><a href="options.html">Sites & Annotations</a></li>
+    <li><a href="options1.html">Photo & Video</a></li>
+    <li><a href="options2.html">Recent activity & Statistics</a></li>
+    <li><a href="options3.html">General Settings</a></li>
+  </ul>
+
+  <div class="float-left container">
+    <h2 class="header float-left">Manage general settings</h2><br/><br/>
+
+    <br/><br/>
+    <div class="float-left">
+
+      <div class="option-class">
+        <input class="options" id="option1" type="checkbox" name="field" value="option">
+        <label class="label" for="option">Always show annotation pop-up on each site</label>
+      </div>
+      <div class="option-class">
+        <input class="options" id="option2" type="checkbox" name="field" value="option">
+        <label class="label" for="option">Always show annotation pop-up on play bar</label>
+      </div>
+      <div class="option-class">
+        <input class="options" id="option3" type="checkbox" name="field" value="option">
+        <label class="label" for="option">Always show all annotation in each page</label>
+      </div>
+      <div class="option-class">
+        <input class="options" id="option4" type="checkbox" name="field" value="checked">
+        <label class="label" for="option">Allow draggable annotation pop-up</label>
+      </div>
+
+    </div>
+    <br/><br/>
+  </div>
+</div>
+</body>
+</html>
