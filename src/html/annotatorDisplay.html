@@ -1,22 +1,24 @@
 <div class="annotator-container">
   <div class="box">
     <div class="box-header">
-      <input type="text" placeholder="Add title" />
+      <input id="annotator-title" type="text" placeholder="Add title" />
     </div>
     
     <div class="box-content">
       <div class="box-content-row">
-        <input type="text" placeholder="00:00" class="input-minutes" />
+        <input id="annotator-start-time" type="text" placeholder="00:00" class="input-minutes" />
         <span class="devider">--</span>
-        <input type="text" placeholder="00:00" class="input-minutes" />
+        <input id="annotator-finish-time" type="text" placeholder="00:00" class="input-minutes" />
       </div>
       
       <div class="box-content-row">
-        <textarea placeholder="Add text annotation here"></textarea>
+        <textarea id="annotator-description" placeholder="Add text annotation here"></textarea>
       </div>
     </div>
   </div>
 </div>
+
+<!-- AM ADAUGAT ID-URI PENTRU FIECARE INPUT CA SA FIE USOR SET-UL SI GET-UL PENTRU VALORI -->
 
 <style>
     .box {
