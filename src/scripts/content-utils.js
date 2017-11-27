@@ -41,12 +41,15 @@ function insertFloatingPanel(template) {
 
     floatingPanelDragHandle.addEventListener('mousedown', function () {
         document.addEventListener('mousemove', mouseMoveListener);
-        floatingPanelDragHandle.style.cursor = '-webkit-grabbing';
+        // floatingPanelDragHandle.style.cursor = '-webkit-grabbing';
+        floatingPanelDragHandle.style.cursor = 'none';
+        document.getElementsByTagName('body')[0].style.cursor = 'none';
     });
 
     document.addEventListener('mouseup', function () {
         document.removeEventListener('mousemove', mouseMoveListener);
         floatingPanelDragHandle.style.cursor = '-webkit-grab';
+        document.getElementsByTagName('body')[0].style.cursor = 'auto';
     });
 }
 
