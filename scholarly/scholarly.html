@@ -21,19 +21,19 @@
                            <span property="schema:familyName">Baciu</span>
                        </a>
                    </li>
-                   <li property="schema:authro" typeof="sa:ContributorRole">
+                   <li property="schema:author" typeof="sa:ContributorRole">
                         <a property="schema:author" typeof="schema:Person">
                             <span property="schema:givenName">Elisa</span>
                             <span property="schema:familyName">Bulbuc</span>
                         </a>
                    </li>
-                   <li property="schema:authro" typeof="sa:ContributorRole">
+                   <li property="schema:author" typeof="sa:ContributorRole">
                         <a property="schema:author" typeof="schema:Person">
                             <span property="schema:givenName">Alexandru</span>
                             <span property="schema:familyName">Mihai</span>
                         </a>
                    </li>
-                   <li property="schema:authro" typeof="sa:ContributorRole">
+                   <li property="schema:author" typeof="sa:ContributorRole">
                         <a property="schema:author" typeof="schema:Person">
                             <span property="schema:givenName">Stefan</span>
                             <span property="schema:familyName">Romanescu</span>
@@ -77,12 +77,27 @@
                 </section>
                 <section id="userInteraction">
                     <h3>User Interaction</h3>
+			<p> The action of adding an annotation is done by clicking an the button <i>Add Annotation</i> in the top right corner of a page. The button is displayed specific to the website the user is on. The annotation has a field with start time, end time, a text box where the user can write a comment and a save button. The start time is automatically filled with the timestamp of the video the user is playing. End time is filled by the user if he wants to highlight an interval.
+			</p>
+			<p> After adding an annotation, the user can see the annotations added on the current video by hovering on the playback bar of the media player.
+			</p>
+			<p> The extension button offers the user the posibility to navigate to the main page by clicking the <i>Options</i> button. On this page the user can see all the annotations sorted by website. User can see here the url of the video or audio resource and the comment that the user placed. 
+			</p>
+			<figure typeof="sa:Image">
+                        <img src="../Mockups/mainPage.png" width="800" height="655">
+                        <figcaption>
+                            The main page where user can manage the annotations
+                        </figcaption>
+                    </figure>
                 </section>
                 <section id="implementation">
                     <h3>Client side implementation</h3>
+			<p> VANNO is created as a chrome extension in order to have access to the Chrome API. The base of the extension is the <i>manifest.json</i> file that tells the browser what permissions our tool needs and what actions it is doing. All annotations of a user are stored localy using the Chrome API.
+			</p>
                 </section>
                 <section id="codeManagement">
                     <h3>Code management</h3>
+			<p>In order to work efficiently as a team we chose a Distributed Version Control Software called <i>Git</i>. Our repository can be viewed at the link <a href="https://github.com/StefanCosminR/Vinno">VANNO</a>. The project has a common part consisting of <i>manifest.json</i>, <i>background.js</i>, <i>content-utils.js</i>. This common part contains the abstractisation for adding/removing an annotation, viewing all annotations. Each member of the team was resposable for integrating the generic functions of adding annotations in the supported websites.</p>
                 </section>
            </section>
            <section id="conclusion" typeof="sa:Conclusion"></section>
