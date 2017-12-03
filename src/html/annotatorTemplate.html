@@ -6,17 +6,30 @@
     
     <div class="box-content">
       <div class="box-content-row">
-        <input id="annotator-start-time" type="text" placeholder="00:00" class="input-minutes" />
+        <input id="annotator-start-time" placeholder="00:00" type="time" class="without_ampm input-minutes" />
         <span class="devider">--</span>
-        <input id="annotator-finish-time" type="text" placeholder="00:00" class="input-minutes" />
+        <input id="annotator-finish-time" placeholder="00:00" type="time" class="without_ampm input-minutes" />
       </div>
       
       <div class="box-content-row">
         <textarea id="annotator-description" placeholder="Add text annotation here"></textarea>
       </div>
-      
+
+      <div class="annotation-card__photos">
+        <div class="annotation-card__photo"></div>
+        <div class="annotation-card__photo"></div>
+        <div class="annotation-card__photo"></div>
+        <div class="annotation-card__photo"></div>
+        <div class="annotation-card__photo"></div>
+        <div class="annotation-card__photo"></div>
+        <div class="annotation-card__photo"></div>
+        <div class="annotation-card__photo"></div>
+        <div class="annotation-card__photo"></div>
+        <div class="annotation-card__photo"></div>
+      </div>
+
       <div class="box-content-row">
-        <button class="btn">Save</button>
+        <button id="save_annotations_button" class="btn">Save</button>
       </div>
     </div>
   </div>
@@ -25,69 +38,144 @@
 <!-- AM ADAUGAT ID-URI PENTRU FIECARE INPUT CA SA FIE USOR SET-UL SI GET-UL PENTRU VALORI -->
 
 <style>
-    .box {
-      width: 400px;
-      border: 1px solid black;
-      background-color: white;
-      border-radius: 3px;
-    }
+  .box {
+    width: 400px;
+    border: 1px solid black;
+    background-color: white;
+    border-radius: 3px;
+  }
 
-    input {
-      outline: none;
-      border: 0;
-      resize: none;
-      padding-left: 10px;
-      font-size: 16px;
-      display: block;
-    }
+  input {
+    outline: none;
+    border: 0;
+    resize: none;
+    padding-left: 10px;
+    font-size: 16px;
+    display: block;
+  }
 
-    .input-minutes {
-      color: white;
-    }
+  .input-minutes {
+    color: white;
+  }
 
-    textarea {
-      outline: none;
-      border: 0;
-      resize: none;
-      padding-left: 10px;
-      font-size: 16px;
-      display: block;
-    }
+  textarea {
+    outline: none;
+    border: 0;
+    resize: none;
+    padding-left: 10px;
+    font-size: 16px;
+    display: block;
+  }
 
-    .input {
-      width: 100%;
-    }
+  .input {
+    width: 100%;
+  }
 
-    .input-minutes {
-      width: 60px;
-      border-radius: 20px;
-      background-color: #eee;
-      display: inline-block;
-      margin: 10px;
-      background-color: #36b4a7;
-    }
+  .input-minutes {
+    width: 60px;
+    border-radius: 20px;
+    background-color: #eee;
+    display: inline-block;
+    margin: 10px;
+    background-color: #36b4a7;
+  }
 
-    .box .box-header {
-      border-bottom: 1px solid black;
-      padding: 20px;
-    }
+  .box .box-header {
+    border-bottom: 1px solid black;
+    padding: 20px;
+  }
 
-    .box .box-content .box-content-row {
-      display: block;
-      width: 100%;
-    }
+  .box .box-content .box-content-row {
+    display: block;
+    width: 100%;
+  }
 
-    textarea {
-      width: 95%;
-    }
+  textarea {
+    width: 95%;
+  }
 
-    .btn {
-      border: none;
-      border-radius: 3px;
-      padding: 10px;
-      width: 100%;
-      cursor: pointer;
-      color: white;
-      background-color: #36b4a7;
-    } 
+  .btn {
+    border: none;
+    border-radius: 3px;
+    padding: 10px;
+    width: 100%;
+    cursor: pointer;
+    color: white;
+    background-color: #36b4a7;
+  } 
+
+  .annotation-card__photos {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin-top: 10px;
+    overflow-x: scroll;
+    width: 100%;
+  }
+
+  .annotation-card__photo {
+    min-width: 30px;
+    min-height: 30px;
+    width: 30px;
+    height: 30px;
+    margin: 0 10px 5px;
+    background: url('https://maxcdn.icons8.com/office/PNG/512/Messaging/attach-512.png');
+    background-size: contain;
+    cursor: pointer;
+  }
+  
+  ::-webkit-scrollbar {
+    width: 5px;
+    height: 5px;
+  }
+
+  ::-webkit-scrollbar-button {
+    width: 0;
+    height: 0;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: #b3b3b3;
+    border: 0 none #ffffff;
+    border-radius: 50px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: #818181;
+  }
+
+  ::-webkit-scrollbar-thumb:active {
+    background: #3f3f3f;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: #e1e1e1;
+    border: 0 none #ffffff;
+    border-radius: 50px;
+  }
+
+  ::-webkit-scrollbar-track:hover {
+    background: #e1e1e1;
+  }
+
+  ::-webkit-scrollbar-track:active {
+    background: #e1e1e1;
+  }
+
+  ::-webkit-scrollbar-corner {
+    background: transparent;
+  }
+
+  .without_ampm::-webkit-datetime-edit-ampm-field {
+    display: none;
+  }
+
+  input[type=time]::-webkit-clear-button {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    -o-appearance: none;
+    -ms-appearance:none;
+    appearance: none;
+    margin: -10px; 
+  }
 </style>
