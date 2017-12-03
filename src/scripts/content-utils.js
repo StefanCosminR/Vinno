@@ -4,7 +4,13 @@
 function insertAnnotator(destionationElement, htmlTemplate) {
     let [container, shadowRoot] = insertNode(destionationElement, htmlTemplate, 'annotator-template', 'annotator-shadow-container');
 
-    shadowRoot.getElementById('save-button').addEventListener('click', saveAnnotatorContent);
+    shadowRoot.getElementById('save-button').addEventListener('click', function() {
+        // we take all the data inserted in the popup
+        console.log(shadowRoot.getElementById("annotator-title").value);
+        console.log(shadowRoot.getElementById("annotator-start-time").value);
+        console.log(shadowRoot.getElementById("annotator-finish-time").value);
+        console.log(shadowRoot.getElementById("annotator-description").value);
+    });
 
     return [container, shadowRoot];
 }
@@ -17,11 +23,6 @@ function removeAnnotator(containerId) {
     let element = document.getElementById(containerId);
     element.parentNode.removeChild(element);
 }
-
-function saveAnnotatorContent() {
-    console.log('saving');
-}
-
 
 
 
