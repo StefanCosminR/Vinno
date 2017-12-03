@@ -1,7 +1,12 @@
 /** ----------------- ANNOTATOR ----------------- */
 
+
 function insertAnnotator(destionationElement, htmlTemplate) {
-    return insertNode(destionationElement, htmlTemplate, 'annotator-template', 'annotator-shadow-container');
+    let [container, shadowRoot] = insertNode(destionationElement, htmlTemplate, 'annotator-template', 'annotator-shadow-container');
+
+    shadowRoot.getElementById('save-button').addEventListener('click', saveAnnotatorContent);
+
+    return [container, shadowRoot];
 }
 
 function insertAnnotatorDisplay(destionationElement, htmlTemplate) {
@@ -13,6 +18,9 @@ function removeAnnotator(containerId) {
     element.parentNode.removeChild(element);
 }
 
+function saveAnnotatorContent() {
+    console.log('saving');
+}
 
 
 
