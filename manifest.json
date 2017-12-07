@@ -35,6 +35,7 @@
       ],
       "js": [
         "src/scripts/content-utils.js",
+        "src/scripts/database-utils.js",
         "src/scripts/dependenciesResolver.js",
         "src/scripts/content-youtube.js"
       ],

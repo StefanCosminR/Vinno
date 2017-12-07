@@ -12,6 +12,17 @@ getAllDependencies()
     });
 
 
+saveToTable('annotations', {title: 'ana are mere'})
+    .then(() => {
+        getAnnotationsFromStorage()
+            .then(ann => {
+                console.log(ann);
+            })
+            .catch(err => console.error(err));
+    })
+    .catch(err => console.error(err));
+
+
 
 function addDotOnProgressBar() {
     let progressBar = document.getElementsByClassName('ytp-progress-bar')[0];
