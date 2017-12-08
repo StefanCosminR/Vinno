@@ -45,4 +45,38 @@ chrome.runtime.onMessage.addListener(
             xmlHttp.send(null);
             sendResponse({html: xmlHttp.responseText});
         }
-    });
+    });    });
+
+var config = {
+    apiKey: "AIzaSyD-xBReIsLbsbWy9NtIsnUPxRWiY6OVzOM",
+    authDomain: "dawnc-ea146.firebaseapp.com",
+    databaseURL: "https://dawnc-ea146.firebaseio.com",
+    projectId: "dawnc-ea146",
+    storageBucket: "dawnc-ea146.appspot.com",
+    messagingSenderId: "731731735733"
+};
+
+firebase.initializeApp(config);
+
+var database = firebase.database();
+var auth = firebase.auth();
+var isAnonymous = false;
+var uid = "";
+
+auth.signInAnonymously();
+
+auth.onAuthStateChanged(firebaseUser => {
+    if (firebaseUser) {
+        isAnonymous = firebaseUser.isAnonymous;
+        uid = firebaseUser.uid;
+    }
+});
+
+function writeUserDataToFirebase(name) { 
+    var ref = database.ref('annotations');
+    var data = {
+        name: name,
+        uid: uid
+    }
+    ref.push(data);
+}
