@@ -19,33 +19,55 @@ chrome.tabs.onUpdated.addListener(function (tab_id, data, tab) {
     }
 });
 
+
+
+let messageCommunicationBus = new MessageCommunicationBus();
+
+messageCommunicationBus.registerListener('getEmbeddedHtml', sendFile('../src/html/annotatorTemplate.html'));
+messageCommunicationBus.registerListener('getAnnotationDisplay', sendFile('../src/html/annotatorDisplay.html'));
+messageCommunicationBus.registerListener('getAnnotatorActions', sendFile('../src/html/quickAnnotate.html'));
+messageCommunicationBus.registerListener('getFloatingPanel', sendFile('../src/html/floatingPanel.html'));
+messageCommunicationBus.registerListener('GET', function(){});
+messageCommunicationBus.registerListener('POST', function() {});
+
+
+function sendFile(path) {
+    let xmlHttp = new XMLHttpRequest();
+    xmlHttp.open('GET', path, false);
+    xmlHttp.send(null);
+    return function(sendResponse) {
+        sendResponse({html: xmlHttp.responseText});
+    }
+}
+
 /**
  * @todo Maybe the request should be done asynchronously in the future, but for now synchronous request does not affect performance notably
  */
-chrome.runtime.onMessage.addListener(
-    function (request, sender, sendResponse) {
-        if (request === "getEmbeddedHtml") {
-            let xmlHttp = new XMLHttpRequest();
-            xmlHttp.open('GET', "../src/html/annotatorTemplate.html", false);
-            xmlHttp.send(null);
-            sendResponse({html: xmlHttp.responseText});
-        } else if(request === 'getAnnotationDisplay') {
-            let xmlHttp = new XMLHttpRequest();
-            xmlHttp.open('GET', '../src/html/annotatorDisplay.html', false);
-            xmlHttp.send(null);
-            sendResponse({html: xmlHttp.responseText});
-        } else if(request === 'getAnnotatorActions') {
-            let xmlHttp = new XMLHttpRequest();
-            xmlHttp.open('GET', '../src/html/quickAnnotate.html', false);
-            xmlHttp.send(null);
-            sendResponse({html: xmlHttp.responseText});
-        } else if(request === 'getFloatingPanel') {
-            let xmlHttp = new XMLHttpRequest();
-            xmlHttp.open('GET', "../src/html/floatingPanel.html", false);
-            xmlHttp.send(null);
-            sendResponse({html: xmlHttp.responseText});
-        }
-    });    });
+// chrome.runtime.onMessage.addListener(
+//     function (request, sender, sendResponse) {
+//
+//         if (request === "getEmbeddedHtml") {
+//             let xmlHttp = new XMLHttpRequest();
+//             xmlHttp.open('GET', "../src/html/annotatorTemplate.html", false);
+//             xmlHttp.send(null);
+//             sendResponse({html: xmlHttp.responseText});
+//         } else if(request === 'getAnnotationDisplay') {
+//             let xmlHttp = new XMLHttpRequest();
+//             xmlHttp.open('GET', '../src/html/annotatorDisplay.html', false);
+//             xmlHttp.send(null);
+//             sendResponse({html: xmlHttp.responseText});
+//         } else if(request === 'getAnnotatorActions') {
+//             let xmlHttp = new XMLHttpRequest();
+//             xmlHttp.open('GET', '../src/html/quickAnnotate.html', false);
+//             xmlHttp.send(null);
+//             sendResponse({html: xmlHttp.responseText});
+//         } else if(request === 'getFloatingPanel') {
+//             let xmlHttp = new XMLHttpRequest();
+//             xmlHttp.open('GET', "../src/html/floatingPanel.html", false);
+//             xmlHttp.send(null);
+//             sendResponse({html: xmlHttp.responseText});
+//         }
+//     });
 
 var config = {
     apiKey: "AIzaSyD-xBReIsLbsbWy9NtIsnUPxRWiY6OVzOM",
