@@ -37,3 +37,14 @@ function getAnnotationsFromStorage() {
         })
     });
 }
+
+function saveToFirebase(link, content) {
+    chrome.runtime.sendMessage({method: 'POST', link, content}, function (response) {
+        console.log(response);
+    });
+}
+
+function getFromFirebase(link) {
+    chrome.runtime.sendMessage({method: 'GET', link}, function (response) {
+        console.log(response);
+    });}
