@@ -27,8 +27,8 @@ messageCommunicationBus.registerListener('getEmbeddedHtml', sendFile('../src/htm
 messageCommunicationBus.registerListener('getAnnotationDisplay', sendFile('../src/html/annotatorDisplay.html'));
 messageCommunicationBus.registerListener('getAnnotatorActions', sendFile('../src/html/quickAnnotate.html'));
 messageCommunicationBus.registerListener('getFloatingPanel', sendFile('../src/html/floatingPanel.html'));
-messageCommunicationBus.registerListener('GET', function(link, content){});
-messageCommunicationBus.registerListener('POST', function(link) {});
+messageCommunicationBus.registerListener('GET', function(link){});
+messageCommunicationBus.registerListener('POST', function(link, content) { writeUserDataToFirebase(link, content) });
 
 
 function sendFile(path) {
@@ -94,11 +94,18 @@ auth.onAuthStateChanged(firebaseUser => {
     }
 });
 
-function writeUserDataToFirebase(name) { 
-    var ref = database.ref('annotations');
-    var data = {
-        name: name,
-        uid: uid
+function writeUserDataToFirebase(link, content) { 
+    var ref = database.ref(link + uid);
+
+    var annotation_data = {
+        title: content.title,
+        website: content.website,
+        start_time: content.start_time,
+        end_time: content.end_time,
+        tags_list: content.tags_list,
+        description: content.description,
+        images_list: content.images_list
     }
-    ref.push(data);
+
+    // ref.push(annotation_data);
 }

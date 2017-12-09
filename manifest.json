@@ -21,19 +21,10 @@
   "content_scripts": [
     {
       "matches": [
-        "https://stackoverflow.com/*"
-      ],
-      "js": [
-        "src/scripts/content-utils.js",
-        "src/scripts/content-stackoverflow.js"
-      ],
-      "run_at": "document_end"
-    },
-    {
-      "matches": [
         "https://www.youtube.com/*"
       ],
       "js": [
+        "src/scripts/classes/AnnotationLayout.js",
         "src/scripts/content-utils.js",
         "src/scripts/database-utils.js",
         "src/scripts/dependenciesResolver.js",
@@ -46,7 +37,9 @@
         "https://tunein.com/radio/*"
       ],
       "js": [
+        "src/scripts/classes/AnnotationLayout.js",
         "src/scripts/content-utils.js",
+        "src/scripts/database-utils.js",
         "src/scripts/dependenciesResolver.js",
         "src/scripts/content-tunein.js"
       ],
@@ -58,6 +51,7 @@
         "https://vimeo.com/*"
       ],
       "js": [
+        "src/scripts/classes/AnnotationLayout.js",
         "src/scripts/content-utils.js",
         "src/scripts/dependenciesResolver.js",
         "src/scripts/content-vimeo.js"
@@ -66,7 +60,8 @@
     }
   ],
   "background": {
-    "scripts": ["src/scripts/firebase.js", "src/scripts/classes/MessageCommunicationBus.js", "src/scripts/background.js"],
+    "scripts": ["src/scripts/firebase.js", "src/scripts/classes/MessageCommunicationBus.js", "src/scripts/classes/AnnotationLayout.js", "src/scripts/background.js"],
     "persistent": false
-  }
+  },
+  "content_security_policy":"script-src 'self' https://www.gstatic.com/ https://*.firebaseio.com https://www.googleapis.com; object-src 'self'"
 }

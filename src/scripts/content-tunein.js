@@ -69,8 +69,6 @@ getAllDependencies()
 
                 document.getElementById("playerActionButton").click();
 
-                var current_time_passed = document.getElementById("scrubberElapsed").innerHTML;
-
                 var holder = document.getElementById("content");
                 var [container, root] = insertAnnotator(holder, dependencies.annotatorPopup);
 
@@ -79,7 +77,8 @@ getAllDependencies()
                 container.style.left = "25%";
                 container.style.zIndex = 100;
 
-                root.getElementById("annotator-start-time").value = document.getElementById("scrubberElapsed").innerHTML;
+                root.getElementById("annotator-start-time").value = "00:" + document.getElementById("scrubberElapsed").innerHTML;
+                root.getElementById("annotator-finish-time").value = "00:00:00";
 
                 // removeAnnotator("annotator-shadow-container");
                 // document.getElementById("playerActionButton").click();

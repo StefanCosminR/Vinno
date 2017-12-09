@@ -6,29 +6,18 @@
     
     <div class="box-content">
       <div class="box-content-row">
-        <input id="annotator-start-time" placeholder="00:00" type="time" class="without_ampm input-minutes" />
+        <input id="annotator-start-time" placeholder="00:00" type="time" step="2" class="without_ampm input-minutes" />
         <span class="devider">--</span>
-        <input id="annotator-finish-time" placeholder="00:00" type="time" class="without_ampm input-minutes" />
+        <input id="annotator-finish-time" placeholder="00:00" type="time" step="2" class="without_ampm input-minutes" />
       </div>
       
       <div class="box-content-row">
         <textarea id="annotator-description" placeholder="Add text annotation here"></textarea>
       </div>
 
-      <input id="annotator-file_loader" type="file">
+      <input id="annotator-file" type="file" accept=".jpg, .jpeg, .png" multiple/>
 
-      <div class="annotation-card__photos">
-        <div class="annotation-card__photo"></div>
-        <div class="annotation-card__photo"></div>
-        <div class="annotation-card__photo"></div>
-        <div class="annotation-card__photo"></div>
-        <div class="annotation-card__photo"></div>
-        <div class="annotation-card__photo"></div>
-        <div class="annotation-card__photo"></div>
-        <div class="annotation-card__photo"></div>
-        <div class="annotation-card__photo"></div>
-        <div class="annotation-card__photo"></div>
-      </div>
+      <div id="images_holder" class="annotation-card__photos"> </div>
 
       <div class="box-content-row">
         <button class="btn" id="save-button">Save</button>
@@ -74,7 +63,7 @@
   }
 
   .input-minutes {
-    width: 60px;
+    width: 85px;
     border-radius: 20px;
     background-color: #eee;
     display: inline-block;
@@ -116,12 +105,11 @@
   }
 
   .annotation-card__photo {
-    min-width: 30px;
-    min-height: 30px;
-    width: 30px;
-    height: 30px;
+    min-width: 50px;
+    min-height: 50px;
+    width: 50px;
+    height: 50px;
     margin: 0 10px 5px;
-    background: url('https://maxcdn.icons8.com/office/PNG/512/Messaging/attach-512.png');
     background-size: contain;
     cursor: pointer;
   }
@@ -176,7 +164,7 @@
     -webkit-appearance: none;
     -moz-appearance: none;
     -o-appearance: none;
-    -ms-appearance:none;
+    -ms-appearance: none;
     appearance: none;
     margin: -10px; 
   }

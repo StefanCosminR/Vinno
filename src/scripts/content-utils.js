@@ -2,14 +2,37 @@
 
 
 function insertAnnotator(destionationElement, htmlTemplate) {
-    let [container, shadowRoot] = insertNode(destionationElement, htmlTemplate, 'annotator-template', 'annotator-shadow-container');
+    var [container, shadowRoot] = insertNode(destionationElement, htmlTemplate, 'annotator-template', 'annotator-shadow-container');
 
     shadowRoot.getElementById('save-button').addEventListener('click', function() {
         // we take all the data inserted in the popup
-        console.log(shadowRoot.getElementById("annotator-title").value);
-        console.log(shadowRoot.getElementById("annotator-start-time").value);
-        console.log(shadowRoot.getElementById("annotator-finish-time").value);
-        console.log(shadowRoot.getElementById("annotator-description").value);
+
+        var title = shadowRoot.getElementById("annotator-title").value;
+        var start_time = shadowRoot.getElementById("annotator-start-time").value;
+        var end_time = shadowRoot.getElementById("annotator-finish-time").value;
+        var description = shadowRoot.getElementById("annotator-description").value;
+        var website = window.location.href;
+
+        var this_annotation = new AnnotationLayout(title, website, start_time, end_time, "tags_list", description, "images_list");
+
+        saveToFirebase("annotations/", this_annotation);
+    });
+
+    var file_loader = shadowRoot.getElementById('annotator-file');
+    var holder_images = shadowRoot.getElementById('images_holder');
+
+    file_loader.addEventListener('change', function() {
+        var current_files = file_loader.files;
+
+        if (current_files.length) {
+            for(var i = 0; i < current_files.length; i++) {
+                var image = document.createElement('img');
+                image.src = window.URL.createObjectURL(current_files[i]);
+                image.setAttribute("class", "annotation-card__photo");
+
+                holder_images.appendChild(image);
+            }
+        }
     });
 
     return [container, shadowRoot];
