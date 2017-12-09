@@ -28,7 +28,7 @@ messageCommunicationBus.registerListener('getAnnotationDisplay', sendFile('../sr
 messageCommunicationBus.registerListener('getAnnotatorActions', sendFile('../src/html/quickAnnotate.html'));
 messageCommunicationBus.registerListener('getFloatingPanel', sendFile('../src/html/floatingPanel.html'));
 messageCommunicationBus.registerListener('GET', function(link){});
-messageCommunicationBus.registerListener('POST', function(link, content) { writeUserDataToFirebase(link, content) });
+messageCommunicationBus.registerListener('POST', function(link, content) {writeUserDataToFirebase(link, content)});
 
 
 function sendFile(path) {
@@ -43,31 +43,6 @@ function sendFile(path) {
 /**
  * @todo Maybe the request should be done asynchronously in the future, but for now synchronous request does not affect performance notably
  */
-// chrome.runtime.onMessage.addListener(
-//     function (request, sender, sendResponse) {
-//
-//         if (request === "getEmbeddedHtml") {
-//             let xmlHttp = new XMLHttpRequest();
-//             xmlHttp.open('GET', "../src/html/annotatorTemplate.html", false);
-//             xmlHttp.send(null);
-//             sendResponse({html: xmlHttp.responseText});
-//         } else if(request === 'getAnnotationDisplay') {
-//             let xmlHttp = new XMLHttpRequest();
-//             xmlHttp.open('GET', '../src/html/annotatorDisplay.html', false);
-//             xmlHttp.send(null);
-//             sendResponse({html: xmlHttp.responseText});
-//         } else if(request === 'getAnnotatorActions') {
-//             let xmlHttp = new XMLHttpRequest();
-//             xmlHttp.open('GET', '../src/html/quickAnnotate.html', false);
-//             xmlHttp.send(null);
-//             sendResponse({html: xmlHttp.responseText});
-//         } else if(request === 'getFloatingPanel') {
-//             let xmlHttp = new XMLHttpRequest();
-//             xmlHttp.open('GET', "../src/html/floatingPanel.html", false);
-//             xmlHttp.send(null);
-//             sendResponse({html: xmlHttp.responseText});
-//         }
-//     });
 
 var config = {
     apiKey: "AIzaSyD-xBReIsLbsbWy9NtIsnUPxRWiY6OVzOM",
@@ -81,6 +56,7 @@ var config = {
 firebase.initializeApp(config);
 
 var database = firebase.database();
+var storage = firebase.storage();
 var auth = firebase.auth();
 var isAnonymous = false;
 var uid = "";
@@ -95,7 +71,18 @@ auth.onAuthStateChanged(firebaseUser => {
 });
 
 function writeUserDataToFirebase(link, content) { 
-    var ref = database.ref(link + uid);
+    var annotation_ref = database.ref(link + uid);
+    var images_list_names = [];
+
+    console.log(content);
+    var images_list = content.images_list;
+
+    for (var i = 0; i < images_list.length; i++) {
+        var images_ref = storage.ref("images/" + images_list[i].name);
+
+        images_list_names.push(images_list[i].name);
+        images_ref.put(images_list[i]);
+    }
 
     var annotation_data = {
         title: content.title,
@@ -104,8 +91,8 @@ function writeUserDataToFirebase(link, content) {
         end_time: content.end_time,
         tags_list: content.tags_list,
         description: content.description,
-        images_list: content.images_list
+        images_list: images_list_names
     }
 
-    // ref.push(annotation_data);
+    // annotation_ref.push(annotation_data);
 }

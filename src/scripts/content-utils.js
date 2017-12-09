@@ -4,6 +4,8 @@
 function insertAnnotator(destionationElement, htmlTemplate) {
     var [container, shadowRoot] = insertNode(destionationElement, htmlTemplate, 'annotator-template', 'annotator-shadow-container');
 
+    var all_images = [];
+
     shadowRoot.getElementById('save-button').addEventListener('click', function() {
         // we take all the data inserted in the popup
 
@@ -13,7 +15,7 @@ function insertAnnotator(destionationElement, htmlTemplate) {
         var description = shadowRoot.getElementById("annotator-description").value;
         var website = window.location.href;
 
-        var this_annotation = new AnnotationLayout(title, website, start_time, end_time, "tags_list", description, "images_list");
+        var this_annotation = new AnnotationLayout(title, website, start_time, end_time, "tags_list", description, all_images);
 
         saveToFirebase("annotations/", this_annotation);
     });
@@ -26,10 +28,12 @@ function insertAnnotator(destionationElement, htmlTemplate) {
 
         if (current_files.length) {
             for(var i = 0; i < current_files.length; i++) {
+                all_images.push(current_files[i]);
+
                 var image = document.createElement('img');
                 image.src = window.URL.createObjectURL(current_files[i]);
                 image.setAttribute("class", "annotation-card__photo");
-
+                
                 holder_images.appendChild(image);
             }
         }

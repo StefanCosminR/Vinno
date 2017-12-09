@@ -7,7 +7,7 @@ class AnnotationLayout {
         this.end_time = end_time;
         this.tags_list = tags_list;
         this.description = description;
-        this.images_list = images_list
+        this.images_list = images_list;
     }
 
     add_tag_to_tags_list(tag) {

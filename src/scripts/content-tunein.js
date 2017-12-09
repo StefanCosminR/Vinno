@@ -78,7 +78,7 @@ getAllDependencies()
                 container.style.zIndex = 100;
 
                 root.getElementById("annotator-start-time").value = "00:" + document.getElementById("scrubberElapsed").innerHTML;
-                root.getElementById("annotator-finish-time").value = "00:00:00";
+                root.getElementById("annotator-finish-time").value = root.getElementById("annotator-start-time").value;
 
                 // removeAnnotator("annotator-shadow-container");
                 // document.getElementById("playerActionButton").click();
