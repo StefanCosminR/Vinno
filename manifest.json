@@ -1,7 +1,7 @@
 {
   "manifest_version": 2,
   "name": "Vinno",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "page_action": {
     "default_popup": "src/html/popup.html",
     "default_title": "Let's annotate"
@@ -66,7 +66,7 @@
     }
   ],
   "background": {
-    "scripts": ["src/scripts/firebase.js","src/scripts/background.js"],
+    "scripts": ["src/scripts/firebase.js", "src/scripts/classes/MessageCommunicationBus.js", "src/scripts/background.js"],
     "persistent": false
   }
 }
