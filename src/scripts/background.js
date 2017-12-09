@@ -27,8 +27,8 @@ messageCommunicationBus.registerListener('getEmbeddedHtml', sendFile('../src/htm
 messageCommunicationBus.registerListener('getAnnotationDisplay', sendFile('../src/html/annotatorDisplay.html'));
 messageCommunicationBus.registerListener('getAnnotatorActions', sendFile('../src/html/quickAnnotate.html'));
 messageCommunicationBus.registerListener('getFloatingPanel', sendFile('../src/html/floatingPanel.html'));
-messageCommunicationBus.registerListener('GET', function(){});
-messageCommunicationBus.registerListener('POST', function() {});
+messageCommunicationBus.registerListener('GET', function(link, content){});
+messageCommunicationBus.registerListener('POST', function(link) {});
 
 
 function sendFile(path) {
