@@ -7,7 +7,7 @@ class MessageCommunicationBus {
             if(request.hasOwnProperty('method')) {
                 this.listeners[request.method](request.link, request.content, sendResponse);
             } else {
-                this.listeners[request](request.link, sendResponse);
+                this.listeners[request](sendResponse);
             }
         });
     }
