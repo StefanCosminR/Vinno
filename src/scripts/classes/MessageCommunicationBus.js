@@ -5,9 +5,9 @@ class MessageCommunicationBus {
 
         chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
             if(request.hasOwnProperty('method')) {
-                this.listeners[request.method](sendResponse);
+                this.listeners[request.method](request.link, request.content, sendResponse);
             } else {
-                this.listeners[request](sendResponse);
+                this.listeners[request](request.link, sendResponse);
             }
         });
     }
