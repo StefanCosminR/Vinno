@@ -45,7 +45,7 @@ function saveToFirebase(link, content) {
 }
 
 function getFromFirebase(link) {
-    return new Promise((reject, resolve) => {
+    return new Promise((resolve, reject) => {
         chrome.runtime.sendMessage({method: 'GET', link}, function (response) {
             console.log(response);
             resolve(response);
