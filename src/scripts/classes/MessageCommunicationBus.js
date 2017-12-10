@@ -9,6 +9,8 @@ class MessageCommunicationBus {
             } else {
                 this.listeners[request](sendResponse);
             }
+
+            return true;
         });
     }
 
