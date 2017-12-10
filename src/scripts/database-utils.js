@@ -45,6 +45,11 @@ function saveToFirebase(link, content) {
 }
 
 function getFromFirebase(link) {
-    chrome.runtime.sendMessage({method: 'GET', link}, function (response) {
-        console.log(response);
-    });}
+    return new Promise((reject, resolve) => {
+        chrome.runtime.sendMessage({method: 'GET', link}, function (response) {
+            console.log(response);
+            resolve(response);
+        });
+    });
+}
+
