@@ -27,8 +27,8 @@ messageCommunicationBus.registerListener('getEmbeddedHtml', sendFile('../src/htm
 messageCommunicationBus.registerListener('getAnnotationDisplay', sendFile('../src/html/annotatorDisplay.html'));
 messageCommunicationBus.registerListener('getAnnotatorActions', sendFile('../src/html/quickAnnotate.html'));
 messageCommunicationBus.registerListener('getFloatingPanel', sendFile('../src/html/floatingPanel.html'));
-messageCommunicationBus.registerListener('GET', function(link){});
-messageCommunicationBus.registerListener('POST', function(link, content, sendResponse) {
+messageCommunicationBus.registerListener('GET', function(sendResponse, link){});
+messageCommunicationBus.registerListener('POST', function(sendResponse, link, content) {
 
     if(link.startsWith('annotations')) {
         writeUserDataToFirebase(link, content)
