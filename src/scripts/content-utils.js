@@ -4,7 +4,8 @@
 function insertAnnotator(destionationElement, htmlTemplate) {
     var [container, shadowRoot] = insertNode(destionationElement, htmlTemplate, 'annotator-template', 'annotator-shadow-container');
 
-    var all_images = [];
+    var all_images_data = [];
+    var all_images_names = [];
 
     shadowRoot.getElementById('save-button').addEventListener('click', function() {
         // we take all the data inserted in the popup
@@ -15,11 +16,15 @@ function insertAnnotator(destionationElement, htmlTemplate) {
         var description = shadowRoot.getElementById("annotator-description").value;
         var website = window.location.href;
 
+        var all_images = [];
+        for (var i = 0; i < all_images_data.length; i++)
+            all_images.push({ data: all_images_data[i], name: all_images_names[i]});
 
-        var this_annotation = new AnnotationLayout(title, website, start_time, end_time, "tags_list", description, []);
+        console.log(all_images);
+
+        var this_annotation = new AnnotationLayout(title, website, start_time, end_time, "tags_list", description, all_images);
 
         saveToFirebase("annotations/", this_annotation);
-        saveToFirebase("images/", all_images);
     });
 
     var file_loader = shadowRoot.getElementById('annotator-file');
@@ -28,24 +33,21 @@ function insertAnnotator(destionationElement, htmlTemplate) {
     file_loader.addEventListener('change', function() {
         var current_files = file_loader.files;
 
-        let fileReader = new FileReader();
+        for (var i = 0; i < current_files.length; i++) {
+            all_images_names.push(current_files[i].name);
+            var fileReader = new FileReader();
+            
+            fileReader.onload = function(event) {
+                all_images_data.push(event.target.result);
+            };
 
-        fileReader.onload = function(event) {
-            // Here is the image converted in desired format
-            all_images.push(event.target.result);
-        };
+            fileReader.readAsDataURL(current_files[i]);
 
-        if (current_files.length) {
-            for(var i = 0; i < current_files.length; i++) {
-
-                fileReader.readAsDataURL(current_files[i]);
-
-                var image = document.createElement('img');
-                image.src = window.URL.createObjectURL(current_files[i]);
-                image.setAttribute("class", "annotation-card__photo");
-                
-                holder_images.appendChild(image);
-            }
+            var image = document.createElement('img');
+            image.src = window.URL.createObjectURL(current_files[i]);
+            image.setAttribute("class", "annotation-card__photo");
+            
+            holder_images.appendChild(image);
         }
     });
 

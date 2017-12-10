@@ -28,30 +28,7 @@ messageCommunicationBus.registerListener('getAnnotationDisplay', sendFile('../sr
 messageCommunicationBus.registerListener('getAnnotatorActions', sendFile('../src/html/quickAnnotate.html'));
 messageCommunicationBus.registerListener('getFloatingPanel', sendFile('../src/html/floatingPanel.html'));
 messageCommunicationBus.registerListener('GET', function(sendResponse, link){});
-messageCommunicationBus.registerListener('POST', function(sendResponse, link, content) {
-
-    if(link.startsWith('annotations')) {
-        writeUserDataToFirebase(link, content)
-    } else if(link.startsWith('images')) {
-        content.forEach(image => {
-            let newLink = link + "1"; // this need to be converted to uuid
-            let imageRef = storageRef.child(newLink);
-            console.log(imageRef.fullPath);
-
-            try {
-                console.log(image);
-                imageRef.putString(image, 'data_url').then(function (snapshot) {
-                    console.log('Uploaded a raw string!');
-                });
-            } catch (e) {
-                console.error("Error", e);
-            }
-
-            sendResponse(true);
-        });
-    }
-
-});
+messageCommunicationBus.registerListener('POST', function(sendResponse, link, content) { writeUserDataToFirebase(link, content); sendResponse(true); });
 
 
 function sendFile(path) {
@@ -98,14 +75,14 @@ function writeUserDataToFirebase(link, content) {
     var annotation_ref = database.ref(link + uid);
     var images_list_names = [];
 
-    console.log(content);
     var images_list = content.images_list;
 
     for (var i = 0; i < images_list.length; i++) {
         var images_ref = storage.ref("images/" + images_list[i].name);
 
         images_list_names.push(images_list[i].name);
-        images_ref.put(images_list[i]);
+        
+        images_ref.putString(images_list[i].data, 'data_url');
     }
 
     var annotation_data = {
@@ -118,5 +95,5 @@ function writeUserDataToFirebase(link, content) {
         images_list: images_list_names
     }
 
-    // annotation_ref.push(annotation_data);
+    annotation_ref.push(annotation_data);
 }
