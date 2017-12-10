@@ -94,11 +94,9 @@ function readUserDataToFirebase(link, sendResponse) {
 
                 all_past_annotations.push(new AnnotationLayout(title, website, start_time, end_time, tags_list, description, images_list));
             }
-        }   
+        }
+        sendResponse(all_past_annotations);
     });
-
-    console.log(all_past_annotations);
-    sendResponse(all_past_annotations);
 }
 
 function writeUserDataToFirebase(link, content) { 
