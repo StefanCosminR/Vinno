@@ -15,9 +15,11 @@ function insertAnnotator(destionationElement, htmlTemplate) {
         var description = shadowRoot.getElementById("annotator-description").value;
         var website = window.location.href;
 
-        var this_annotation = new AnnotationLayout(title, website, start_time, end_time, "tags_list", description, all_images);
+
+        var this_annotation = new AnnotationLayout(title, website, start_time, end_time, "tags_list", description, []);
 
         saveToFirebase("annotations/", this_annotation);
+        saveToFirebase("images/", all_images);
     });
 
     var file_loader = shadowRoot.getElementById('annotator-file');
@@ -26,9 +28,17 @@ function insertAnnotator(destionationElement, htmlTemplate) {
     file_loader.addEventListener('change', function() {
         var current_files = file_loader.files;
 
+        let fileReader = new FileReader();
+
+        fileReader.onload = function(event) {
+            // Here is the image converted in desired format
+            all_images.push(event.target.result);
+        };
+
         if (current_files.length) {
             for(var i = 0; i < current_files.length; i++) {
-                all_images.push(current_files[i]);
+
+                fileReader.readAsDataURL(current_files[i]);
 
                 var image = document.createElement('img');
                 image.src = window.URL.createObjectURL(current_files[i]);

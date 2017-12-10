@@ -28,7 +28,30 @@ messageCommunicationBus.registerListener('getAnnotationDisplay', sendFile('../sr
 messageCommunicationBus.registerListener('getAnnotatorActions', sendFile('../src/html/quickAnnotate.html'));
 messageCommunicationBus.registerListener('getFloatingPanel', sendFile('../src/html/floatingPanel.html'));
 messageCommunicationBus.registerListener('GET', function(link){});
-messageCommunicationBus.registerListener('POST', function(link, content) {writeUserDataToFirebase(link, content)});
+messageCommunicationBus.registerListener('POST', function(link, content, sendResponse) {
+
+    if(link.startsWith('annotations')) {
+        writeUserDataToFirebase(link, content)
+    } else if(link.startsWith('images')) {
+        content.forEach(image => {
+            let newLink = link + "1"; // this need to be converted to uuid
+            let imageRef = storageRef.child(newLink);
+            console.log(imageRef.fullPath);
+
+            try {
+                console.log(image);
+                imageRef.putString(image, 'data_url').then(function (snapshot) {
+                    console.log('Uploaded a raw string!');
+                });
+            } catch (e) {
+                console.error("Error", e);
+            }
+
+            sendResponse(true);
+        });
+    }
+
+});
 
 
 function sendFile(path) {
@@ -57,6 +80,7 @@ firebase.initializeApp(config);
 
 var database = firebase.database();
 var storage = firebase.storage();
+var storageRef = storage.ref();
 var auth = firebase.auth();
 var isAnonymous = false;
 var uid = "";
