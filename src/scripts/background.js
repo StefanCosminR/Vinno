@@ -79,10 +79,9 @@ function writeUserDataToFirebase(link, content) {
 
     for (var i = 0; i < images_list.length; i++) {
         var images_ref = storage.ref("images/" + images_list[i].name);
+        images_ref.putString(images_list[i].data, 'data_url');
 
         images_list_names.push(images_list[i].name);
-        
-        images_ref.putString(images_list[i].data, 'data_url');
     }
 
     var annotation_data = {

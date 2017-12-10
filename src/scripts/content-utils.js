@@ -1,4 +1,7 @@
 /** ----------------- ANNOTATOR ----------------- */
+function load_annotations_from_database() {
+    getFromFirebase("annotations/");
+}
 
 
 function insertAnnotator(destionationElement, htmlTemplate) {
@@ -18,9 +21,7 @@ function insertAnnotator(destionationElement, htmlTemplate) {
 
         var all_images = [];
         for (var i = 0; i < all_images_data.length; i++)
-            all_images.push({ data: all_images_data[i], name: all_images_names[i]});
-
-        console.log(all_images);
+            all_images.push({ data: all_images_data[i], name: all_images_names[i] });
 
         var this_annotation = new AnnotationLayout(title, website, start_time, end_time, "tags_list", description, all_images);
 
