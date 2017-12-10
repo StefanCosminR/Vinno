@@ -7,7 +7,8 @@ getAllDependencies()
         function main_function()
         {
             // show_added_annotations_until_now(dependencies);
-            load_annotations_from_database();
+            var all_annotations = load_annotations_from_database();
+            console.log(all_annotations);
 
             all_annotations_moments.push(["01:00", "04:00"]);
             all_annotations_titles.push("My favorite part!");

@@ -27,7 +27,7 @@ messageCommunicationBus.registerListener('getEmbeddedHtml', sendFile('../src/htm
 messageCommunicationBus.registerListener('getAnnotationDisplay', sendFile('../src/html/annotatorDisplay.html'));
 messageCommunicationBus.registerListener('getAnnotatorActions', sendFile('../src/html/quickAnnotate.html'));
 messageCommunicationBus.registerListener('getFloatingPanel', sendFile('../src/html/floatingPanel.html'));
-messageCommunicationBus.registerListener('GET', function(sendResponse, link){});
+messageCommunicationBus.registerListener('GET', function(sendResponse, link) { readUserDataToFirebase(link, sendResponse); });
 messageCommunicationBus.registerListener('POST', function(sendResponse, link, content) { writeUserDataToFirebase(link, content); sendResponse(true); });
 
 
@@ -70,6 +70,34 @@ auth.onAuthStateChanged(firebaseUser => {
         uid = firebaseUser.uid;
     }
 });
+
+function readUserDataToFirebase(link, sendResponse) { 
+    var all_past_annotations = [];
+    var annotation_ref = database.ref(link + uid);
+
+    annotation_ref.once('value').then((data) => {
+        var all_objects = data.val();
+        var keys = Object.keys(all_objects);
+
+
+        for (var i = 0; i < keys.length; i++) {
+            var this_key = keys[i];
+
+            var title = all_objects[this_key].title;
+            var website = all_objects[this_key].website;
+            var start_time = all_objects[this_key].start_time;
+            var end_time = all_objects[this_key].end_time;
+            var tags_list = all_objects[this_key].tags_list;
+            var description = all_objects[this_key].description;
+            var images_list = all_objects[this_key].images_list;
+
+            all_past_annotations.push(new AnnotationLayout(title, website, start_time, end_time, tags_list, description, images_list));
+        }
+    });
+
+    console.log(all_past_annotations);
+    sendResponse(all_past_annotations);
+}
 
 function writeUserDataToFirebase(link, content) { 
     var annotation_ref = database.ref(link + uid);

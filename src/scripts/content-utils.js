@@ -1,9 +1,4 @@
 /** ----------------- ANNOTATOR ----------------- */
-function load_annotations_from_database() {
-    getFromFirebase("annotations/");
-}
-
-
 function insertAnnotator(destionationElement, htmlTemplate) {
     var [container, shadowRoot] = insertNode(destionationElement, htmlTemplate, 'annotator-template', 'annotator-shadow-container');
 
@@ -64,7 +59,10 @@ function removeAnnotator(containerId) {
     element.parentNode.removeChild(element);
 }
 
-
+/** ----------------- DATABASE RELATED --------------- */
+function load_annotations_from_database() {
+    return getFromFirebase("annotations/");
+}
 
 /** ----------------- FLOATING PANEL ----------------- */
 
