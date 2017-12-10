@@ -75,24 +75,26 @@ function readUserDataToFirebase(link, sendResponse) {
     var all_past_annotations = [];
     var annotation_ref = database.ref(link + uid);
 
-    annotation_ref.once('value').then((data) => {
+    annotation_ref.once('value').then(function(data) {
         var all_objects = data.val();
-        var keys = Object.keys(all_objects);
+        
+        if (all_objects) {
+            var keys = Object.keys(all_objects);
 
+            for (var i = 0; i < keys.length; i++) {
+                var this_key = keys[i];
 
-        for (var i = 0; i < keys.length; i++) {
-            var this_key = keys[i];
+                var title = all_objects[this_key].title;
+                var website = all_objects[this_key].website;
+                var start_time = all_objects[this_key].start_time;
+                var end_time = all_objects[this_key].end_time;
+                var tags_list = all_objects[this_key].tags_list;
+                var description = all_objects[this_key].description;
+                var images_list = all_objects[this_key].images_list;
 
-            var title = all_objects[this_key].title;
-            var website = all_objects[this_key].website;
-            var start_time = all_objects[this_key].start_time;
-            var end_time = all_objects[this_key].end_time;
-            var tags_list = all_objects[this_key].tags_list;
-            var description = all_objects[this_key].description;
-            var images_list = all_objects[this_key].images_list;
-
-            all_past_annotations.push(new AnnotationLayout(title, website, start_time, end_time, tags_list, description, images_list));
-        }
+                all_past_annotations.push(new AnnotationLayout(title, website, start_time, end_time, tags_list, description, images_list));
+            }
+        }   
     });
 
     console.log(all_past_annotations);
