@@ -27,7 +27,7 @@ messageCommunicationBus.registerListener('getEmbeddedHtml', sendFile('../src/htm
 messageCommunicationBus.registerListener('getAnnotationDisplay', sendFile('../src/html/annotatorDisplay.html'));
 messageCommunicationBus.registerListener('getAnnotatorActions', sendFile('../src/html/quickAnnotate.html'));
 messageCommunicationBus.registerListener('getFloatingPanel', sendFile('../src/html/floatingPanel.html'));
-messageCommunicationBus.registerListener('GET', function(sendResponse, link) { readUserDataToFirebase(link, sendResponse); });
+messageCommunicationBus.registerListener('GET', function(sendResponse, link, urlsite) { console.log(urlsite); readUserDataToFirebase(link, urlsite, sendResponse); });
 messageCommunicationBus.registerListener('POST', function(sendResponse, link, content) { writeUserDataToFirebase(link, content); sendResponse(true); });
 
 
@@ -71,7 +71,7 @@ auth.onAuthStateChanged(firebaseUser => {
     }
 });
 
-function readUserDataToFirebase(link, sendResponse) { 
+function readUserDataToFirebase(link, urlsite, sendResponse) { 
     var all_past_annotations = [];
     var annotation_ref = database.ref(link + uid);
 
@@ -83,18 +83,29 @@ function readUserDataToFirebase(link, sendResponse) {
 
             for (var i = 0; i < keys.length; i++) {
                 var this_key = keys[i];
-
-                var title = all_objects[this_key].title;
                 var website = all_objects[this_key].website;
-                var start_time = all_objects[this_key].start_time;
-                var end_time = all_objects[this_key].end_time;
-                var tags_list = all_objects[this_key].tags_list;
-                var description = all_objects[this_key].description;
-                var images_list = all_objects[this_key].images_list;
 
-                all_past_annotations.push(new AnnotationLayout(title, website, start_time, end_time, tags_list, description, images_list));
+                if (website.startsWith(urlsite))
+                {
+                    var title = all_objects[this_key].title;
+                    var start_time = all_objects[this_key].start_time;
+                    var end_time = all_objects[this_key].end_time;
+                    var tags_list = all_objects[this_key].tags_list;
+                    var description = all_objects[this_key].description;
+                    var images_list  = [];
+
+                    if (all_objects[this_key].images_list)
+                        for (var j = 0; j < all_objects[this_key].images_list.length; j++)
+                        {
+                            storageRef.child("images/" + uid + "/" + all_objects[this_key].images_list[j]).getDownloadURL().then(function(url) {
+                                images_list.push(url);
+                            });
+                        }
+                    all_past_annotations.push(new AnnotationLayout(title, website, start_time, end_time, tags_list, description, images_list));
+                }
             }
         }
+        console.log(all_past_annotations);
         sendResponse(all_past_annotations);
     });
 }
@@ -106,7 +117,7 @@ function writeUserDataToFirebase(link, content) {
     var images_list = content.images_list;
 
     for (var i = 0; i < images_list.length; i++) {
-        var images_ref = storage.ref("images/" + images_list[i].name);
+        var images_ref = storage.ref("images/" + uid + "/" + images_list[i].name);
         images_ref.putString(images_list[i].data, 'data_url');
 
         images_list_names.push(images_list[i].name);

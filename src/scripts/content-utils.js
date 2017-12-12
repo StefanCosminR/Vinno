@@ -60,8 +60,8 @@ function removeAnnotator(containerId) {
 }
 
 /** ----------------- DATABASE RELATED --------------- */
-function load_annotations_from_database() {
-    return getFromFirebase("annotations/");
+function load_annotations_from_database(urlsite) {
+    return getFromFirebase("annotations/", urlsite);
 }
 
 /** ----------------- FLOATING PANEL ----------------- */

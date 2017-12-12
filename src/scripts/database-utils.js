@@ -4,9 +4,9 @@ function saveToFirebase(link, content) {
     });
 }
 
-function getFromFirebase(link) {
+function getFromFirebase(link, urlsite) {
     return new Promise((resolve, reject) => {
-        chrome.runtime.sendMessage({method: 'GET', link}, function (response) {
+        chrome.runtime.sendMessage({method: 'GET', link, content:urlsite}, function (response) {
             console.log(response);
             resolve(response);
         });
