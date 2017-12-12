@@ -1,9 +1,9 @@
 /** ----------------- ANNOTATOR ----------------- */
 function insertAnnotator(destionationElement, htmlTemplate) {
-    var [container, shadowRoot] = insertNode(destionationElement, htmlTemplate, 'annotator-template', 'annotator-shadow-container');
+    let [container, shadowRoot] = insertNode(destionationElement, htmlTemplate, 'annotator-template', 'annotator-shadow-container');
 
-    var all_images_data = [];
-    var all_images_names = [];
+    let all_images_data = [];
+    let all_images_names = [];
 
     shadowRoot.getElementById('save-button').addEventListener('click', function() {
 
@@ -11,17 +11,18 @@ function insertAnnotator(destionationElement, htmlTemplate) {
         {
             // we take all the data inserted in the popup
 
-            var title = shadowRoot.getElementById("annotator-title").value;
-            var start_time = shadowRoot.getElementById("annotator-start-time").value;
-            var end_time = shadowRoot.getElementById("annotator-finish-time").value;
-            var description = shadowRoot.getElementById("annotator-description").value;
-            var website = window.location.href;
+            let title = shadowRoot.getElementById("annotator-title").value;
+            let start_time = shadowRoot.getElementById("annotator-start-time").value;
+            let end_time = shadowRoot.getElementById("annotator-finish-time").value;
+            let description = shadowRoot.getElementById("annotator-description").value;
+            let website = window.location.href;
+            let [tags_list, new_description] = get_tags_from_description(description);
 
-            var all_images = [];
-            for (var i = 0; i < all_images_data.length; i++)
+            let all_images = [];
+            for (let i = 0; i < all_images_data.length; i++)
                 all_images.push({ data: all_images_data[i], name: all_images_names[i] });
 
-            var this_annotation = new AnnotationLayout(title, website, start_time, end_time, "tags_list", description, all_images);
+            let this_annotation = new AnnotationLayout(title, website, start_time, end_time, tags_list, new_description, all_images);
 
             saveToFirebase("annotations/", this_annotation);
 
@@ -29,15 +30,15 @@ function insertAnnotator(destionationElement, htmlTemplate) {
         }
     });    
 
-    var file_loader = shadowRoot.getElementById('annotator-file');
-    var holder_images = shadowRoot.getElementById('images_holder');
+    let file_loader = shadowRoot.getElementById('annotator-file');
+    let holder_images = shadowRoot.getElementById('images_holder');
 
     file_loader.addEventListener('change', function() {
-        var current_files = file_loader.files;
+        let current_files = file_loader.files;
 
-        for (var i = 0; i < current_files.length; i++) {
+        for (let i = 0; i < current_files.length; i++) {
             all_images_names.push(current_files[i].name);
-            var fileReader = new FileReader();
+            let fileReader = new FileReader();
             
             fileReader.onload = function(event) {
                 all_images_data.push(event.target.result);
@@ -45,7 +46,7 @@ function insertAnnotator(destionationElement, htmlTemplate) {
 
             fileReader.readAsDataURL(current_files[i]);
 
-            var image = document.createElement('img');
+            let image = document.createElement('img');
             image.src = window.URL.createObjectURL(current_files[i]);
             image.setAttribute("class", "annotation-card__photo");
             
@@ -56,10 +57,28 @@ function insertAnnotator(destionationElement, htmlTemplate) {
     return [container, shadowRoot];
 }
 
+function get_tags_from_description(description)
+{
+    let tags_list = [];
+    let new_description = description;
+    let all_words = description.match(/#[a-zA-Z]+/g);
+
+    if(all_words)
+        for (let i = 0; i < all_words.length; i++)
+        {
+            let this_word = all_words[i];
+
+            tags_list.push(this_word);
+            new_description = new_description.replace(this_word, "{" + i + "}");
+        }
+
+    return [tags_list, new_description];
+}
+
 function verify_each_input(root)
 {
-    var start_time_in_seconds = estimate_time_in_seconds(root.getElementById("annotator-start-time").value);
-    var finish_time_in_seconds = estimate_time_in_seconds(root.getElementById("annotator-finish-time").value);
+    let start_time_in_seconds = estimate_time_in_seconds(root.getElementById("annotator-start-time").value);
+    let finish_time_in_seconds = estimate_time_in_seconds(root.getElementById("annotator-finish-time").value);
 
     if (start_time_in_seconds >= finish_time_in_seconds)
         return false;
@@ -68,7 +87,7 @@ function verify_each_input(root)
 
 function estimate_time_in_seconds(time)
 {
-    var each_part_of_time = time.split(":");
+    let each_part_of_time = time.split(":");
     if (each_part_of_time.length == 3)
         return Number(each_part_of_time[0]) * 3600 + Number(each_part_of_time[1]) * 60 + Number(each_part_of_time[2]);
     else

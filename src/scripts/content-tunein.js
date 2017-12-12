@@ -40,8 +40,27 @@ getAllDependencies()
                     all_annotations_titles.push(this_annotation.title);
                     all_annotations_start_time.push(this_annotation.start_time);
                     all_annotations_end_time.push(this_annotation.end_time);
-                    all_annotations_tags.push(this_annotation.tags_list);
-                    all_annotations_description.push(this_annotation.description);
+
+                    if (this_annotation.tags_list)
+                    {
+                        let tags_list = this_annotation.tags_list;
+                        let description = this_annotation.description;
+                        
+                        for (let j = 0; j < tags_list.length; j++)
+                        {
+                            let this_tag = tags_list[j];
+                            description = description.replace("{" + j + "}", this_tag);
+                        }
+
+                        
+                        all_annotations_tags.push(tags_list);
+                        all_annotations_description.push(description);
+                    }   
+                    else
+                    {
+                        all_annotations_tags.push([]);
+                        all_annotations_description.push(this_annotation.description);
+                    }
                     if (this_annotation.images_list)
                         all_annotations_images_list.push(this_annotation.images_list);
                     else
@@ -123,10 +142,10 @@ getAllDependencies()
 
         function fill_with_annotations(full_time)
         {
-            for (let iterator = 0; iterator < all_annotations_titles.length; iterator++)
-                add_annotation_to_the_list(iterator, all_annotations_titles[iterator], all_annotations_start_time[iterator], 
-                                           all_annotations_end_time[iterator], all_annotations_tags[iterator], 
-                                           all_annotations_description[iterator], all_annotations_images_list[iterator], full_time);
+            for (let i = 0; i < all_annotations_titles.length; i++)
+                add_annotation_to_the_list(i, all_annotations_titles[i], all_annotations_start_time[i], 
+                                           all_annotations_end_time[i], all_annotations_tags[i], 
+                                           all_annotations_description[i], all_annotations_images_list[i], full_time);
         }
 
         function add_annotation_to_the_list(iterator, title, start_time, end_time, tags_list, description, images_list, full_time)
