@@ -8,23 +8,12 @@ getAllDependencies()
         let all_annotations_description = [];
         let all_annotations_images_list = [];
 
+        let all_new_annotations = [];
+        let all_annotations_total_number = 0;
+
         function main_function()
         {
-            let all_annotations = load_annotations_from_database("https://tunein.com/radio/");
-
-            all_annotations.then(function(result) { 
-                for (iterator = 0; iterator < result.length; iterator++) 
-                {
-                    let this_annotation = result[iterator];
-
-                    all_annotations_titles.push(this_annotation.title);
-                    all_annotations_start_time.push(this_annotation.start_time);
-                    all_annotations_end_time.push(this_annotation.end_time);
-                    all_annotations_tags.push(this_annotation.tags_list);
-                    all_annotations_description.push(this_annotation.description);
-                    all_annotations_images_list.push(this_annotation.images_list);
-                }
-            });
+            get_all_annotations();
 
             add_insert_annotation_button();
 
@@ -37,6 +26,29 @@ getAllDependencies()
                     clearInterval(trigger);
                 }
             }, 1000);
+        }
+
+        function get_all_annotations()
+        {
+            let all_annotations = load_annotations_from_database("https://tunein.com/radio/");
+
+            all_annotations.then(function(result) { 
+                for (let i = 0; i < result.length; i++) 
+                {
+                    let this_annotation = result[i];
+
+                    all_annotations_titles.push(this_annotation.title);
+                    all_annotations_start_time.push(this_annotation.start_time);
+                    all_annotations_end_time.push(this_annotation.end_time);
+                    all_annotations_tags.push(this_annotation.tags_list);
+                    all_annotations_description.push(this_annotation.description);
+                    if (this_annotation.images_list)
+                        all_annotations_images_list.push(this_annotation.images_list);
+                    else
+                        all_annotations_images_list.push([]);
+                }
+                all_annotations_total_number = result.length;
+            });
         }
 
         function add_insert_annotation_button()
@@ -72,6 +84,8 @@ getAllDependencies()
                 let holder = document.getElementById("content");
                 let [container, root] = insertAnnotator(holder, dependencies.annotatorPopup);
 
+                let all_new_images = []
+
                 container.style.position = "fixed";
                 container.style.bottom = "10%";
                 container.style.left = "25%";
@@ -80,9 +94,29 @@ getAllDependencies()
                 root.getElementById("annotator-start-time").value = "00:" + document.getElementById("scrubberElapsed").innerHTML;
                 root.getElementById("annotator-finish-time").value = root.getElementById("annotator-start-time").value;
 
+                let file_loader = root.getElementById('annotator-file');
+
+                file_loader.addEventListener('change', function() {
+                    let current_files = file_loader.files;
+
+                    for (let i = 0; i < current_files.length; i++) 
+                        all_new_images.push(window.URL.createObjectURL(current_files[i]));
+                });
+
                 root.getElementById("save-button").addEventListener("click", function() {
                     if (verify_each_input(root))
+                    {
+                        let title = root.getElementById("annotator-title").value;
+                        let start_time = root.getElementById("annotator-start-time").value;
+                        let end_time = root.getElementById("annotator-finish-time").value;
+                        let description = root.getElementById("annotator-description").value;
+
+                        all_annotations_total_number = all_annotations_total_number + 1;
+                        add_annotation_to_the_list(all_annotations_total_number, title, start_time, end_time, 
+                                                   "tags_list", description, all_new_images, document.getElementById("scrubberDuration").innerHTML);
+
                         document.getElementById("playerActionButton").click();
+                    }
                 });
             });
         }

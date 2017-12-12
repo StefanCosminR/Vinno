@@ -104,38 +104,51 @@ function readUserDataToFirebase(link, urlsite, sendResponse) {
 
 function writeUserDataToFirebase(link, content) { 
     let annotation_ref = database.ref(link + uid);
-    let images_list_names = [];
+    let images_list_links = [];
     let images_list = content.images_list;
 
     let all_images_promises = [];
 
-    for (let i = 0; i < images_list.length; i++) {
-        let images_ref = storage.ref("images/" + uid + "/" + images_list[i].name);
-        let j = i;
-        images_ref.putString(images_list[j].data, 'data_url').then(() => { 
-            all_images_promises.push(storageRef.child("images/" + uid + "/" + images_list[j].name).getDownloadURL());
+    if (images_list.length != 0)
+        for (let i = 0; i < images_list.length; i++) {
+            let images_ref = storage.ref("images/" + uid + "/" + images_list[i].name);
+            let j = i;
+            images_ref.putString(images_list[j].data, 'data_url').then(() => { 
+                all_images_promises.push(storageRef.child("images/" + uid + "/" + images_list[j].name).getDownloadURL());
 
-            if (j == images_list.length - 1)
-            {
-                Promise.all(all_images_promises).then(values => { 
-                    for (let i = 0; i < values.length; i++)
-                        images_list_names.push(values[i]);
+                if (j == images_list.length - 1)
+                {
+                    Promise.all(all_images_promises).then(values => { 
+                        for (let i = 0; i < values.length; i++)
+                            images_list_links.push(values[i]);
 
-                    let annotation_data = {
-                        title: content.title,
-                        website: content.website,
-                        start_time: content.start_time,
-                        end_time: content.end_time,
-                        tags_list: content.tags_list,
-                        description: content.description,
-                        images_list: images_list_names
-                    }
+                        let annotation_data = {
+                            title: content.title,
+                            website: content.website,
+                            start_time: content.start_time,
+                            end_time: content.end_time,
+                            tags_list: content.tags_list,
+                            description: content.description,
+                            images_list: images_list_links
+                        }
 
-                    annotation_ref.push(annotation_data);
-                });
-            }
-        });
+                        annotation_ref.push(annotation_data);
+                    });
+                }
+            });
+        }
+    else
+    {
+        let annotation_data = {
+            title: content.title,
+            website: content.website,
+            start_time: content.start_time,
+            end_time: content.end_time,
+            tags_list: content.tags_list,
+            description: content.description,
+            images_list: images_list_links
+        }
+
+        annotation_ref.push(annotation_data);
     }
-
-
 }
