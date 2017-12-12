@@ -6,22 +6,28 @@ function insertAnnotator(destionationElement, htmlTemplate) {
     var all_images_names = [];
 
     shadowRoot.getElementById('save-button').addEventListener('click', function() {
-        // we take all the data inserted in the popup
 
-        var title = shadowRoot.getElementById("annotator-title").value;
-        var start_time = shadowRoot.getElementById("annotator-start-time").value;
-        var end_time = shadowRoot.getElementById("annotator-finish-time").value;
-        var description = shadowRoot.getElementById("annotator-description").value;
-        var website = window.location.href;
+        if (verify_each_input(shadowRoot))
+        {
+            // we take all the data inserted in the popup
 
-        var all_images = [];
-        for (var i = 0; i < all_images_data.length; i++)
-            all_images.push({ data: all_images_data[i], name: all_images_names[i] });
+            var title = shadowRoot.getElementById("annotator-title").value;
+            var start_time = shadowRoot.getElementById("annotator-start-time").value;
+            var end_time = shadowRoot.getElementById("annotator-finish-time").value;
+            var description = shadowRoot.getElementById("annotator-description").value;
+            var website = window.location.href;
 
-        var this_annotation = new AnnotationLayout(title, website, start_time, end_time, "tags_list", description, all_images);
+            var all_images = [];
+            for (var i = 0; i < all_images_data.length; i++)
+                all_images.push({ data: all_images_data[i], name: all_images_names[i] });
 
-        saveToFirebase("annotations/", this_annotation);
-    });
+            var this_annotation = new AnnotationLayout(title, website, start_time, end_time, "tags_list", description, all_images);
+
+            saveToFirebase("annotations/", this_annotation);
+
+            removeAnnotator("annotator-shadow-container");
+        }
+    });    
 
     var file_loader = shadowRoot.getElementById('annotator-file');
     var holder_images = shadowRoot.getElementById('images_holder');
@@ -48,6 +54,25 @@ function insertAnnotator(destionationElement, htmlTemplate) {
     });
 
     return [container, shadowRoot];
+}
+
+function verify_each_input(root)
+{
+    var start_time_in_seconds = estimate_time_in_seconds(root.getElementById("annotator-start-time").value);
+    var finish_time_in_seconds = estimate_time_in_seconds(root.getElementById("annotator-finish-time").value);
+
+    if (start_time_in_seconds >= finish_time_in_seconds)
+        return false;
+    return true;
+}   
+
+function estimate_time_in_seconds(time)
+{
+    var each_part_of_time = time.split(":");
+    if (each_part_of_time.length == 3)
+        return Number(each_part_of_time[0]) * 3600 + Number(each_part_of_time[1]) * 60 + Number(each_part_of_time[2]);
+    else
+        return Number(each_part_of_time[0]) * 60 + Number(each_part_of_time[1]);
 }
 
 function insertAnnotatorDisplay(destionationElement, htmlTemplate) {

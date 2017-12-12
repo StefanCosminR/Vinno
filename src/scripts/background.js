@@ -27,7 +27,7 @@ messageCommunicationBus.registerListener('getEmbeddedHtml', sendFile('../src/htm
 messageCommunicationBus.registerListener('getAnnotationDisplay', sendFile('../src/html/annotatorDisplay.html'));
 messageCommunicationBus.registerListener('getAnnotatorActions', sendFile('../src/html/quickAnnotate.html'));
 messageCommunicationBus.registerListener('getFloatingPanel', sendFile('../src/html/floatingPanel.html'));
-messageCommunicationBus.registerListener('GET', function(sendResponse, link, urlsite) { console.log(urlsite); readUserDataToFirebase(link, urlsite, sendResponse); });
+messageCommunicationBus.registerListener('GET', function(sendResponse, link, urlsite) { readUserDataToFirebase(link, urlsite, sendResponse); });
 messageCommunicationBus.registerListener('POST', function(sendResponse, link, content) { writeUserDataToFirebase(link, content); sendResponse(true); });
 
 
@@ -72,66 +72,70 @@ auth.onAuthStateChanged(firebaseUser => {
 });
 
 function readUserDataToFirebase(link, urlsite, sendResponse) { 
-    var all_past_annotations = [];
-    var annotation_ref = database.ref(link + uid);
+    let all_past_annotations = [];
+    let annotation_ref = database.ref(link + uid);
 
     annotation_ref.once('value').then(function(data) {
-        var all_objects = data.val();
+        let all_objects = data.val();
         
         if (all_objects) {
-            var keys = Object.keys(all_objects);
+            let keys = Object.keys(all_objects);
 
-            for (var i = 0; i < keys.length; i++) {
-                var this_key = keys[i];
-                var website = all_objects[this_key].website;
+            for (let i = 0; i < keys.length; i++) {
+                let this_key = keys[i];
+                let website = all_objects[this_key].website;
 
                 if (website.startsWith(urlsite))
                 {
-                    var title = all_objects[this_key].title;
-                    var start_time = all_objects[this_key].start_time;
-                    var end_time = all_objects[this_key].end_time;
-                    var tags_list = all_objects[this_key].tags_list;
-                    var description = all_objects[this_key].description;
-                    var images_list  = [];
+                    let title = all_objects[this_key].title;
+                    let start_time = all_objects[this_key].start_time;
+                    let end_time = all_objects[this_key].end_time;
+                    let tags_list = all_objects[this_key].tags_list;
+                    let description = all_objects[this_key].description;
+                    let images_list  = all_objects[this_key].images_list;
 
-                    if (all_objects[this_key].images_list)
-                        for (var j = 0; j < all_objects[this_key].images_list.length; j++)
-                        {
-                            storageRef.child("images/" + uid + "/" + all_objects[this_key].images_list[j]).getDownloadURL().then(function(url) {
-                                images_list.push(url);
-                            });
-                        }
                     all_past_annotations.push(new AnnotationLayout(title, website, start_time, end_time, tags_list, description, images_list));
                 }
             }
         }
-        console.log(all_past_annotations);
         sendResponse(all_past_annotations);
     });
 }
 
 function writeUserDataToFirebase(link, content) { 
-    var annotation_ref = database.ref(link + uid);
-    var images_list_names = [];
+    let annotation_ref = database.ref(link + uid);
+    let images_list_names = [];
+    let images_list = content.images_list;
 
-    var images_list = content.images_list;
+    let all_images_promises = [];
 
-    for (var i = 0; i < images_list.length; i++) {
-        var images_ref = storage.ref("images/" + uid + "/" + images_list[i].name);
-        images_ref.putString(images_list[i].data, 'data_url');
+    for (let i = 0; i < images_list.length; i++) {
+        let images_ref = storage.ref("images/" + uid + "/" + images_list[i].name);
+        let j = i;
+        images_ref.putString(images_list[j].data, 'data_url').then(() => { 
+            all_images_promises.push(storageRef.child("images/" + uid + "/" + images_list[j].name).getDownloadURL());
 
-        images_list_names.push(images_list[i].name);
+            if (j == images_list.length - 1)
+            {
+                Promise.all(all_images_promises).then(values => { 
+                    for (let i = 0; i < values.length; i++)
+                        images_list_names.push(values[i]);
+
+                    let annotation_data = {
+                        title: content.title,
+                        website: content.website,
+                        start_time: content.start_time,
+                        end_time: content.end_time,
+                        tags_list: content.tags_list,
+                        description: content.description,
+                        images_list: images_list_names
+                    }
+
+                    annotation_ref.push(annotation_data);
+                });
+            }
+        });
     }
 
-    var annotation_data = {
-        title: content.title,
-        website: content.website,
-        start_time: content.start_time,
-        end_time: content.end_time,
-        tags_list: content.tags_list,
-        description: content.description,
-        images_list: images_list_names
-    }
 
-    annotation_ref.push(annotation_data);
 }
