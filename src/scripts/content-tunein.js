@@ -47,11 +47,7 @@ getAllDependencies()
                         let description = this_annotation.description;
                         
                         for (let j = 0; j < tags_list.length; j++)
-                        {
-                            let this_tag = tags_list[j];
-                            description = description.replace("{" + j + "}", this_tag);
-                        }
-
+                            description = description.replace("{" + j + "}", tags_list[j]);
                         
                         all_annotations_tags.push(tags_list);
                         all_annotations_description.push(description);
@@ -61,6 +57,7 @@ getAllDependencies()
                         all_annotations_tags.push([]);
                         all_annotations_description.push(this_annotation.description);
                     }
+                    
                     if (this_annotation.images_list)
                         all_annotations_images_list.push(this_annotation.images_list);
                     else
@@ -194,7 +191,13 @@ getAllDependencies()
 
                 root.getElementById("annotator-start-time").value = start_time;
                 root.getElementById("annotator-finish-time").value = end_time;
-                root.getElementById("annotator-description").value = description;
+                root.getElementById("annotator-description").innerHTML = description;
+
+                let all_words = description.match(/#\S+/g);
+                if(all_words)
+                    for (let i = 0; i < all_words.length; i++)
+                        root.getElementById("annotator-description").innerHTML = root.getElementById("annotator-description").innerHTML.replace(all_words[i], 
+                                                                                      '<span style="color: #1E90FF">'+ all_words[i] + '</span>');
 
                 for (let i = 0; i < images_list.length; i++)
                 {

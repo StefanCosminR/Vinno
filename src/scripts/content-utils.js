@@ -61,7 +61,7 @@ function get_tags_from_description(description)
 {
     let tags_list = [];
     let new_description = description;
-    let all_words = description.match(/#[a-zA-Z]+/g);
+    let all_words = description.match(/#\S+/g);
 
     if(all_words)
         for (let i = 0; i < all_words.length; i++)

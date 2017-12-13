@@ -12,7 +12,7 @@
       </div>
 
       <div class="box-content-row">
-        <textarea id="annotator-description" placeholder="Add text annotation here"></textarea>
+        <p id="annotator-description"></p>
       </div>
 
       <div id="images_holder" class="annotation-card__photos"> </div>
@@ -43,13 +43,14 @@
     color: white;
   }
 
-  textarea {
+  p {
     outline: none;
     border: 0;
     resize: none;
     padding-left: 10px;
     font-size: 16px;
     display: block;
+    width: 90%;
   }
 
   .input {
@@ -73,10 +74,6 @@
   .box .box-content .box-content-row {
     display: block;
     width: 100%;
-  }
-
-  textarea {
-    width: 95%;
   }
 
   .btn {
