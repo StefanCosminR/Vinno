@@ -93,8 +93,9 @@ function readUserDataToFirebase(link, urlsite, sendResponse) {
                     let tags_list = all_objects[this_key].tags_list;
                     let description = all_objects[this_key].description;
                     let images_list  = all_objects[this_key].images_list;
+                    let music_list  = all_objects[this_key].music_list;
 
-                    all_past_annotations.push(new AnnotationLayout(title, website, start_time, end_time, tags_list, description, images_list));
+                    all_past_annotations.push(new AnnotationLayout(title, website, start_time, end_time, tags_list, description, images_list, music_list));
                 }
             }
         }
@@ -104,13 +105,58 @@ function readUserDataToFirebase(link, urlsite, sendResponse) {
 
 function writeUserDataToFirebase(link, content) { 
     let annotation_ref = database.ref(link + uid);
+
     let images_list_links = [];
+    let music_list_links = [];
+
     let images_list = content.images_list;
+    let music_list = content.music_list;
 
     let all_images_promises = [];
+    let all_music_promises = [];
 
-    if (images_list.length != 0)
-        for (let i = 0; i < images_list.length; i++) {
+    if (images_list.length != 0 && music_list.length != 0)
+    {
+        console.log("BOTH");
+        for (let i = 0; i < images_list.length; i++) 
+        {
+            let images_ref = storage.ref("images/" + uid + "/" + images_list[i].name);
+            let j = i;
+            images_ref.putString(images_list[j].data, 'data_url').then(() => { 
+                all_images_promises.push(storageRef.child("images/" + uid + "/" + images_list[j].name).getDownloadURL());
+
+                if (j == images_list.length - 1)
+                {
+                    Promise.all(all_images_promises).then(values => { 
+                        for (let i = 0; i < values.length; i++)
+                            images_list_links.push(values[i]);
+
+
+                        // TO DO BOTH PROMISES IN THE SAME TIME
+
+
+                        let annotation_data = {
+                            title: content.title,
+                            website: content.website,
+                            start_time: content.start_time,
+                            end_time: content.end_time,
+                            tags_list: content.tags_list,
+                            description: content.description,
+                            images_list: images_list_links,
+                            music_list: music_list_links
+                        }
+
+                        annotation_ref.push(annotation_data);
+                    });
+                }
+            });
+        }
+    }
+    else if (images_list.length != 0 && music_list.length == 0)
+    {
+        console.log("ONLY IMAGES");
+        for (let i = 0; i < images_list.length; i++) 
+        {
             let images_ref = storage.ref("images/" + uid + "/" + images_list[i].name);
             let j = i;
             images_ref.putString(images_list[j].data, 'data_url').then(() => { 
@@ -129,7 +175,8 @@ function writeUserDataToFirebase(link, content) {
                             end_time: content.end_time,
                             tags_list: content.tags_list,
                             description: content.description,
-                            images_list: images_list_links
+                            images_list: images_list_links,
+                            music_list: music_list_links
                         }
 
                         annotation_ref.push(annotation_data);
@@ -137,8 +184,43 @@ function writeUserDataToFirebase(link, content) {
                 }
             });
         }
+    }
+    else if (images_list.length == 0 && music_list.length != 0)
+    {
+        console.log("ONLY MUSIC");
+        for (let i = 0; i < music_list.length; i++) 
+        {
+            let music_ref = storage.ref("music/" + uid + "/" + music_list[i].name);
+            let j = i;
+            music_ref.putString(music_list[j].data, 'data_url').then(() => { 
+                all_music_promises.push(storageRef.child("music/" + uid + "/" + music_list[j].name).getDownloadURL());
+
+                if (j == music_list.length - 1)
+                {
+                    Promise.all(all_music_promises).then(values => { 
+                        for (let i = 0; i < values.length; i++)
+                            music_list_links.push(values[i]);
+
+                        let annotation_data = {
+                            title: content.title,
+                            website: content.website,
+                            start_time: content.start_time,
+                            end_time: content.end_time,
+                            tags_list: content.tags_list,
+                            description: content.description,
+                            images_list: images_list_links,
+                            music_list: music_list_links
+                        }
+
+                        annotation_ref.push(annotation_data);
+                    });
+                }
+            });
+        }
+    }
     else
     {
+        console.log("NONE");
         let annotation_data = {
             title: content.title,
             website: content.website,
@@ -146,7 +228,8 @@ function writeUserDataToFirebase(link, content) {
             end_time: content.end_time,
             tags_list: content.tags_list,
             description: content.description,
-            images_list: images_list_links
+            images_list: images_list_links,
+            music_list: music_list_links
         }
 
         annotation_ref.push(annotation_data);

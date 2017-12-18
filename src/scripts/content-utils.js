@@ -5,6 +5,9 @@ function insertAnnotator(destionationElement, htmlTemplate) {
     let all_images_data = [];
     let all_images_names = [];
 
+    let all_music_data = [];
+    let all_music_names = [];
+
     shadowRoot.getElementById('save-button').addEventListener('click', function() {
 
         if (verify_each_input(shadowRoot))
@@ -22,7 +25,11 @@ function insertAnnotator(destionationElement, htmlTemplate) {
             for (let i = 0; i < all_images_data.length; i++)
                 all_images.push({ data: all_images_data[i], name: all_images_names[i] });
 
-            let this_annotation = new AnnotationLayout(title, website, start_time, end_time, tags_list, new_description, all_images);
+            let all_music = [];
+            for (let i = 0; i < all_music_data.length; i++)
+                all_music.push({ data: all_music_data[i], name: all_music_names[i] });
+
+            let this_annotation = new AnnotationLayout(title, website, start_time, end_time, tags_list, new_description, all_images, all_music);
 
             saveToFirebase("annotations/", this_annotation);
 
@@ -37,20 +44,39 @@ function insertAnnotator(destionationElement, htmlTemplate) {
         let current_files = file_loader.files;
 
         for (let i = 0; i < current_files.length; i++) {
-            all_images_names.push(current_files[i].name);
-            let fileReader = new FileReader();
-            
-            fileReader.onload = function(event) {
-                all_images_data.push(event.target.result);
-            };
+            if (current_files[i].name.endsWith(".img") || current_files[i].name.endsWith(".jpg") || current_files[i].name.endsWith(".jpeg"))
+            {
+                all_images_names.push(current_files[i].name);
+                let fileReader = new FileReader();
+                
+                fileReader.onload = function(event) {
+                    all_images_data.push(event.target.result);
+                };
 
-            fileReader.readAsDataURL(current_files[i]);
+                fileReader.readAsDataURL(current_files[i]);
 
-            let image = document.createElement('img');
-            image.src = window.URL.createObjectURL(current_files[i]);
-            image.setAttribute("class", "annotation-card__photo");
-            
-            holder_images.appendChild(image);
+                let image = document.createElement('img');
+                image.src = window.URL.createObjectURL(current_files[i]);
+                image.setAttribute("class", "annotation-card__photo");
+                
+                holder_images.appendChild(image);
+            }
+            else
+            {
+                all_music_names.push(current_files[i].name);
+                let fileReader = new FileReader();
+                
+                fileReader.onload = function(event) {
+                    all_music_data.push(event.target.result);
+                };
+
+                fileReader.readAsDataURL(current_files[i]);
+
+                let image = document.createElement('img');
+                image.setAttribute("class", "annotation-card__music");
+                
+                holder_images.appendChild(image);
+            }
         }
     });
 

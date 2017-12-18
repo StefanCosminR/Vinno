@@ -7,6 +7,7 @@ getAllDependencies()
         let all_annotations_tags = [];
         let all_annotations_description = [];
         let all_annotations_images_list = [];
+        let all_annotations_music_list = [];
 
         let all_new_annotations = [];
         let all_annotations_total_number = 0;
@@ -62,7 +63,13 @@ getAllDependencies()
                         all_annotations_images_list.push(this_annotation.images_list);
                     else
                         all_annotations_images_list.push([]);
+
+                    if (this_annotation.music_list)
+                        all_annotations_music_list.push(this_annotation.music_list);
+                    else
+                        all_annotations_music_list.push([]);
                 }
+
                 all_annotations_total_number = result.length;
             });
         }
@@ -142,10 +149,11 @@ getAllDependencies()
             for (let i = 0; i < all_annotations_titles.length; i++)
                 add_annotation_to_the_list(i, all_annotations_titles[i], all_annotations_start_time[i], 
                                            all_annotations_end_time[i], all_annotations_tags[i], 
-                                           all_annotations_description[i], all_annotations_images_list[i], full_time);
+                                           all_annotations_description[i], all_annotations_images_list[i], 
+                                           all_annotations_music_list[i], full_time);
         }
 
-        function add_annotation_to_the_list(iterator, title, start_time, end_time, tags_list, description, images_list, full_time)
+        function add_annotation_to_the_list(iterator, title, start_time, end_time, tags_list, description, images_list, music_list, full_time)
         {
             // we display the popup on the loading area
 
@@ -167,10 +175,10 @@ getAllDependencies()
 
             let created_annotation = document.getElementById(title + "_" + iterator);
             
-            add_listener_for_annotation(created_annotation, start_time, end_time, tags_list, description, images_list);
+            add_listener_for_annotation(created_annotation, start_time, end_time, tags_list, description, images_list, music_list);
         }
 
-        function add_listener_for_annotation(annotation, start_time, end_time, tags_list, description, images_list)
+        function add_listener_for_annotation(annotation, start_time, end_time, tags_list, description, images_list, music_list)
         {
             annotation.addEventListener("mouseover", function() {
                 // we start to hover a popup
@@ -197,13 +205,21 @@ getAllDependencies()
                 if(all_words)
                     for (let i = 0; i < all_words.length; i++)
                         root.getElementById("annotator-description").innerHTML = root.getElementById("annotator-description").innerHTML.replace(all_words[i], 
-                                                                                      '<span style="color: #1E90FF">'+ all_words[i] + '</span>');
+                                                                                 '<span style="color: #1E90FF">'+ all_words[i] + '</span>');
 
                 for (let i = 0; i < images_list.length; i++)
                 {
                     let image = document.createElement('img');
                     image.src = images_list[i];
                     image.setAttribute("class", "annotation-card__photo");
+
+                    holder_images.appendChild(image);
+                }
+
+                for (let i = 0; i < music_list.length; i++)
+                {
+                    let image = document.createElement('img');
+                    image.setAttribute("class", "annotation-card__music");
 
                     holder_images.appendChild(image);
                 }
