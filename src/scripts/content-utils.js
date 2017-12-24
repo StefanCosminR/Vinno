@@ -29,7 +29,8 @@ function insertAnnotator(destionationElement, htmlTemplate) {
     file_loader.addEventListener('change', function() {
         let current_files = file_loader.files;
 
-        for (let i = 0; i < current_files.length; i++) {
+        for (let i = 0; i < current_files.length; i++) 
+        {
             let fileReader = new FileReader();
             
             fileReader.onload = function(event) 

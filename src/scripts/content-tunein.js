@@ -109,6 +109,7 @@ getAllDependencies()
                 let [container, root] = insertAnnotator(holder, dependencies.annotatorPopup);
 
                 let all_new_images = []
+                let all_new_songs = [];
 
                 container.style.position = "fixed";
                 container.style.bottom = "10%";
@@ -124,7 +125,21 @@ getAllDependencies()
                     let current_files = file_loader.files;
 
                     for (let i = 0; i < current_files.length; i++) 
-                        all_new_images.push(window.URL.createObjectURL(current_files[i]));
+                    {
+                        let fileReader = new FileReader();
+            
+                        fileReader.onload = function(event) 
+                        {
+                            if (current_files[i].name.endsWith(".img") || current_files[i].name.endsWith(".jpg") || current_files[i].name.endsWith(".jpeg"))
+                                all_new_images.push(event.target.result);
+                            else if (current_files[i].name.endsWith(".mp3"))
+                                all_new_songs.push("");
+
+                            console.log(all_new_images);
+                            console.log(all_new_songs);
+                        };
+                        fileReader.readAsDataURL(current_files[i]);
+                    }
                 });
 
                 root.getElementById("save-button").addEventListener("click", function() {
@@ -138,9 +153,12 @@ getAllDependencies()
 
                         all_annotations_total_number = all_annotations_total_number + 1;
                         let [tags_list, new_description] = get_tags_from_description(description);
+
+                        console.log(all_new_songs);
+                        console.log("asds");
                         
                         add_annotation_to_the_list(all_annotations_total_number, content_title, title, start_time, end_time, 
-                                                   tags_list, description, all_new_images, "", document.getElementById("scrubberDuration").innerHTML);
+                                                   tags_list, description, all_new_images, all_new_songs, document.getElementById("scrubberDuration").innerHTML);
 
                         document.getElementById("playerActionButton").click();
                     }

@@ -27,6 +27,16 @@ auth.onAuthStateChanged(firebaseUser =>
     }
 });
 
+let all_content_title = [];
+let all_website = [];
+let all_title = [];
+let all_description = [];
+let all_playlist = [];
+
+let player = document.getElementById("audio");
+let current_song = -1;
+let play_state = false;
+
 function readAllAnnotationsFromFirebase() 
 {
     let annotation_ref = database.ref("annotations/");
@@ -43,17 +53,68 @@ function readAllAnnotationsFromFirebase()
             {
                 let this_key = keys[i];
                 
-                console.log(all_objects[uid][this_key].content_title);
-                
+                if (all_objects[uid][this_key].music_list)
+                    for (let j = 0; j < all_objects[uid][this_key].music_list.length; j++)
+                    {
+                        all_content_title.push(all_objects[uid][this_key].content_title);
+                        all_website.push(all_objects[uid][this_key].website);
+                        all_title.push(all_objects[uid][this_key].title);
+                        all_playlist.push(all_objects[uid][this_key].music_list[j]);
+                        all_description.push(all_objects[uid][this_key].description);
+                        current_song = 0;
+                    }
             }
         }
-
         fill_with_annotations();
     });
 }
 
+function switchPlayState(current) 
+{
+    player.src = all_playlist[current];
+    if(play_state) 
+    {
+        document.getElementById("play").setAttribute("class", "play-button paused");
+        player.pause();
+        play_state = false;
+    } 
+    else 
+    {
+        document.getElementById("play").setAttribute("class", "play-button playing");
+        player.play();
+        play_state = true;
+    }
+}
+// <li><i class="fa fa-check-circle-o"></i><a><span>Images</span></a></li>
 function fill_with_annotations() 
-{ 
-    console.log("asd");
-}   
-console.log("asd");
+{   
+    let holder = document.getElementById("list");
+    for (let i = 0; i < all_playlist.length; i++)
+    {
+        let new_song = document.createElement("li");
+        new_song.setAttribute("id", "song_" + i);
+        new_song.innerHTML = "<i class=\"fa fa-check-circle-o\"></i><a><span>" + "Song from annotation with title <b>\"" + all_title[i] + 
+                              "\"</b> and description <b>\"" + all_description[i] + "\"</b>" + " hosted at <b>\"" + all_content_title[i] + "\"";
+        holder.appendChild(new_song);
+
+        document.getElementById("song_" + i).onclick = function() {
+            switchPlayState(i);
+
+            for (let j = 0; j < all_playlist.length; j++)
+            {
+                let this_song = document.getElementById("song_" + j).childNodes[0];
+                this_song.setAttribute("style", "color: #36b4a7;")
+            }
+
+            let this_song = document.getElementById("song_" + i).childNodes[0];
+            this_song.setAttribute("style", "color: red;")
+        };
+    }
+
+    document.getElementById("play").onclick = function() {
+        if (current_song != -1)
+            switchPlayState(current_song);
+    };
+}  
+
+readAllAnnotationsFromFirebase();

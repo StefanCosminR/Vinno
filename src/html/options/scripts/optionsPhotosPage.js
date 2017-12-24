@@ -33,6 +33,8 @@ let all_title = [];
 let all_description = [];
 let all_image_list = [];
 
+let slide_index = 1;
+
 function readAllAnnotationsFromFirebase() 
 {
     let annotation_ref = database.ref("annotations/");
@@ -49,16 +51,15 @@ function readAllAnnotationsFromFirebase()
             {
                 let this_key = keys[i];
                 
-                for (let j = 0; j < all_objects[uid][this_key].images_list.length; j++)
-                {
-                    all_content_title.push(all_objects[uid][this_key].content_title);
-                    all_website.push(all_objects[uid][this_key].website);
-                    all_title.push(all_objects[uid][this_key].title);
-                    all_image_list.push(all_objects[uid][this_key].images_list[j]);
-                    all_description.push(all_objects[uid][this_key].description);
-                }
-
-                console.log(all_image_list);
+                if(all_objects[uid][this_key].images_list)
+                    for (let j = 0; j < all_objects[uid][this_key].images_list.length; j++)
+                    {
+                        all_content_title.push(all_objects[uid][this_key].content_title);
+                        all_website.push(all_objects[uid][this_key].website);
+                        all_title.push(all_objects[uid][this_key].title);
+                        all_image_list.push(all_objects[uid][this_key].images_list[j]);
+                        all_description.push(all_objects[uid][this_key].description);
+                    }
             }
         }
 
@@ -74,7 +75,7 @@ function fill_with_annotations()
     {
         
         let new_photo = document.createElement("div");
-        new_photo.setAttribute("class", "mySlides fade");
+        new_photo.setAttribute("class", "my_slides fade");
         if(i == 0)
             new_photo.setAttribute("style", "display: block;");
         else
@@ -83,33 +84,33 @@ function fill_with_annotations()
                               "\"</b> and description <b>\"" + all_description[i] + "\"</b>" + " hosted at <b>\"" + all_content_title[i] + "\"</b></div></div>";
         // TO DO 
         // maybe use URL too (from all_website)
-        console.log(new_photo);
         holder.appendChild(new_photo);
     }
 
 
     document.getElementsByClassName("prev")[0].onclick = function() {
-        showSlides(slideIndex = slideIndex - 1);
+        show_slides(slide_index = slide_index - 1);
     }
     document.getElementsByClassName("next")[0].onclick = function() {
-        showSlides(slideIndex = slideIndex + 1);
+        show_slides(slide_index = slide_index + 1);
     }
 }
 
-let slideIndex = 1;
-readAllAnnotationsFromFirebase();
-if (all_title.length)
-    showSlides(slideIndex);
-
-function showSlides(n) {
-  let slides = document.getElementsByClassName("mySlides");
+function show_slides(n) 
+{
+  let slides = document.getElementsByClassName("my_slides");
 
   if (n > slides.length)
-    slideIndex = 1;  
+    slide_index = 1;  
   if (n < 1) 
-    slideIndex = slides.length;
+    slide_index = slides.length;
   for (let i = 0; i < slides.length; i++)
       slides[i].style.display = "none";  
 
-  slides[slideIndex-1].style.display = "block";  
+  slides[slide_index-1].style.display = "block";  
 }
+
+readAllAnnotationsFromFirebase();
+
+if (all_title.length)
+    show_slides(slide_index);
