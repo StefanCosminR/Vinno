@@ -151,10 +151,11 @@ getAllDependencies()
         function fill_with_annotations(full_time)
         {
             for (let i = 0; i < all_annotations_titles.length; i++)
-                add_annotation_to_the_list(i, all_annotations_content_title[i], all_annotations_titles[i], all_annotations_start_time[i], 
-                                           all_annotations_end_time[i], all_annotations_tags[i], 
-                                           all_annotations_description[i], all_annotations_images_list[i], 
-                                           all_annotations_music_list[i], full_time);
+                if (all_annotations_content_title[i] == document.getElementById("playerTitle").innerHTML)
+                    add_annotation_to_the_list(i, all_annotations_content_title[i], all_annotations_titles[i], all_annotations_start_time[i], 
+                                               all_annotations_end_time[i], all_annotations_tags[i], 
+                                               all_annotations_description[i], all_annotations_images_list[i], 
+                                               all_annotations_music_list[i], full_time);
         }
 
         function add_annotation_to_the_list(iterator, content_title, title, start_time, end_time, tags_list, description, images_list, music_list, full_time)

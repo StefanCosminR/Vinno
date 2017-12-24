@@ -96,62 +96,6 @@
       li:hover i {
         color: #21CCFC;
       }
-      .slideshow-container {
-        background: white;
-        width: 70%;
-        position: absolute;
-        top: 1%;
-        right: 5%;
-      }
-      .prev, .next {
-        cursor: pointer;
-        position: absolute;
-        top: 50%;
-        width: auto;
-        padding: 16px;
-        margin-top: -22px;
-        color: white;
-        font-weight: bold;
-        font-size: 18px;
-        transition: 0.6s ease;
-        border-radius: 0 3px 3px 0;
-      }
-      .next {
-        right: 0;
-        border-radius: 3px 0 0 3px;
-      }
-      .prev:hover, .next:hover {
-        background-color: #36b4a7;
-      }
-      .text {
-        color: #36b4a7;
-        font-size: 15px;
-        position: absolute;
-        width: 100%;
-        text-align: center;
-      }
-      .fade {
-        -webkit-animation-name: fade;
-        -webkit-animation-duration: 1s;
-        animation-name: fade;
-        animation-duration: 1s;
-      }
-      @-webkit-keyframes fade {
-        from {
-          opacity: .4
-        } 
-        to {
-          opacity: 1
-        }
-      }
-      @keyframes fade {
-        from {
-          opacity: .4
-        } 
-        to {
-          opacity: 1
-        }
-      }
     </style>
   </head>
 
@@ -170,21 +114,15 @@
               <label for="section-12"><i class="fa fa-briefcase"></i><span>Attachments</span></label>
               <div class="content">
                 <ul>
-                  <li><i class="fa fa-picture-o"></i><span>Images</span></a></li>
-                  <li><i class="fa fa-signal"></i><a href="optionsMusicPage.html"><span>Music</span></a></li>
+                  <li><i class="fa fa-picture-o"></i><a href="optionsMusicPage.html"><span>Images</span></a></li>
+                  <li><i class="fa fa-signal"></i><span>Music</span></a></li>
                 </ul>
               </div>
             </div>
           </div>
         </div>
 
-        <div class="slideshow-container">
-
-          <a class="prev">&#10094;</a>
-          <a class="next">&#10095;</a>
-        </div>
-
     <script type="text/javascript" src="../../scripts/firebase.js"></script>
-    <script type="text/javascript" src="scripts/optionsPhotosPage.js"></script>
+    <script type="text/javascript" src="scripts/optionsMusicPage.js"></script>
   </body>
 </html>
