@@ -2,18 +2,13 @@
 function insertAnnotator(destionationElement, htmlTemplate) {
     let [container, shadowRoot] = insertNode(destionationElement, htmlTemplate, 'annotator-template', 'annotator-shadow-container');
 
-    let all_images_data = [];
-    let all_images_names = [];
-
-    let all_music_data = [];
-    let all_music_names = [];
+    let image_names = [];
+    let music_names = [];
 
     shadowRoot.getElementById('save-button').addEventListener('click', function() {
-
         if (verify_each_input(shadowRoot))
         {
-            // we take all the data inserted in the popup
-
+            let content_title = document.getElementById("playerTitle").innerHTML;
             let title = shadowRoot.getElementById("annotator-title").value;
             let start_time = shadowRoot.getElementById("annotator-start-time").value;
             let end_time = shadowRoot.getElementById("annotator-finish-time").value;
@@ -21,17 +16,8 @@ function insertAnnotator(destionationElement, htmlTemplate) {
             let website = window.location.href;
             let [tags_list, new_description] = get_tags_from_description(description);
 
-            let all_images = [];
-            for (let i = 0; i < all_images_data.length; i++)
-                all_images.push({ data: all_images_data[i], name: all_images_names[i] });
-
-            let all_music = [];
-            for (let i = 0; i < all_music_data.length; i++)
-                all_music.push({ data: all_music_data[i], name: all_music_names[i] });
-
-            let this_annotation = new AnnotationLayout(title, website, start_time, end_time, tags_list, new_description, all_images, all_music);
-
-            saveToFirebase("annotations/", this_annotation);
+            let this_annotation = new AnnotationLayout(content_title, title, website, start_time, end_time, tags_list, new_description, image_names, music_names);
+            saveAnnotationToFirebase("annotations/", this_annotation);
 
             removeAnnotator("annotator-shadow-container");
         }
@@ -44,39 +30,28 @@ function insertAnnotator(destionationElement, htmlTemplate) {
         let current_files = file_loader.files;
 
         for (let i = 0; i < current_files.length; i++) {
+            let fileReader = new FileReader();
+            
+            fileReader.onload = function(event) 
+            {
+                if (current_files[i].name.endsWith(".img") || current_files[i].name.endsWith(".jpg") || current_files[i].name.endsWith(".jpeg"))
+                    image_names.push(current_files[i].name);
+                else if (current_files[i].name.endsWith(".mp3"))
+                    music_names.push(current_files[i].name);
+                
+                saveAttachmentToFirebase("", { data: event.target.result, name: current_files[i].name });
+            };
+            fileReader.readAsDataURL(current_files[i]);
+
+            let image = document.createElement('img');
             if (current_files[i].name.endsWith(".img") || current_files[i].name.endsWith(".jpg") || current_files[i].name.endsWith(".jpeg"))
             {
-                all_images_names.push(current_files[i].name);
-                let fileReader = new FileReader();
-                
-                fileReader.onload = function(event) {
-                    all_images_data.push(event.target.result);
-                };
-
-                fileReader.readAsDataURL(current_files[i]);
-
-                let image = document.createElement('img');
                 image.src = window.URL.createObjectURL(current_files[i]);
                 image.setAttribute("class", "annotation-card__photo");
-                
-                holder_images.appendChild(image);
             }
-            else
-            {
-                all_music_names.push(current_files[i].name);
-                let fileReader = new FileReader();
-                
-                fileReader.onload = function(event) {
-                    all_music_data.push(event.target.result);
-                };
-
-                fileReader.readAsDataURL(current_files[i]);
-
-                let image = document.createElement('img');
+            else if (current_files[i].name.endsWith(".mp3"))
                 image.setAttribute("class", "annotation-card__music");
-                
-                holder_images.appendChild(image);
-            }
+            holder_images.appendChild(image);
         }
     });
 
@@ -85,7 +60,7 @@ function insertAnnotator(destionationElement, htmlTemplate) {
 
 function get_tags_from_description(description)
 {
-    let tags_list = [];
+    let tag_list = [];
     let new_description = description;
     let all_words = description.match(/#\S+/g);
 
@@ -94,11 +69,11 @@ function get_tags_from_description(description)
         {
             let this_word = all_words[i];
 
-            tags_list.push(this_word);
+            tag_list.push(this_word);
             new_description = new_description.replace(this_word, "{" + i + "}");
         }
 
-    return [tags_list, new_description];
+    return [tag_list, new_description];
 }
 
 function verify_each_input(root)
@@ -108,6 +83,7 @@ function verify_each_input(root)
 
     if (start_time_in_seconds >= finish_time_in_seconds)
         return false;
+
     return true;
 }   
 

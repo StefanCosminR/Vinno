@@ -1,5 +1,11 @@
-function saveToFirebase(link, content) {
+function saveAnnotationToFirebase(link, content) {
     chrome.runtime.sendMessage({method: 'POST', link, content}, function (response) {
+        // console.log(response);
+    });
+}
+
+function saveAttachmentToFirebase(link, content) {
+	    chrome.runtime.sendMessage({method: 'POST', link, content}, function (response) {
         // console.log(response);
     });
 }

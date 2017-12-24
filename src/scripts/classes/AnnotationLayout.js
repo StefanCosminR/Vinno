@@ -1,6 +1,7 @@
 class AnnotationLayout {
 
-    constructor(title, website, start_time, end_time, tags_list, description, images_list, music_list) {
+    constructor(content_title, title, website, start_time, end_time, tags_list, description, images_list, music_list) {
+        this.content_title = content_title;
         this.title = title;
         this.website = website;
         this.start_time = start_time;

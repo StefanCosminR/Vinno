@@ -19,16 +19,29 @@ chrome.tabs.onUpdated.addListener(function (tab_id, data, tab) {
     }
 });
 
-
-
 let messageCommunicationBus = new MessageCommunicationBus();
 
 messageCommunicationBus.registerListener('getEmbeddedHtml', sendFile('../src/html/annotatorTemplate.html'));
 messageCommunicationBus.registerListener('getAnnotationDisplay', sendFile('../src/html/annotatorDisplay.html'));
 messageCommunicationBus.registerListener('getAnnotatorActions', sendFile('../src/html/quickAnnotate.html'));
 messageCommunicationBus.registerListener('getFloatingPanel', sendFile('../src/html/floatingPanel.html'));
-messageCommunicationBus.registerListener('GET', function(sendResponse, link, urlsite) { readUserDataToFirebase(link, urlsite, sendResponse); });
-messageCommunicationBus.registerListener('POST', function(sendResponse, link, content) { writeUserDataToFirebase(link, content); sendResponse(true); });
+messageCommunicationBus.registerListener('GET', function(sendResponse, link, urlsite) 
+{ 
+    readUserDataToFirebase(link, urlsite, sendResponse); 
+});
+messageCommunicationBus.registerListener('POST', function(sendResponse, link, content) 
+{ 
+    if (link != "") 
+    {
+        saveAnnotationToFirebase(link, content); 
+        sendResponse(true);
+    }
+    else
+    {
+        saveAttachmentToFirebase(content); 
+        sendResponse(true); 
+    }
+});
 
 
 function sendFile(path) {
@@ -40,11 +53,8 @@ function sendFile(path) {
     }
 }
 
-/**
- * @todo Maybe the request should be done asynchronously in the future, but for now synchronous request does not affect performance notably
- */
-
-var config = {
+var config = 
+{
     apiKey: "AIzaSyD-xBReIsLbsbWy9NtIsnUPxRWiY6OVzOM",
     authDomain: "dawnc-ea146.firebaseapp.com",
     databaseURL: "https://dawnc-ea146.firebaseio.com",
@@ -64,174 +74,107 @@ var uid = "";
 
 auth.signInAnonymously();
 
-auth.onAuthStateChanged(firebaseUser => {
+auth.onAuthStateChanged(firebaseUser => 
+{
     if (firebaseUser) {
         isAnonymous = firebaseUser.isAnonymous;
         uid = firebaseUser.uid;
     }
 });
 
-function readUserDataToFirebase(link, urlsite, sendResponse) { 
-    let all_past_annotations = [];
+function readUserDataToFirebase(link, urlsite, sendResponse) 
+{ 
+    let past_annotations = [];
     let annotation_ref = database.ref(link + uid);
 
-    annotation_ref.once('value').then(function(data) {
+    annotation_ref.once('value').then(function(data) 
+    {
         let all_objects = data.val();
         
-        if (all_objects) {
+        if (all_objects) 
+        {
             let keys = Object.keys(all_objects);
 
-            for (let i = 0; i < keys.length; i++) {
+            for (let i = 0; i < keys.length; i++) 
+            {
                 let this_key = keys[i];
                 let website = all_objects[this_key].website;
 
                 if (website.startsWith(urlsite))
                 {
+                    let content_title = all_objects[this_key].content_title;
                     let title = all_objects[this_key].title;
                     let start_time = all_objects[this_key].start_time;
                     let end_time = all_objects[this_key].end_time;
                     let tags_list = all_objects[this_key].tags_list;
                     let description = all_objects[this_key].description;
-                    let images_list  = all_objects[this_key].images_list;
+                    let image_list  = all_objects[this_key].images_list;
                     let music_list  = all_objects[this_key].music_list;
 
-                    all_past_annotations.push(new AnnotationLayout(title, website, start_time, end_time, tags_list, description, images_list, music_list));
+                    past_annotations.push(new AnnotationLayout(content_title, title, website, start_time, end_time, tags_list, description, image_list, music_list));
                 }
             }
         }
-        sendResponse(all_past_annotations);
+        sendResponse(past_annotations);
     });
 }
 
-function writeUserDataToFirebase(link, content) { 
+function saveAttachmentToFirebase(content)
+{
+    if (content.name.endsWith(".img") || content.name.endsWith(".jpg") || content.name.endsWith(".jpeg"))
+    {
+        let image_ref = storage.ref("image/" + uid + "/" + content.name);
+        image_ref.putString(content.data, 'data_url');
+    }
+    else if (content.name.endsWith(".mp3"))
+    {
+        let music_ref = storage.ref("music/" + uid + "/" + content.name);
+        music_ref.putString(content.data, 'data_url');
+    }
+}   
+
+function saveAnnotationToFirebase(link, content) 
+{ 
     let annotation_ref = database.ref(link + uid);
 
-    let images_list_links = [];
-    let music_list_links = [];
+    let image_list = content.images_list;
+    let image_urls = [];
+    let image_promises = [];
 
-    let images_list = content.images_list;
     let music_list = content.music_list;
+    let music_urls = [];
+    let music_promises = [];
 
-    let all_images_promises = [];
-    let all_music_promises = [];
+    for (let i = 0; i < image_list.length; i++) 
+        image_promises.push(storageRef.child("image/" + uid + "/" + image_list[i]).getDownloadURL());
 
-    if (images_list.length != 0 && music_list.length != 0)
+    for (let i = 0; i < music_list.length; i++) 
+        music_promises.push(storageRef.child("music/" + uid + "/" + music_list[i]).getDownloadURL());
+
+    Promise.all(image_promises).then(function(values) 
     {
-        console.log("BOTH");
-        for (let i = 0; i < images_list.length; i++) 
+        for (let i = 0; i < values.length; i++)
+           image_urls.push(values[i]);
+
+        Promise.all(music_promises).then(function(values)
         {
-            let images_ref = storage.ref("images/" + uid + "/" + images_list[i].name);
-            let j = i;
-            images_ref.putString(images_list[j].data, 'data_url').then(() => { 
-                all_images_promises.push(storageRef.child("images/" + uid + "/" + images_list[j].name).getDownloadURL());
+            for (let i = 0; i < values.length; i++)
+               music_urls.push(values[i]);
 
-                if (j == images_list.length - 1)
-                {
-                    Promise.all(all_images_promises).then(values => { 
-                        for (let i = 0; i < values.length; i++)
-                            images_list_links.push(values[i]);
+            let annotation_data = 
+            {
+                content_title: content.content_title,
+                title: content.title,
+                website: content.website,
+                start_time: content.start_time,
+                end_time: content.end_time,
+                tags_list: content.tags_list,
+                description: content.description,
+                images_list: image_urls,
+                music_list: music_urls
+            }
 
-
-                        // TO DO BOTH PROMISES IN THE SAME TIME
-
-
-                        let annotation_data = {
-                            title: content.title,
-                            website: content.website,
-                            start_time: content.start_time,
-                            end_time: content.end_time,
-                            tags_list: content.tags_list,
-                            description: content.description,
-                            images_list: images_list_links,
-                            music_list: music_list_links
-                        }
-
-                        annotation_ref.push(annotation_data);
-                    });
-                }
-            });
-        }
-    }
-    else if (images_list.length != 0 && music_list.length == 0)
-    {
-        console.log("ONLY IMAGES");
-        for (let i = 0; i < images_list.length; i++) 
-        {
-            let images_ref = storage.ref("images/" + uid + "/" + images_list[i].name);
-            let j = i;
-            images_ref.putString(images_list[j].data, 'data_url').then(() => { 
-                all_images_promises.push(storageRef.child("images/" + uid + "/" + images_list[j].name).getDownloadURL());
-
-                if (j == images_list.length - 1)
-                {
-                    Promise.all(all_images_promises).then(values => { 
-                        for (let i = 0; i < values.length; i++)
-                            images_list_links.push(values[i]);
-
-                        let annotation_data = {
-                            title: content.title,
-                            website: content.website,
-                            start_time: content.start_time,
-                            end_time: content.end_time,
-                            tags_list: content.tags_list,
-                            description: content.description,
-                            images_list: images_list_links,
-                            music_list: music_list_links
-                        }
-
-                        annotation_ref.push(annotation_data);
-                    });
-                }
-            });
-        }
-    }
-    else if (images_list.length == 0 && music_list.length != 0)
-    {
-        console.log("ONLY MUSIC");
-        for (let i = 0; i < music_list.length; i++) 
-        {
-            let music_ref = storage.ref("music/" + uid + "/" + music_list[i].name);
-            let j = i;
-            music_ref.putString(music_list[j].data, 'data_url').then(() => { 
-                all_music_promises.push(storageRef.child("music/" + uid + "/" + music_list[j].name).getDownloadURL());
-
-                if (j == music_list.length - 1)
-                {
-                    Promise.all(all_music_promises).then(values => { 
-                        for (let i = 0; i < values.length; i++)
-                            music_list_links.push(values[i]);
-
-                        let annotation_data = {
-                            title: content.title,
-                            website: content.website,
-                            start_time: content.start_time,
-                            end_time: content.end_time,
-                            tags_list: content.tags_list,
-                            description: content.description,
-                            images_list: images_list_links,
-                            music_list: music_list_links
-                        }
-
-                        annotation_ref.push(annotation_data);
-                    });
-                }
-            });
-        }
-    }
-    else
-    {
-        console.log("NONE");
-        let annotation_data = {
-            title: content.title,
-            website: content.website,
-            start_time: content.start_time,
-            end_time: content.end_time,
-            tags_list: content.tags_list,
-            description: content.description,
-            images_list: images_list_links,
-            music_list: music_list_links
-        }
-
-        annotation_ref.push(annotation_data);
-    }
+            annotation_ref.push(annotation_data);
+        });
+    });
 }

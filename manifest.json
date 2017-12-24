@@ -11,13 +11,11 @@
     "activeTab",
     "geolocation",
     "storage",
-    "https://www.google.ro/*",
-    "https://stackoverflow.com/*",
     "https://tunein.com/radio/*",
     "https://www.youtube.com/*",
     "https://www.vimeo.com/*"
   ],
-  "options_page": "src/html/options.html",
+  "options_page": "src/html/options/optionsMainPage.html",
   "content_scripts": [
     {
       "matches": [

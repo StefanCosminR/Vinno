@@ -1,6 +1,7 @@
 getAllDependencies()
 	.then(dependencies => {
 
+        let all_annotations_content_title = [];
         let all_annotations_titles = [];
         let all_annotations_start_time = [];
         let all_annotations_end_time = [];
@@ -10,6 +11,7 @@ getAllDependencies()
         let all_annotations_music_list = [];
 
         let all_new_annotations = [];
+
         let all_annotations_total_number = 0;
 
         function main_function()
@@ -38,6 +40,7 @@ getAllDependencies()
                 {
                     let this_annotation = result[i];
 
+                    all_annotations_content_title.push(this_annotation.content_title);
                     all_annotations_titles.push(this_annotation.title);
                     all_annotations_start_time.push(this_annotation.start_time);
                     all_annotations_end_time.push(this_annotation.end_time);
@@ -76,8 +79,6 @@ getAllDependencies()
 
         function add_insert_annotation_button()
         {
-            // we add "Insert Annotation button"
-
             let authentification_bar = document.getElementsByClassName("auth-links__container___rSeFg")[0];
 
             let new_annotate_button = document.createElement("a");
@@ -129,14 +130,17 @@ getAllDependencies()
                 root.getElementById("save-button").addEventListener("click", function() {
                     if (verify_each_input(root))
                     {
+                        let content_title = document.getElementById("playerTitle").innerHTML;
                         let title = root.getElementById("annotator-title").value;
                         let start_time = root.getElementById("annotator-start-time").value;
                         let end_time = root.getElementById("annotator-finish-time").value;
                         let description = root.getElementById("annotator-description").value;
 
                         all_annotations_total_number = all_annotations_total_number + 1;
-                        add_annotation_to_the_list(all_annotations_total_number, title, start_time, end_time, 
-                                                   "tags_list", description, all_new_images, document.getElementById("scrubberDuration").innerHTML);
+                        let [tags_list, new_description] = get_tags_from_description(description);
+                        
+                        add_annotation_to_the_list(all_annotations_total_number, content_title, title, start_time, end_time, 
+                                                   tags_list, description, all_new_images, "", document.getElementById("scrubberDuration").innerHTML);
 
                         document.getElementById("playerActionButton").click();
                     }
@@ -147,13 +151,13 @@ getAllDependencies()
         function fill_with_annotations(full_time)
         {
             for (let i = 0; i < all_annotations_titles.length; i++)
-                add_annotation_to_the_list(i, all_annotations_titles[i], all_annotations_start_time[i], 
+                add_annotation_to_the_list(i, all_annotations_content_title[i], all_annotations_titles[i], all_annotations_start_time[i], 
                                            all_annotations_end_time[i], all_annotations_tags[i], 
                                            all_annotations_description[i], all_annotations_images_list[i], 
                                            all_annotations_music_list[i], full_time);
         }
 
-        function add_annotation_to_the_list(iterator, title, start_time, end_time, tags_list, description, images_list, music_list, full_time)
+        function add_annotation_to_the_list(iterator, content_title, title, start_time, end_time, tags_list, description, images_list, music_list, full_time)
         {
             // we display the popup on the loading area
 
