@@ -29,6 +29,7 @@ auth.onAuthStateChanged(firebaseUser =>
 
 let all_annotations_titles = [];
 let all_annotations_urls = [];
+let all_annotations_websites = [];
 
 function readAllAnnotationsFromFirebase() 
 {
@@ -49,6 +50,13 @@ function readAllAnnotationsFromFirebase()
                 {
                     all_annotations_urls.push(all_objects[uid][this_key].website);
                     all_annotations_titles.push(all_objects[uid][this_key].content_title);
+
+                    if (all_objects[uid][this_key].website.startsWith("https://tunein.com/radio/"))
+                        all_annotations_websites.push("TuneIn");
+                    else if (all_objects[uid][this_key].website.startsWith("https://www.youtube.com/"))
+                        all_annotations_websites.push("Youtube");
+                    else if (all_objects[uid][this_key].website.startsWith("https://www.vimeo.com/"))
+                        all_annotations_websites.push("Vimeo");
                 }
             }
         }
@@ -58,34 +66,65 @@ function readAllAnnotationsFromFirebase()
 }
 
 function fill_with_annotations() 
-{
-    let holder = document.getElementById("all_annotations");
+{   
+    let content = document.getElementById("display_content");
 
-    for (let i = 0; i < all_annotations_titles.length; i++)
-    {
-        let new_annotate_list_item = document.createElement("li");
-        let new_annotate_list_item_image = document.createElement("i");
-        let new_annotate_list_item_link = document.createElement("a");
+    let all_websites = ["TuneIn", "Youtube", "Vimeo"];
+    for (let i = 0; i < all_websites.length; i++)
+        if (all_annotations_websites.indexOf(all_websites[i]) != -1)
+        {
+            let new_website = document.createElement("div");
+            let innerHTML_string = "<div class=\"accordion\"><div class=\"section\"><input type=\"radio\" name=\"accordion-1\" id=\"section-" + i + "\"" +
+                                    "value=\"toggle\"/><label for=\"section-" + i + "\">";
 
-        if (all_annotations_urls[i].startsWith("https://tunein.com/radio/"))
-            new_annotate_list_item_image.setAttribute("class", "fa fa-volume-up");
-        else if (all_annotations_urls[i].startsWith("https://www.youtube.com/"))
-            new_annotate_list_item_image.setAttribute("class", "fa fa-youtube-play");
-        else if (all_annotations_urls[i].startsWith("https://www.vimeo.com/"))
-            new_annotate_list_item_image.setAttribute("class", "fa fa-vimeo");
 
-        new_annotate_list_item.appendChild(new_annotate_list_item_image);
-        new_annotate_list_item_link.setAttribute("href", all_annotations_urls[i]);
-        new_annotate_list_item_link.innerHTML = all_annotations_titles[i];
-        new_annotate_list_item.appendChild(new_annotate_list_item_link);
+            if (all_websites[i] == "TuneIn")
+                innerHTML_string =  innerHTML_string + "<i class=\"fa fa-volume-up\"></i>";
+            else if (all_websites[i] == "Youtube")
+                innerHTML_string =  innerHTML_string + "<i class=\"fa fa-youtube-play\"></i>";
+            else if (all_websites[i] == "Vimeo")
+                innerHTML_string =  innerHTML_string + "<i class=\"fa fa-vimeo\"></i>";
 
-        holder.appendChild(new_annotate_list_item);
-    }
+            innerHTML_string = innerHTML_string + "<span>" + all_websites[i] + "</span></label>" +
+                                    "<div class=\"content\"><ul id=\"all_annotations-" + i + "\"></ul></div></div></div></div>";
+            new_website.innerHTML = innerHTML_string;
+            content.appendChild(new_website);
+
+            let holder = document.getElementById("all_annotations-" + i);
+
+            for (let j = 0; j < all_annotations_titles.length; j++)
+                if (all_annotations_websites[j] == all_websites[i])
+                {
+                    let new_annotate_list_item = document.createElement("li");
+                    let new_annotate_list_item_image = document.createElement("i");
+                    let new_annotate_list_item_link = document.createElement("a");
+
+                    new_annotate_list_item_image.setAttribute("class", "fa fa-check-circle-o");
+
+                    new_annotate_list_item.appendChild(new_annotate_list_item_image);
+                    new_annotate_list_item_link.setAttribute("href", all_annotations_urls[j]);
+                    new_annotate_list_item_link.innerHTML = all_annotations_titles[j];
+                    new_annotate_list_item.appendChild(new_annotate_list_item_link);
+
+                    holder.appendChild(new_annotate_list_item);
+                }
+        }
 }
 
 function main_function()
 {
-    readAllAnnotationsFromFirebase();
+    document.getElementById("section-11").onclick = function() {
+        if (document.getElementById("display_content") == null)
+        {
+            let holder = document.createElement("div");
+
+            holder.setAttribute("id", "display_content");
+            document.getElementById("world").appendChild(holder);
+            readAllAnnotationsFromFirebase();
+        }
+        else
+            document.getElementById("display_content").remove();
+    }
 }
 
 
