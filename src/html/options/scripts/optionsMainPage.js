@@ -77,7 +77,6 @@ function fill_with_annotations()
             let innerHTML_string = "<div class=\"accordion\"><div class=\"section\"><input type=\"radio\" name=\"accordion-1\" id=\"section-" + i + "\"" +
                                     "value=\"toggle\"/><label for=\"section-" + i + "\">";
 
-
             if (all_websites[i] == "TuneIn")
                 innerHTML_string =  innerHTML_string + "<i class=\"fa fa-volume-up\"></i>";
             else if (all_websites[i] == "Youtube")
@@ -85,8 +84,9 @@ function fill_with_annotations()
             else if (all_websites[i] == "Vimeo")
                 innerHTML_string =  innerHTML_string + "<i class=\"fa fa-vimeo\"></i>";
 
-            innerHTML_string = innerHTML_string + "<span>" + all_websites[i] + "</span></label>" +
-                                    "<div class=\"content\"><ul id=\"all_annotations-" + i + "\"></ul></div></div></div></div>";
+            innerHTML_string = innerHTML_string + "<span>" + all_websites[i] + "</span></label>" + "<div class=\"content\"><ul id=\"all_annotations-" + i + 
+                               "\"></ul></div></div></div></div>";
+
             new_website.innerHTML = innerHTML_string;
             content.appendChild(new_website);
 
@@ -113,6 +113,12 @@ function fill_with_annotations()
 
 function main_function()
 {
+    let holder = document.createElement("div");
+
+    holder.setAttribute("id", "display_content");
+    document.getElementById("world").appendChild(holder);
+    readAllAnnotationsFromFirebase();
+            
     document.getElementById("section-11").onclick = function() {
         if (document.getElementById("display_content") == null)
         {
@@ -124,7 +130,11 @@ function main_function()
         }
         else
             document.getElementById("display_content").remove();
-    }
+    };
+    document.getElementById("section-12").onclick = function() {
+        if (document.getElementById("display_content") != null)
+            document.getElementById("display_content").remove();
+    };
 }
 
 
