@@ -87,7 +87,6 @@ function fill_with_annotations()
         holder.appendChild(new_photo);
     }
 
-
     document.getElementsByClassName("prev")[0].onclick = function() {
         show_slides(slide_index = slide_index - 1);
     }
@@ -98,16 +97,16 @@ function fill_with_annotations()
 
 function show_slides(n) 
 {
-  let slides = document.getElementsByClassName("my_slides");
+    let slides = document.getElementsByClassName("my_slides");
 
-  if (n > slides.length)
-    slide_index = 1;  
-  if (n < 1) 
-    slide_index = slides.length;
-  for (let i = 0; i < slides.length; i++)
-      slides[i].style.display = "none";  
+    if (n > slides.length)
+        slide_index = 1;  
+    if (n < 1) 
+        slide_index = slides.length;
+    for (let i = 0; i < slides.length; i++)
+        slides[i].style.display = "none";  
 
-  slides[slide_index-1].style.display = "block";  
+    slides[slide_index-1].style.display = "block";  
 }
 
 readAllAnnotationsFromFirebase();

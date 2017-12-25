@@ -21,7 +21,14 @@ function insertAnnotator(destionationElement, htmlTemplate) {
 
             removeAnnotator("annotator-shadow-container");
         }
-    });    
+    });   
+
+    shadowRoot.getElementById('close-button').addEventListener('click', function() { 
+        removeAnnotator("annotator-shadow-container");
+
+        removeAttachmentToFirebase("removeAttachment", image_names);
+        removeAttachmentToFirebase("removeAttachment", music_names);
+    });   
 
     let file_loader = shadowRoot.getElementById('annotator-file');
     let holder_images = shadowRoot.getElementById('images_holder');
@@ -40,7 +47,7 @@ function insertAnnotator(destionationElement, htmlTemplate) {
                 else if (current_files[i].name.endsWith(".mp3"))
                     music_names.push(current_files[i].name);
                 
-                saveAttachmentToFirebase("", { data: event.target.result, name: current_files[i].name });
+                saveAttachmentToFirebase("saveAttachment", { data: event.target.result, name: current_files[i].name });
             };
             fileReader.readAsDataURL(current_files[i]);
 

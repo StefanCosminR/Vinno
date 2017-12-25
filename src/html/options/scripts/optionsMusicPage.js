@@ -85,7 +85,7 @@ function switchPlayState(current)
         play_state = true;
     }
 }
-// <li><i class="fa fa-check-circle-o"></i><a><span>Images</span></a></li>
+
 function fill_with_annotations() 
 {   
     let holder = document.getElementById("list");
@@ -94,7 +94,9 @@ function fill_with_annotations()
         let new_song = document.createElement("li");
         new_song.setAttribute("id", "song_" + i);
         new_song.innerHTML = "<i class=\"fa fa-check-circle-o\"></i><a><span>" + "Song from annotation with title <b>\"" + all_title[i] + 
-                              "\"</b> and description <b>\"" + all_description[i] + "\"</b>" + " hosted at <b>\"" + all_content_title[i] + "\"";
+                             "\"</b> and description <b>\"" + all_description[i] + "\"</b>" + " hosted at <b>\"" + all_content_title[i] + "\"";
+        // TO DO 
+        // maybe use URL too (from all_website)
         holder.appendChild(new_song);
 
         document.getElementById("song_" + i).onclick = function() {

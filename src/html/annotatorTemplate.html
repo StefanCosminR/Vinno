@@ -15,12 +15,13 @@
         <textarea id="annotator-description" placeholder="Add text annotation here"></textarea>
       </div>
 
-      <input id="annotator-file" type="file" accept=".jpg, .jpeg, .png" multiple/>
+      <input id="annotator-file" type="file" multiple/>
 
       <div id="images_holder" class="annotation-card__photos"> </div>
 
       <div class="box-content-row">
         <button class="btn" id="save-button">Save</button>
+        <button class="btn" id="close-button">Close</button>
       </div>
     </div>
   </div>
@@ -29,6 +30,12 @@
 <!-- AM ADAUGAT ID-URI PENTRU FIECARE INPUT CA SA FIE USOR SET-UL SI GET-UL PENTRU VALORI -->
 
 <style>
+  #save-button {
+    width: 49.44%;
+  }
+  #close-button {
+    width: 49.44%;
+  }
   .box {
     width: 400px;
     border: 1px solid black;

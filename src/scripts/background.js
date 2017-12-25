@@ -31,15 +31,21 @@ messageCommunicationBus.registerListener('GET', function(sendResponse, link, url
 });
 messageCommunicationBus.registerListener('POST', function(sendResponse, link, content) 
 { 
-    if (link != "") 
-    {
-        saveAnnotationToFirebase(link, content); 
-        sendResponse(true);
-    }
-    else
+    if (link == "saveAttachment") 
     {
         saveAttachmentToFirebase(content); 
         sendResponse(true); 
+        
+    }
+    else if (link == "removeAttachment")
+    {
+        removeAttachmentToFirebase(content); 
+        sendResponse(true); 
+    }
+    else
+    {
+        saveAnnotationToFirebase(link, content); 
+        sendResponse(true);
     }
 });
 
@@ -130,6 +136,23 @@ function saveAttachmentToFirebase(content)
     {
         let music_ref = storage.ref("music/" + uid + "/" + content.name);
         music_ref.putString(content.data, 'data_url');
+    }
+}   
+
+function removeAttachmentToFirebase(content)
+{
+    for (let i = 0; i < content.length; i++)
+    {
+        if (content[i].endsWith(".img") || content[i].endsWith(".jpg") || content[i].endsWith(".jpeg"))
+        {
+            let image_ref = storageRef.child("image/" + uid + "/" + content[i]);
+            image_ref.delete();
+        }
+        else if (content[i].endsWith(".mp3"))
+        {
+            let music_ref = storageRef.child("music/" + uid + "/" + content[i]);
+            music_ref.delete();
+        }
     }
 }   
 
