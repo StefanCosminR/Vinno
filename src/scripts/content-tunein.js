@@ -198,47 +198,50 @@ getAllDependencies()
         function add_listener_for_annotation(annotation, start_time, end_time, tags_list, description, images_list, music_list)
         {
             annotation.addEventListener("mouseover", function() {
-                // we start to hover a popup
-
-                let holder = document.getElementById("content");
-                let [container, root] = insertAnnotatorDisplay(holder, dependencies.annotatorDisplay);
-
-                container.style.position = "fixed";
-                container.style.bottom = "10%";
-                container.style.left = "25%";
-                container.style.zIndex = 100;
-
-                // we set the title, start / finish time and description text for the hover popup
-
-                let holder_images = root.getElementById('images_holder');
-
-                root.getElementById("annotator-title").value = annotation.id.split("_")[0];
-
-                root.getElementById("annotator-start-time").value = start_time;
-                root.getElementById("annotator-finish-time").value = end_time;
-                root.getElementById("annotator-description").innerHTML = description;
-
-                let all_words = description.match(/#\S+/g);
-                if(all_words)
-                    for (let i = 0; i < all_words.length; i++)
-                        root.getElementById("annotator-description").innerHTML = root.getElementById("annotator-description").innerHTML.replace(all_words[i], 
-                                                                                 '<span style="color: #1E90FF">'+ all_words[i] + '</span>');
-
-                for (let i = 0; i < images_list.length; i++)
+                if (document.getElementById("annotator-shadow-container") == null)
                 {
-                    let image = document.createElement('img');
-                    image.src = images_list[i];
-                    image.setAttribute("class", "annotation-card__photo");
+                    // we start to hover a popup
 
-                    holder_images.appendChild(image);
-                }
+                    let holder = document.getElementById("content");
+                    let [container, root] = insertAnnotatorDisplay(holder, dependencies.annotatorDisplay);
 
-                for (let i = 0; i < music_list.length; i++)
-                {
-                    let image = document.createElement('img');
-                    image.setAttribute("class", "annotation-card__music");
+                    container.style.position = "fixed";
+                    container.style.bottom = "10%";
+                    container.style.left = "25%";
+                    container.style.zIndex = 100;
 
-                    holder_images.appendChild(image);
+                    // we set the title, start / finish time and description text for the hover popup
+
+                    let holder_images = root.getElementById('images_holder');
+
+                    root.getElementById("annotator-title").value = annotation.id.split("_")[0];
+
+                    root.getElementById("annotator-start-time").value = start_time;
+                    root.getElementById("annotator-finish-time").value = end_time;
+                    root.getElementById("annotator-description").innerHTML = description;
+
+                    let all_words = description.match(/#\S+/g);
+                    if(all_words)
+                        for (let i = 0; i < all_words.length; i++)
+                            root.getElementById("annotator-description").innerHTML = root.getElementById("annotator-description").innerHTML.replace(all_words[i], 
+                                                                                     '<span style="color: #1E90FF">'+ all_words[i] + '</span>');
+
+                    for (let i = 0; i < images_list.length; i++)
+                    {
+                        let image = document.createElement('img');
+                        image.src = images_list[i];
+                        image.setAttribute("class", "annotation-card__photo");
+
+                        holder_images.appendChild(image);
+                    }
+
+                    for (let i = 0; i < music_list.length; i++)
+                    {
+                        let image = document.createElement('img');
+                        image.setAttribute("class", "annotation-card__music");
+
+                        holder_images.appendChild(image);
+                    }
                 }
             });
 

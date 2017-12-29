@@ -48,18 +48,41 @@ function insertAnnotator(destionationElement, htmlTemplate) {
                     music_names.push(current_files[i].name);
                 
                 saveAttachmentToFirebase("saveAttachment", { data: event.target.result, name: current_files[i].name });
-            };
-            fileReader.readAsDataURL(current_files[i]);
 
-            let image = document.createElement('img');
-            if (current_files[i].name.endsWith(".img") || current_files[i].name.endsWith(".jpg") || current_files[i].name.endsWith(".jpeg"))
-            {
-                image.src = window.URL.createObjectURL(current_files[i]);
-                image.setAttribute("class", "annotation-card__photo");
-            }
-            else if (current_files[i].name.endsWith(".mp3"))
-                image.setAttribute("class", "annotation-card__music");
-            holder_images.appendChild(image);
+                let image = document.createElement('img');
+                if (current_files[i].name.endsWith(".img") || current_files[i].name.endsWith(".jpg") || current_files[i].name.endsWith(".jpeg"))
+                {
+                    image.src = window.URL.createObjectURL(current_files[i]);
+                    image.setAttribute("class", "annotation-card__photo");
+                }
+                else if (current_files[i].name.endsWith(".mp3"))
+                    image.setAttribute("class", "annotation-card__music");
+                holder_images.appendChild(image);
+
+                image.addEventListener("mouseover", function() {
+                    image.src = "http://www.endlessicons.com/wp-content/uploads/2012/12/trash-icon.png";
+
+                    image.addEventListener("click", function() {
+                        let to_delete_image_names = [];
+                        to_delete_image_names.push(image_names[i]);
+
+                        if (i > -1)
+                            if (image.class == "annotation-card__photo")
+                                image_names.splice(i, 1);
+                            else
+                                music_names.splice(i, 1);
+
+                        removeAttachmentToFirebase("removeAttachment", to_delete_image_names);
+                        image.remove();
+                    });
+                });
+                
+                image.addEventListener("mouseout", function() {
+                    image.src = window.URL.createObjectURL(current_files[i]);
+                });
+            };
+
+            fileReader.readAsDataURL(current_files[i]);
         }
     });
 
