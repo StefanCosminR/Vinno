@@ -23,6 +23,9 @@ function insertAnnotator(destionationElement, htmlTemplate) {
             saveAnnotationToFirebase("annotations/", this_annotation);
 
             removeAnnotator("annotator-shadow-container");
+
+            image_names = [];
+            music_names = [];
         }
     });   
 
@@ -31,12 +34,15 @@ function insertAnnotator(destionationElement, htmlTemplate) {
 
         removeAttachmentToFirebase("removeAttachment", image_names);
         removeAttachmentToFirebase("removeAttachment", music_names);
+        
+        image_names = [];
+        music_names = [];
     });   
 
-    // window.onbeforeunload = function() {
-    //     removeAttachmentToFirebase("removeAttachment", image_names);
-    //     removeAttachmentToFirebase("removeAttachment", music_names);
-    // };
+    window.onbeforeunload = function() {
+        removeAttachmentToFirebase("removeAttachment", image_names);
+        removeAttachmentToFirebase("removeAttachment", music_names);
+    };
 
     let file_loader = shadowRoot.getElementById('annotator-file');
     let holder_images = shadowRoot.getElementById('images_holder');
