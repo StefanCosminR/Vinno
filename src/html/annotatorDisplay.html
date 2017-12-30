@@ -1,221 +1,230 @@
-<div class="annotator-container">
-  <div class="box">
-    <div class="box-header">
-      <input id="annotator-title" type="text" placeholder="Add title" />
-    </div>
-    
-    <div class="box-content">
-      <div class="box-content-row">
-        <input id="annotator-start-time" type="time" placeholder="00:00" step="2" class="without_ampm input-minutes" />
-        <span class="devider">--</span>
-        <input id="annotator-finish-time" type="time" placeholder="00:00" step="2" class="without_ampm input-minutes" />
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+      <meta charset="UTF-8">
+      <title>Template</title>
+  </head>
+  <body>
+    <div class="annotator-container">
+      <div class="box">
+        <div class="box-header">
+          <input id="annotator-title" type="text" placeholder="Add title" />
+        </div>
+        
+        <div class="box-content">
+          <div class="box-content-row">
+            <input id="annotator-start-time" type="time" placeholder="00:00" step="2" class="without_ampm input-minutes" />
+            <span class="devider">--</span>
+            <input id="annotator-finish-time" type="time" placeholder="00:00" step="2" class="without_ampm input-minutes" />
+          </div>
+
+          <div class="box-content-row">
+            <p id="annotator-description"></p>
+          </div>
+
+          <div id="images_holder" class="annotation-card__photos"> </div>
+        </div>
       </div>
-
-      <div class="box-content-row">
-        <p id="annotator-description"></p>
+      <div class="map-holder">
+        <div class="search_map" id="map"></div>
       </div>
-
-      <div id="images_holder" class="annotation-card__photos"> </div>
     </div>
-  </div>
-  <div class="map-holder">
-    <div class="search_map" id="map"></div>
-  </div>
-</div>
 
-<!-- AM ADAUGAT ID-URI PENTRU FIECARE INPUT CA SA FIE USOR SET-UL SI GET-UL PENTRU VALORI -->
+    <!-- AM ADAUGAT ID-URI PENTRU FIECARE INPUT CA SA FIE USOR SET-UL SI GET-UL PENTRU VALORI -->
 
-<style>
-  .annotator-container{
-    float: left;
-  }
-  .box {
-    width: 400px;
-    float: left;
-    border: 1px solid black;
-    background-color: white;
-  }
-  .map-holder {
-    float: left;
-    width: 400px;
-    height: 210.35px;
-    border: 1px solid black;
-    background-color: white;
-    border-radius: 3px;
-  }
-  input {
-    outline: none;
-    border: 0;
-    resize: none;
-    padding-left: 10px;
-    font-size: 16px;
-    display: block;
-  }
+    <style>
+      .annotator-container{
+        float: left;
+      }
+      .box {
+        width: 400px;
+        float: left;
+        border: 1px solid black;
+        background-color: white;
+      }
+      .map-holder {
+        float: left;
+        width: 400px;
+        height: 210.35px;
+        border: 1px solid black;
+        background-color: white;
+        border-radius: 3px;
+      }
+      input {
+        outline: none;
+        border: 0;
+        resize: none;
+        padding-left: 10px;
+        font-size: 16px;
+        display: block;
+      }
 
-  .input-minutes {
-    color: white;
-  }
+      .input-minutes {
+        color: white;
+      }
 
-  p {
-    outline: none;
-    border: 0;
-    resize: none;
-    padding-left: 10px;
-    font-size: 16px;
-    display: block;
-    width: 90%;
-  }
+      p {
+        outline: none;
+        border: 0;
+        resize: none;
+        padding-left: 10px;
+        font-size: 16px;
+        display: block;
+        width: 90%;
+      }
 
-  .input-minutes {
-    width: 85px;
-    border-radius: 20px;
-    background-color: #eee;
-    display: inline-block;
-    margin: 10px;
-    background-color: #36b4a7;
-  }
+      .input-minutes {
+        width: 85px;
+        border-radius: 20px;
+        background-color: #eee;
+        display: inline-block;
+        margin: 10px;
+        background-color: #36b4a7;
+      }
 
-  .box .box-header {
-    border-bottom: 1px solid black;
-    padding: 20px;
-  }
+      .box .box-header {
+        border-bottom: 1px solid black;
+        padding: 20px;
+      }
 
-  .box .box-content .box-content-row {
-    display: block;
-    width: 100%;
-  }
+      .box .box-content .box-content-row {
+        display: block;
+        width: 100%;
+      }
 
-  .btn {
-    border: none;
-    border-radius: 3px;
-    padding: 10px;
-    width: 100%;
-    cursor: pointer;
-    color: white;
-    background-color: #36b4a7;
-  } 
+      .btn {
+        border: none;
+        border-radius: 3px;
+        padding: 10px;
+        width: 100%;
+        cursor: pointer;
+        color: white;
+        background-color: #36b4a7;
+      } 
 
-  .annotation-card__photos {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    overflow-x: scroll;
-    width: 100%;
-  }
+      .annotation-card__photos {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        overflow-x: scroll;
+        width: 100%;
+      }
 
-  .annotation-card__photo {
-    min-width: 50px;
-    min-height: 50px;
-    width: 50px;
-    height: 50px;
-    background: url('https://maxcdn.icons8.com/office/PNG/512/Messaging/attach-512.png');
-    background-size: contain;
-    cursor: pointer;
-    margin: 0 5px 5px;
-  }
+      .annotation-card__photo {
+        min-width: 50px;
+        min-height: 50px;
+        width: 50px;
+        height: 50px;
+        background: url('https://maxcdn.icons8.com/office/PNG/512/Messaging/attach-512.png');
+        background-size: contain;
+        cursor: pointer;
+        margin: 0 5px 5px;
+      }
 
-  .annotation-card__music {
-    min-width: 50px;
-    min-height: 50px;
-    width: 50px;
-    height: 50px;
-    background-size: contain;
-    background-image: url("https://upload.wikimedia.org/wikipedia/commons/thumb/8/80/Circle-icons-music.svg/1024px-Circle-icons-music.svg.png");
-    cursor: pointer;
-    margin: 0 5px 5px;
-    overflow: hidden;
-  }
-  
-  ::-webkit-scrollbar {
-    width: 5px;
-    height: 5px;
-  }
+      .annotation-card__music {
+        min-width: 50px;
+        min-height: 50px;
+        width: 50px;
+        height: 50px;
+        background-size: contain;
+        background-image: url("https://upload.wikimedia.org/wikipedia/commons/thumb/8/80/Circle-icons-music.svg/1024px-Circle-icons-music.svg.png");
+        cursor: pointer;
+        margin: 0 5px 5px;
+        overflow: hidden;
+      }
+      
+      ::-webkit-scrollbar {
+        width: 5px;
+        height: 5px;
+      }
 
-  ::-webkit-scrollbar-button {
-    width: 0;
-    height: 0;
-  }
+      ::-webkit-scrollbar-button {
+        width: 0;
+        height: 0;
+      }
 
-  ::-webkit-scrollbar-thumb {
-    background: #b3b3b3;
-    border: 0 none #ffffff;
-    border-radius: 50px;
-  }
+      ::-webkit-scrollbar-thumb {
+        background: #b3b3b3;
+        border: 0 none #ffffff;
+        border-radius: 50px;
+      }
 
-  ::-webkit-scrollbar-thumb:hover {
-    background: #818181;
-  }
+      ::-webkit-scrollbar-thumb:hover {
+        background: #818181;
+      }
 
-  ::-webkit-scrollbar-thumb:active {
-    background: #3f3f3f;
-  }
+      ::-webkit-scrollbar-thumb:active {
+        background: #3f3f3f;
+      }
 
-  ::-webkit-scrollbar-track {
-    background: #e1e1e1;
-    border: 0 none #ffffff;
-    border-radius: 50px;
-  }
+      ::-webkit-scrollbar-track {
+        background: #e1e1e1;
+        border: 0 none #ffffff;
+        border-radius: 50px;
+      }
 
-  ::-webkit-scrollbar-track:hover {
-    background: #e1e1e1;
-  }
+      ::-webkit-scrollbar-track:hover {
+        background: #e1e1e1;
+      }
 
-  ::-webkit-scrollbar-track:active {
-    background: #e1e1e1;
-  }
+      ::-webkit-scrollbar-track:active {
+        background: #e1e1e1;
+      }
 
-  ::-webkit-scrollbar-corner {
-    background: transparent;
-  }
+      ::-webkit-scrollbar-corner {
+        background: transparent;
+      }
 
-  .without_ampm::-webkit-datetime-edit-ampm-field {
-    display: none;
-  }
+      .without_ampm::-webkit-datetime-edit-ampm-field {
+        display: none;
+      }
 
-  input[type=time]::-webkit-clear-button {
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    -o-appearance: none;
-    -ms-appearance: none;
-    appearance: none;
-    margin: -10px; 
-  }
+      input[type=time]::-webkit-clear-button {
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        -o-appearance: none;
+        -ms-appearance: none;
+        appearance: none;
+        margin: -10px; 
+      }
 
-  #infowindow-content .title {
-    font-weight: bold;
-  }
+      #infowindow-content .title {
+        font-weight: bold;
+      }
 
-  #infowindow-content {
-    display: none;
-  }
+      #infowindow-content {
+        display: none;
+      }
 
-  #map #infowindow-content {
-    display: inline;
-  }
+      #map #infowindow-content {
+        display: inline;
+      }
 
-  .pac-card {
-    margin: 10px 10px 0 0;
-    border-radius: 2px 0 0 2px;
-    box-sizing: border-box;
-    -moz-box-sizing: border-box;
-    outline: none;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
-    background-color: #fff;
-  }
+      .pac-card {
+        margin: 10px 10px 0 0;
+        border-radius: 2px 0 0 2px;
+        box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        outline: none;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+        background-color: #fff;
+      }
 
-  #pac-container {
-    padding-bottom: 12px;
-    margin-right: 12px;
-  }
+      #pac-container {
+        padding-bottom: 12px;
+        margin-right: 12px;
+      }
 
-  #title {
-    color: #fff;
-    background-color: #4d90fe;
-    font-size: 25px;
-    font-weight: 500;
-    padding: 6px 12px;
-  }
-  #map {
-    height: 80%;
-  }
-</style>
+      #title {
+        color: #fff;
+        background-color: #4d90fe;
+        font-size: 25px;
+        font-weight: 500;
+        padding: 6px 12px;
+      }
+      #map {
+        height: 100%;
+      }
+    </style>
+  </body>
+</html>
