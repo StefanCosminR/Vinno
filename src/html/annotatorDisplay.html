@@ -26,9 +26,28 @@
         </div>
       </div>
       <div class="map-holder">
+        <input type="hidden" id="map_lat" value="" />
+        <input type="hidden" id="map_lng" value="" />
         <div class="search_map" id="map"></div>
       </div>
     </div>
+
+    <script type="text/javascript">
+      function initAutocomplete() 
+      {
+        let map_lat = document.getElementById("annotator-shadow-container-display").shadowRoot.getElementById("map_lat").value;
+        let map_lng = document.getElementById("annotator-shadow-container-display").shadowRoot.getElementById("map_lng").value;
+
+        var map = new google.maps.Map(document.getElementById("annotator-shadow-container-display").shadowRoot.getElementById("map"), {
+          center: {lat: parseFloat(map_lat), lng: parseFloat(map_lng)},
+          zoom: 15,
+          mapTypeId: "roadmap"
+        });
+      }
+    </script>
+    
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDa-6m9meqJwiOFHRAo_M3l67pFlrjU5es&libraries=places&callback=initAutocomplete"
+       async defer></script>
 
     <!-- AM ADAUGAT ID-URI PENTRU FIECARE INPUT CA SA FIE USOR SET-UL SI GET-UL PENTRU VALORI -->
 

@@ -34,6 +34,8 @@
       </div>
       <div class="map-holder">
         <input id="pac-input" class="controls" type="text" placeholder="Search for address">
+        <input type="hidden" id="map_lat" value="" />
+        <input type="hidden" id="map_lng" value="" />
         <div class="search_map" id="map"></div>
       </div>
     </div>
@@ -42,8 +44,8 @@
       function initAutocomplete() 
       {
         var map = new google.maps.Map(document.getElementById("annotator-shadow-container").shadowRoot.getElementById("map"), {
-          center: {lat: -33.8688, lng: 151.2195},
-          zoom: 13,
+          center: {lat: 47.1584549, lng: 27.601441799999975},
+          zoom: 15,
           mapTypeId: "roadmap"
         });
 
@@ -58,28 +60,20 @@
         });
 
         searchBox.addListener("places_changed", function() {
-          var places = searchBox.getPlaces();
-
-          console.log(places);
-          
-          if (places.length == 0)
-            return;
+          var place = searchBox.getPlaces()[0];
 
           // For each place, get the icon, name and location.
           var bounds = new google.maps.LatLngBounds();
-          places.forEach(function(place) {
-            if (!place.geometry)
-              return;
 
-            if (place.geometry.viewport) 
-              bounds.union(place.geometry.viewport);
-            else
-              bounds.extend(place.geometry.location);
-          });
+          document.getElementById("annotator-shadow-container").shadowRoot.getElementById("map_lat").value = place.geometry.location.lat();
+          document.getElementById("annotator-shadow-container").shadowRoot.getElementById("map_lng").value = place.geometry.location.lng();
+
+          bounds.union(place.geometry.viewport);
           map.fitBounds(bounds);
         });
       }
     </script>
+    
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDa-6m9meqJwiOFHRAo_M3l67pFlrjU5es&libraries=places&callback=initAutocomplete"
        async defer></script>
 

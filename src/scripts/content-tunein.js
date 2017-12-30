@@ -9,6 +9,7 @@ getAllDependencies()
         let all_annotations_description = [];
         let all_annotations_images_list = [];
         let all_annotations_music_list = [];
+        let all_annotations_coordinates = [];
 
         let all_new_annotations = [];
 
@@ -71,6 +72,11 @@ getAllDependencies()
                         all_annotations_music_list.push(this_annotation.music_list);
                     else
                         all_annotations_music_list.push([]);
+
+                    if (this_annotation.coordinates)
+                        all_annotations_coordinates.push(this_annotation.coordinates);
+                    else
+                        all_annotations_coordinates.push([]);
                 }
 
                 all_annotations_total_number = result.length;
@@ -147,12 +153,15 @@ getAllDependencies()
                         let start_time = root.getElementById("annotator-start-time").value;
                         let end_time = root.getElementById("annotator-finish-time").value;
                         let description = root.getElementById("annotator-description").value;
+                        let coordinates = [];
+                        coordinates.push(root.getElementById("map_lat").value);
+                        coordinates.push(root.getElementById("map_lng").value);
 
                         all_annotations_total_number = all_annotations_total_number + 1;
                         let [tags_list, new_description] = get_tags_from_description(description);
                         
                         add_annotation_to_the_list(all_annotations_total_number, content_title, title, start_time, end_time, 
-                                                   tags_list, description, all_new_images, all_new_songs, document.getElementById("scrubberDuration").innerHTML);
+                                                   tags_list, description, all_new_images, all_new_songs, coordinates, document.getElementById("scrubberDuration").innerHTML);
 
                         document.getElementById("playerActionButton").click();
                     }
@@ -167,10 +176,10 @@ getAllDependencies()
                     add_annotation_to_the_list(i, all_annotations_content_title[i], all_annotations_titles[i], all_annotations_start_time[i], 
                                                all_annotations_end_time[i], all_annotations_tags[i], 
                                                all_annotations_description[i], all_annotations_images_list[i], 
-                                               all_annotations_music_list[i], full_time);
+                                               all_annotations_music_list[i], all_annotations_coordinates[i], full_time);
         }
 
-        function add_annotation_to_the_list(iterator, content_title, title, start_time, end_time, tags_list, description, images_list, music_list, full_time)
+        function add_annotation_to_the_list(iterator, content_title, title, start_time, end_time, tags_list, description, images_list, music_list, coordinates, full_time)
         {
             // we display the popup on the loading area
 
@@ -192,10 +201,10 @@ getAllDependencies()
 
             let created_annotation = document.getElementById(title + "_" + iterator);
             
-            add_listener_for_annotation(created_annotation, start_time, end_time, tags_list, description, images_list, music_list);
+            add_listener_for_annotation(created_annotation, start_time, end_time, tags_list, description, images_list, music_list, coordinates);
         }
 
-        function add_listener_for_annotation(annotation, start_time, end_time, tags_list, description, images_list, music_list)
+        function add_listener_for_annotation(annotation, start_time, end_time, tags_list, description, images_list, music_list, coordinates)
         {
             annotation.addEventListener("mouseover", function() {
                 if (document.getElementById("annotator-shadow-container") == null)
@@ -242,6 +251,9 @@ getAllDependencies()
 
                         holder_images.appendChild(image);
                     }
+
+                    root.getElementById("map_lat").value = coordinates[0];
+                    root.getElementById("map_lng").value = coordinates[1];
                 }
             });
 

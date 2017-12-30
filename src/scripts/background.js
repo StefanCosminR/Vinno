@@ -116,8 +116,9 @@ function readUserDataToFirebase(link, urlsite, sendResponse)
                     let description = all_objects[this_key].description;
                     let image_list  = all_objects[this_key].images_list;
                     let music_list  = all_objects[this_key].music_list;
+                    let coordinates = all_objects[this_key].coordinates;
 
-                    past_annotations.push(new AnnotationLayout(content_title, title, website, start_time, end_time, tags_list, description, image_list, music_list));
+                    past_annotations.push(new AnnotationLayout(content_title, title, website, start_time, end_time, tags_list, description, image_list, music_list, coordinates));
                 }
             }
         }
@@ -194,7 +195,8 @@ function saveAnnotationToFirebase(link, content)
                 tags_list: content.tags_list,
                 description: content.description,
                 images_list: image_urls,
-                music_list: music_urls
+                music_list: music_urls,
+                coordinates: content.coordinates
             }
 
             annotation_ref.push(annotation_data);

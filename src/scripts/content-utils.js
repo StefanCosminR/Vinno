@@ -15,8 +15,11 @@ function insertAnnotator(destionationElement, htmlTemplate) {
             let description = shadowRoot.getElementById("annotator-description").value;
             let website = window.location.href;
             let [tags_list, new_description] = get_tags_from_description(description);
+            let coordinates = [];
+            coordinates.push(shadowRoot.getElementById("map_lat").value);
+            coordinates.push(shadowRoot.getElementById("map_lng").value);
 
-            let this_annotation = new AnnotationLayout(content_title, title, website, start_time, end_time, tags_list, new_description, image_names, music_names);
+            let this_annotation = new AnnotationLayout(content_title, title, website, start_time, end_time, tags_list, new_description, image_names, music_names, coordinates);
             saveAnnotationToFirebase("annotations/", this_annotation);
 
             removeAnnotator("annotator-shadow-container");
