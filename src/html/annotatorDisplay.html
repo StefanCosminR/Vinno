@@ -25,7 +25,7 @@
           <div id="images_holder" class="annotation-card__photos"> </div>
         </div>
       </div>
-      <div class="map-holder">
+      <div id="delete_holder" class="map-holder">
         <input type="hidden" id="map_lat" value="" />
         <input type="hidden" id="map_lng" value="" />
         <div class="search_map" id="map"></div>
@@ -38,11 +38,16 @@
         let map_lat = document.getElementById("annotator-shadow-container-display").shadowRoot.getElementById("map_lat").value;
         let map_lng = document.getElementById("annotator-shadow-container-display").shadowRoot.getElementById("map_lng").value;
 
-        var map = new google.maps.Map(document.getElementById("annotator-shadow-container-display").shadowRoot.getElementById("map"), {
-          center: {lat: parseFloat(map_lat), lng: parseFloat(map_lng)},
-          zoom: 15,
-          mapTypeId: "roadmap"
-        });
+        if (map_lat == 0 && map_lng == 0)
+          document.getElementById("annotator-shadow-container-display").shadowRoot.getElementById("delete_holder").remove();
+        else
+        {
+          var map = new google.maps.Map(document.getElementById("annotator-shadow-container-display").shadowRoot.getElementById("map"), {
+            center: {lat: parseFloat(map_lat), lng: parseFloat(map_lng)},
+            zoom: 13,
+            mapTypeId: "roadmap"
+          });
+        }
       }
     </script>
     
