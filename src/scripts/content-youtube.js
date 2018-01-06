@@ -4,24 +4,12 @@ let annotatorActions;
 getAllDependencies()
     .then(dependencies => {
         embeddedHtml = dependencies.annotatorPopup;
-        annotatorActions = dependencies.annotationActionsMenu;
+        annotatorActions = dependencies.annotationActionsMenu; // quick insert button
 
         // addDotOnProgressBar();
         // addAnnotatorActions(annotatorActions);
-        insertFloatingPanel(dependencies.floatingPanel);
+        insertFloatingPanel(dependencies.floatingPanel, dependencies.floatingPanelContentTemplate);
     });
-
-
-saveToTable('annotations', {title: 'ana are mere'})
-    .then(() => {
-        getAnnotationsFromStorage()
-            .then(ann => {
-                console.log(ann);
-            })
-            .catch(err => console.error(err));
-    })
-    .catch(err => console.error(err));
-
 
 
 function addDotOnProgressBar() {

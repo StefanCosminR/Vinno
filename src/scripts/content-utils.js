@@ -5,9 +5,8 @@ function insertAnnotator(destionationElement, htmlTemplate) {
     let image_names = [];
     let music_names = [];
 
-    shadowRoot.getElementById('save-button').addEventListener('click', function() {
-        if (verify_each_input(shadowRoot))
-        {
+    shadowRoot.getElementById('save-button').addEventListener('click', function () {
+        if (verify_each_input(shadowRoot)) {
             let content_title = document.getElementById("playerTitle").innerHTML;
             let title = shadowRoot.getElementById("annotator-title").value;
             let start_time = shadowRoot.getElementById("annotator-start-time").value;
@@ -27,19 +26,19 @@ function insertAnnotator(destionationElement, htmlTemplate) {
             image_names = [];
             music_names = [];
         }
-    });   
+    });
 
-    shadowRoot.getElementById('close-button').addEventListener('click', function() { 
+    shadowRoot.getElementById('close-button').addEventListener('click', function () {
         removeAnnotator("annotator-shadow-container");
 
         removeAttachmentToFirebase("removeAttachment", image_names);
         removeAttachmentToFirebase("removeAttachment", music_names);
-        
+
         image_names = [];
         music_names = [];
-    });   
+    });
 
-    window.onbeforeunload = function() {
+    window.onbeforeunload = function () {
         removeAttachmentToFirebase("removeAttachment", image_names);
         removeAttachmentToFirebase("removeAttachment", music_names);
     };
@@ -47,25 +46,22 @@ function insertAnnotator(destionationElement, htmlTemplate) {
     let file_loader = shadowRoot.getElementById('annotator-file');
     let holder_images = shadowRoot.getElementById('images_holder');
 
-    file_loader.addEventListener('change', function() {
+    file_loader.addEventListener('change', function () {
         let current_files = file_loader.files;
 
-        for (let i = 0; i < current_files.length; i++) 
-        {
+        for (let i = 0; i < current_files.length; i++) {
             let fileReader = new FileReader();
-            
-            fileReader.onload = function(event) 
-            {
+
+            fileReader.onload = function (event) {
                 if (current_files[i].name.endsWith(".img") || current_files[i].name.endsWith(".jpg") || current_files[i].name.endsWith(".jpeg"))
                     image_names.push(current_files[i].name);
                 else if (current_files[i].name.endsWith(".mp3"))
                     music_names.push(current_files[i].name);
-                
-                saveAttachmentToFirebase("saveAttachment", { data: event.target.result, name: current_files[i].name });
+
+                saveAttachmentToFirebase("saveAttachment", {data: event.target.result, name: current_files[i].name});
 
                 let image = document.createElement('img');
-                if (current_files[i].name.endsWith(".img") || current_files[i].name.endsWith(".jpg") || current_files[i].name.endsWith(".jpeg"))
-                {
+                if (current_files[i].name.endsWith(".img") || current_files[i].name.endsWith(".jpg") || current_files[i].name.endsWith(".jpeg")) {
                     image.src = window.URL.createObjectURL(current_files[i]);
                     image.setAttribute("class", "annotation-card__photo");
                 }
@@ -73,10 +69,10 @@ function insertAnnotator(destionationElement, htmlTemplate) {
                     image.setAttribute("class", "annotation-card__music");
                 holder_images.appendChild(image);
 
-                image.addEventListener("mouseover", function() {
+                image.addEventListener("mouseover", function () {
                     image.src = "http://www.endlessicons.com/wp-content/uploads/2012/12/trash-icon.png";
 
-                    image.addEventListener("click", function() {
+                    image.addEventListener("click", function () {
                         let to_delete_image_names = [];
                         to_delete_image_names.push(image_names[i]);
 
@@ -90,8 +86,8 @@ function insertAnnotator(destionationElement, htmlTemplate) {
                         image.remove();
                     });
                 });
-                
-                image.addEventListener("mouseout", function() {
+
+                image.addEventListener("mouseout", function () {
                     image.src = window.URL.createObjectURL(current_files[i]);
                 });
             };
@@ -103,15 +99,13 @@ function insertAnnotator(destionationElement, htmlTemplate) {
     return [container, shadowRoot];
 }
 
-function get_tags_from_description(description)
-{
+function get_tags_from_description(description) {
     let tag_list = [];
     let new_description = description;
     let all_words = description.match(/#\S+/g);
 
-    if(all_words)
-        for (let i = 0; i < all_words.length; i++)
-        {
+    if (all_words)
+        for (let i = 0; i < all_words.length; i++) {
             let this_word = all_words[i];
 
             tag_list.push(this_word);
@@ -121,8 +115,7 @@ function get_tags_from_description(description)
     return [tag_list, new_description];
 }
 
-function verify_each_input(root)
-{
+function verify_each_input(root) {
     let start_time_in_seconds = estimate_time_in_seconds(root.getElementById("annotator-start-time").value);
     let finish_time_in_seconds = estimate_time_in_seconds(root.getElementById("annotator-finish-time").value);
 
@@ -130,10 +123,9 @@ function verify_each_input(root)
         return false;
 
     return true;
-}   
+}
 
-function estimate_time_in_seconds(time)
-{
+function estimate_time_in_seconds(time) {
     let each_part_of_time = time.split(":");
     if (each_part_of_time.length == 3)
         return Number(each_part_of_time[0]) * 3600 + Number(each_part_of_time[1]) * 60 + Number(each_part_of_time[2]);
@@ -157,10 +149,85 @@ function load_annotations_from_database(urlsite) {
 
 /** ----------------- FLOATING PANEL ----------------- */
 
-function insertFloatingPanel(template) {
+let annotationsSubject = new Subject();
+
+class FloatingPanel {
+    constructor(template, contentTemplate) {
+        this._container = undefined;
+        this._root = undefined;
+        this._data = undefined;
+        this._contentTemplate = contentTemplate;
+
+        let body = document.getElementsByTagName('body')[0];
+        [this._container, this._root] = insertNode(body, template, 'floating-panel-template', 'floating-panel');
+        this.renderPanelStyles();
+        this.addMovement();
+    }
+
+    renderPanelStyles() {
+        let css = `
+    position: fixed;
+    top: 70px;
+    right: 50px;
+    z-index: 6000;
+    width: 400px;
+    height: 80vh;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 17px 16px 124px -20px rgba(0,0,0,0.75);
+    `;
+
+        this._container.setAttribute('class', 'floating-panel__container');
+        this._container.setAttribute('style', css);
+    }
+
+    addMovement() {
+        let mouseMoveListener = (event) => {
+            this._container.style.right = document.documentElement.clientWidth - event.clientX - 200 + 'px';
+        };
+
+        let floatingPanelDragHandle = this._root.querySelector('.floating-panel__drag-handle');
+
+        floatingPanelDragHandle.addEventListener('mousedown', function () {
+            document.addEventListener('mousemove', mouseMoveListener);
+            // floatingPanelDragHandle.style.cursor = '-webkit-grabbing';
+            floatingPanelDragHandle.style.cursor = 'none';
+            document.getElementsByTagName('body')[0].style.cursor = 'none';
+        });
+
+        document.addEventListener('mouseup', function () {
+            document.removeEventListener('mousemove', mouseMoveListener);
+            floatingPanelDragHandle.style.cursor = '-webkit-grab';
+            document.getElementsByTagName('body')[0].style.cursor = 'auto';
+        });
+    }
+
+    addDataObservable(observable) {
+        observable.subscribe((data) => {
+            this._data = data;
+            this.updateView();
+        })
+    }
+
+    updateView() {
+        let annotations = '';
+        this._data.forEach(annotation => {
+            annotations += interpolation(this._contentTemplate, annotation);
+        });
+        this._root.querySelector('.floating-panel__content').innerHTML = annotations;
+    }
+
+
+}
+
+function insertFloatingPanel(template, contentTemplate) {
+    let floatingPanel = new FloatingPanel(template, contentTemplate);
+    floatingPanel.addDataObservable(annotationsSubject);
+    loadAllAnnotationsFor(window.location.href);
+    /*
     let body = document.getElementsByTagName('body')[0];
     let [container, root] = insertNode(body, template, 'floating-panel-template', 'floating-panel');
-    container.setAttribute('class', 'floating-panel__container');
+    // container
     let css = `
     position: fixed;
     top: 70px;
@@ -193,10 +260,44 @@ function insertFloatingPanel(template) {
         floatingPanelDragHandle.style.cursor = '-webkit-grab';
         document.getElementsByTagName('body')[0].style.cursor = 'auto';
     });
+
+    console.log(window.location.href);
+    loadAllAnnotationsFor(window.location.href);
+
+    annotationsSubject.subscribe(function (annotations) {
+        console.log(annotations);
+    });
+    */
 }
 
+function loadAllAnnotationsFor(url) {
+    load_annotations_from_database(url)
+        .then(annotations => annotationsSubject.next(annotations));
+}
 
+function interpolation(source, tags) {
 
+    console.log(tags);
+
+    const regex = /({{)(\w+)(}})/gim;
+
+    function replacer(match, braces1, word, braces2, offset, string) {
+        let result = '';
+        console.log(tags[word]);
+        if(tags && tags[word]) {
+            result = tags[word];
+        }
+        return result;
+    }
+    return source.replace(regex, replacer);
+}
+
+/**
+ * @todo Resolve reloading of annotations on route change
+ */
+// window.onhashchange = function () {
+//     alert("onhashchange = " + window.location.hash); // do something on click
+// };
 
 
 /** ----------------- GENERAL ----------------- */

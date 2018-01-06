@@ -19,10 +19,11 @@
   "content_scripts": [
     {
       "matches": [
-        "https://www.youtube.com/*"
+        "https://www.youtube.com/watch*"
       ],
       "js": [
         "src/scripts/classes/AnnotationLayout.js",
+        "src/scripts/classes/Subject.js",
         "src/scripts/content-utils.js",
         "src/scripts/database-utils.js",
         "src/scripts/dependenciesResolver.js",
