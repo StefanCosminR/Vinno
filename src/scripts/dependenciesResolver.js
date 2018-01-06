@@ -30,6 +30,14 @@ function getFloatingPanel() {
     })
 }
 
+function getFloatingPanelContentTemplate() {
+    return new Promise((resolve, reject) => {
+        chrome.runtime.sendMessage('getFloatingPanelContentTemplate', function(response) {
+            resolve(response.html);
+        });
+    })
+}
+
 function getAllDependencies() {
     return new Promise((resolve, reject) => {
         let dependencies = {};
@@ -49,7 +57,11 @@ function getAllDependencies() {
             })
             .then(response => {
                 dependencies.annotatorDisplay = response;
-                resolve(dependencies);
+                return getFloatingPanelContentTemplate();
+            })
+            .then(response => {
+                dependencies.floatingPanelContentTemplate = response;
+                resolve(dependencies)
             })
             .catch(err => reject(err));
     });
