@@ -25,10 +25,12 @@ messageCommunicationBus.registerListener('getEmbeddedHtml', sendFile('../src/htm
 messageCommunicationBus.registerListener('getAnnotationDisplay', sendFile('../src/html/annotatorDisplay.html'));
 messageCommunicationBus.registerListener('getAnnotatorActions', sendFile('../src/html/quickAnnotate.html'));
 messageCommunicationBus.registerListener('getFloatingPanel', sendFile('../src/html/floatingPanel.html'));
+messageCommunicationBus.registerListener('getFloatingPanelContentTemplate', sendFile('../src/html/floatingPanelContentTemplate.html'));
 messageCommunicationBus.registerListener('GET', function(sendResponse, link, urlsite) 
 { 
     readUserDataToFirebase(link, urlsite, sendResponse); 
 });
+
 messageCommunicationBus.registerListener('POST', function(sendResponse, link, content) 
 { 
     if (link == "saveAttachment") 
