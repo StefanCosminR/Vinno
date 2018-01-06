@@ -20,6 +20,7 @@
                 </button>
             </div>
             <div class="annotation-card__content">
+                <h2 class="annotation-card__title">Some kind of title</h2>
                 <div class="annotation-card__text">
                     Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore
                     et
@@ -237,78 +238,83 @@
         }
 
             .annotation-card {
-        border-top: 1px solid #e1e1e1;
-        margin-top: 10px;
-    }
+                border-top: 1px solid #e1e1e1;
+                margin-top: 10px;
+            }
+
             .annotation-card:first-child {
-        border: 0;
-        margin: 0;
-    }
+                border: 0;
+                margin: 0;
+            }
 
                 .annotation-card__top {
-            height: 40px;
-            display: flex;
-            flex-direction: row;
-            justify-content: space-between;
-        }
+                    height: 40px;
+                    display: flex;
+                    flex-direction: row;
+                    justify-content: space-between;
+                }
 
                     .annotation-card__time-area {
-                display: flex;
-                flex-direction: row;
-                justify-content: space-around;
-                align-items: center;
-            }
+                        display: flex;
+                        flex-direction: row;
+                        justify-content: space-around;
+                        align-items: center;
+                    }
 
                         .annotation-card__time-delimiter {
-        margin: 0 5px;
-    }
+                            margin: 0 5px;
+                    }
 
                     .annotation-card__action-button {
-                border: none;
-                cursor: pointer;
-                color: white;
-                padding: 0 15px;
-                height: 80%;
-                align-self: center;
-                border-radius: 2px;
-                background: #36b4a7;
-
-            }
+                        border: none;
+                        cursor: pointer;
+                        color: white;
+                        padding: 0 15px;
+                        height: 80%;
+                        align-self: center;
+                        border-radius: 2px;
+                        background: #36b4a7;
+                    }
 
                 .annotation-card__content {  }
 
+                    .annotation-card__title {
+                        font-family: 'Source Sans Pro', 'Open Sans', sans-serif;
+                    }
+
                     .annotation-card__text {
-                text-align: justify;
-                font-family: 'Source Sans Pro', 'Open Sans', sans-serif;
-            }
+                        text-align: justify;
+                        font-family: 'Source Sans Pro', 'Open Sans', sans-serif;
+                        font-size: 1.2rem;
+                    }
 
                     .annotation-card__photos {
-                display: flex;
-                flex-direction: row;
-                align-items: center;
-                margin-top: 10px;
-                overflow-x: scroll;
-                width: 100%;
-            }
+                        display: flex;
+                        flex-direction: row;
+                        align-items: center;
+                        margin-top: 10px;
+                        overflow-x: scroll;
+                        width: 100%;
+                    }
 
                         .annotation-card__photo {
-                    min-width: 80px;
-                    min-height: 80px;
-                    width: 80px;
-                    height: 80px;
-                    margin: 0 10px 5px;
-                    background: url('https://www.polyvore.com/cgi/img-thing?.out=jpg&size=l&tid=113074569');
-                    background-size:contain;
-                    cursor: pointer;
-                }
+                            min-width: 80px;
+                            min-height: 80px;
+                            width: 80px;
+                            height: 80px;
+                            margin: 0 10px 5px;
+                            background: url('https://www.polyvore.com/cgi/img-thing?.out=jpg&size=l&tid=113074569');
+                            background-size:contain;
+                            cursor: pointer;
+                        }
 
                         .annotation-card__photo:first-child {
-                    margin-left: 0;
-                }
+                            margin-left: 0;
+                        }
 
                         .annotation-card__photo:last-child {
-                    margin-right: 0;
-                }
+                            margin-right: 0;
+                        }
 
 
 
