@@ -7,7 +7,31 @@ function insertAnnotator(destionationElement, htmlTemplate) {
 
     shadowRoot.getElementById('save-button').addEventListener('click', function () {
         if (verify_each_input(shadowRoot)) {
-            let content_title = document.getElementById("playerTitle").innerHTML;
+
+            var url = String(window.location.href);
+            var content_title = ""
+
+            if(url.indexOf("tunein") != -1)
+            {
+                content_title = document.getElementById("playerTitle").innerHTML;
+                console.log("Found tune content title");
+            }
+            else if(url.indexOf("mixcloud") != -1)
+            {
+                let title_wrapper = document.getElementsByClassName("title-inner-wrapper");
+                content_title = title_wrapper[0].firstChild.firstChild.innerHTML;
+                console.log("Found mixcloud content title");
+
+            }
+            else if(url.indexOf("youtube") != -1)
+            {
+                // get content title
+            }
+            else if(url.indexOf("vimeo") != -1)
+            {
+                // get content title
+            }
+
             let title = shadowRoot.getElementById("annotator-title").value;
             let start_time = shadowRoot.getElementById("annotator-start-time").value;
             let end_time = shadowRoot.getElementById("annotator-finish-time").value;
@@ -19,6 +43,7 @@ function insertAnnotator(destionationElement, htmlTemplate) {
             coordinates.push(shadowRoot.getElementById("map_lng").value);
 
             let this_annotation = new AnnotationLayout(content_title, title, website, start_time, end_time, tags_list, new_description, image_names, music_names, coordinates);
+            debugger;
             saveAnnotationToFirebase("annotations/", this_annotation);
 
             removeAnnotator("annotator-shadow-container");
@@ -126,7 +151,7 @@ function verify_each_input(root) {
 }
 
 function estimate_time_in_seconds(time) {
-    let each_part_of_time = time.split(":");
+    let each_part_of_time = String(time).split(":");
     if (each_part_of_time.length == 3)
         return Number(each_part_of_time[0]) * 3600 + Number(each_part_of_time[1]) * 60 + Number(each_part_of_time[2]);
     else
@@ -340,4 +365,3 @@ function convertNodeToShadowDom(node) {
 function insertNodeInShadowDom(shadowDom, node) {
     shadowDom.appendChild(document.importNode(node.content, true));
 }
-

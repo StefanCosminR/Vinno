@@ -10,14 +10,14 @@
         <div class="box-header">
           <input id="annotator-title" type="text" placeholder="Add title" />
         </div>
-        
+
         <div class="box-content">
           <div class="box-content-row">
             <input id="annotator-start-time" placeholder="00:00" type="time" step="2" class="without_ampm input-minutes" />
             <span class="devider">--</span>
             <input id="annotator-finish-time" placeholder="00:00" type="time" step="2" class="without_ampm input-minutes" />
           </div>
-          
+
           <div class="box-content-row">
             <textarea id="annotator-description" placeholder="Add text annotation here"></textarea>
           </div>
@@ -41,7 +41,7 @@
     </div>
 
     <script type="text/javascript">
-      function initAutocomplete() 
+      function initAutocomplete()
       {
         var map = new google.maps.Map(document.getElementById("annotator-shadow-container").shadowRoot.getElementById("map"), {
           center: {lat: 47.1584549, lng: 27.601441799999975},
@@ -73,7 +73,7 @@
         });
       }
     </script>
-    
+
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDa-6m9meqJwiOFHRAo_M3l67pFlrjU5es&libraries=places&callback=initAutocomplete"
        async defer></script>
 
@@ -156,7 +156,7 @@
         cursor: pointer;
         color: white;
         background-color: #36b4a7;
-      } 
+      }
 
       .annotation-card__photos {
         display: flex;
@@ -187,7 +187,7 @@
         margin: 0 5px 5px;
         overflow: hidden;
       }
-      
+
       ::-webkit-scrollbar {
         width: 5px;
         height: 5px;
@@ -240,7 +240,7 @@
         -o-appearance: none;
         -ms-appearance: none;
         appearance: none;
-        margin: -10px; 
+        margin: -10px;
       }
 
       #infowindow-content .title {
