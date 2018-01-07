@@ -43,7 +43,7 @@ function insertAnnotator(destionationElement, htmlTemplate) {
             coordinates.push(shadowRoot.getElementById("map_lng").value);
 
             let this_annotation = new AnnotationLayout(content_title, title, website, start_time, end_time, tags_list, new_description, image_names, music_names, coordinates);
-            debugger;
+            // debugger;
             saveAnnotationToFirebase("annotations/", this_annotation);
 
             removeAnnotator("annotator-shadow-container");

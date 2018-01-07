@@ -115,7 +115,7 @@ getAllDependencies()
 								document.getElementsByClassName("play-icon state")[0].click();
 
 								let holder = document.getElementsByClassName("player-waveform")[0];
-								debugger;
+								// debugger;
                 let [container, root] = insertAnnotator(holder, dependencies.annotatorPopup);
 
                 container.style.position = "fixed";
