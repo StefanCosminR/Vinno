@@ -18,13 +18,9 @@ Documentation links:
 ### List of available sites:
 - https://vimeo.com (Video) - Alexandru
 - https://www.youtube.com (Video) - Stefan
-- http://www.musixhub.com (Video) - Elisa
-- https://www.smule.com/listen (Video)
-- http://www.trilulilu.ro (Video)
-- https://8tracks.com (Video)
-- https://soundcloud.com (Audio) 
-- https://tunein.com/radio/home (Audio) - Filip
-- https://www.audionetwork.com (Audio)
 - https://www.mixcloud.com (Audio) - Elisa
+- https://tunein.com/radio/home (Audio) - Filip
+
+
  
 
