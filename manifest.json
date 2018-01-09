@@ -3,7 +3,7 @@
   "name": "Vinno",
   "version": "0.0.3",
   "page_action": {
-    "default_popup": "src/html/popup.html",
+    "default_popup": "src/html/popup/popup.html",
     "default_title": "Let's annotate"
   },
   "offline_enabled": true,
