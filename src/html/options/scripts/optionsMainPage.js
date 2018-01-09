@@ -135,10 +135,6 @@ function main_function()
         if (document.getElementById("display_content") != null)
             document.getElementById("display_content").remove();
     };
-    document.getElementById("section-13").onclick = function() {
-        if (document.getElementById("display_content") != null)
-            document.getElementById("display_content").remove();
-    };
 }
 
 
