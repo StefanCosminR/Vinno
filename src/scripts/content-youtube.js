@@ -1,13 +1,13 @@
-let embeddedHtml;
+let annotatorPopupTemplate;
 let annotatorActions;
 
 getAllDependencies()
     .then(dependencies => {
-        embeddedHtml = dependencies.annotatorPopup;
+        annotatorPopupTemplate = dependencies.annotatorPopup;
         annotatorActions = dependencies.annotationActionsMenu; // quick insert button
 
         // addDotOnProgressBar();
-        // addAnnotatorActions(annotatorActions);
+        addAnnotatorActions(annotatorActions, annotatorPopupTemplate);
         insertFloatingPanel(dependencies.floatingPanel, dependencies.floatingPanelContentTemplate);
     });
 
@@ -30,15 +30,16 @@ function addDotOnProgressBar() {
     progressList.appendChild(dot);
 
     console.log(document.getElementsByClassName('annotator-dot'));
+    return dot;
 }
 
 
 
 
-function addAnnotatorActions(template) {
+function addAnnotatorActions(template, annotatorPopupTemplate) {
     let video = document.getElementById('movie_player');
-    let [container, root] = insertAnnotator(video, template);
-
+    // let [container, root] = insertAnnotator(video, template);
+    let [container, root] = insertNode(video, template, 'quick-annotator-button', 'quick-annotator-button-container')
     container.style.position = 'relative';
     container.style.top = '50px';
     container.style.right = '10px';
@@ -49,6 +50,14 @@ function addAnnotatorActions(template) {
 
     root.querySelector('.quick__button').addEventListener('click', function() {
         console.log('clicked');
+        let progressBarDot = addDotOnProgressBar();
+        let [container, shadowRoot] = insertAnnotator(progressBarDot, annotatorPopupTemplate)
+        container.style.position = 'absolute';
+        shadowRoot.style.bottom = '10px';
+
+        document.getElementById('annotator-shadow-container').addEventListener('click', function() {
+            return false;
+        });
     });
 }
 
