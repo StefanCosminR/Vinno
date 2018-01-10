@@ -12,16 +12,11 @@ function insertAnnotator(destionationElement, htmlTemplate) {
             var content_title = ""
 
             if(url.indexOf("tunein") != -1)
-            {
                 content_title = document.getElementById("playerTitle").innerHTML;
-                console.log("Found tune content title");
-            }
             else if(url.indexOf("mixcloud") != -1)
             {
                 let title_wrapper = document.getElementsByClassName("title-inner-wrapper");
                 content_title = title_wrapper[0].firstChild.firstChild.innerHTML;
-                console.log("Found mixcloud content title");
-
             }
             else if(url.indexOf("youtube") != -1)
             {
@@ -29,7 +24,7 @@ function insertAnnotator(destionationElement, htmlTemplate) {
             }
             else if(url.indexOf("vimeo") != -1)
             {
-                // get content title
+                // cum se cheama video
             }
 
             let title = shadowRoot.getElementById("annotator-title").value;
