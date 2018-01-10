@@ -25,7 +25,7 @@ function insertAnnotator(destionationElement, htmlTemplate) {
             }
             else if(url.indexOf("youtube") != -1)
             {
-                // get content title
+                content_title = document.title;
             }
             else if(url.indexOf("vimeo") != -1)
             {
@@ -51,6 +51,8 @@ function insertAnnotator(destionationElement, htmlTemplate) {
             image_names = [];
             music_names = [];
         }
+
+        return [container, shadowRoot];
     });
 
     shadowRoot.getElementById('close-button').addEventListener('click', function () {
@@ -239,6 +241,11 @@ class FloatingPanel {
         this._data.forEach(annotation => {
             annotations += interpolation(this._contentTemplate, annotation);
         });
+        if(annotations === '') {
+            annotations = `
+                <h2>Let's get going with some annotations :) </h2>
+            `
+        }
         this._root.querySelector('.floating-panel__content').innerHTML = annotations;
     }
 
@@ -249,56 +256,14 @@ function insertFloatingPanel(template, contentTemplate) {
     let floatingPanel = new FloatingPanel(template, contentTemplate);
     floatingPanel.addDataObservable(annotationsSubject);
     loadAllAnnotationsFor(window.location.href);
-    /*
-    let body = document.getElementsByTagName('body')[0];
-    let [container, root] = insertNode(body, template, 'floating-panel-template', 'floating-panel');
-    // container
-    let css = `
-    position: fixed;
-    top: 70px;
-    right: 50px;
-    z-index: 6000;
-    width: 400px;
-    height: 80vh;
-    border-radius: 12px;
-    overflow: hidden;
-    box-shadow: 17px 16px 124px -20px rgba(0,0,0,0.75);
-    `;
-    container.setAttribute('style', css);
-
-
-    function mouseMoveListener(event) {
-        container.style.right = document.documentElement.clientWidth - event.clientX - 200 + 'px';
-    }
-
-    let floatingPanelDragHandle = root.querySelector('.floating-panel__drag-handle');
-
-    floatingPanelDragHandle.addEventListener('mousedown', function () {
-        document.addEventListener('mousemove', mouseMoveListener);
-        // floatingPanelDragHandle.style.cursor = '-webkit-grabbing';
-        floatingPanelDragHandle.style.cursor = 'none';
-        document.getElementsByTagName('body')[0].style.cursor = 'none';
-    });
-
-    document.addEventListener('mouseup', function () {
-        document.removeEventListener('mousemove', mouseMoveListener);
-        floatingPanelDragHandle.style.cursor = '-webkit-grab';
-        document.getElementsByTagName('body')[0].style.cursor = 'auto';
-    });
-
-    console.log(window.location.href);
-    loadAllAnnotationsFor(window.location.href);
-
-    annotationsSubject.subscribe(function (annotations) {
-        console.log(annotations);
-    });
-    */
 }
 
 function loadAllAnnotationsFor(url) {
     load_annotations_from_database(url)
         .then(annotations => annotationsSubject.next(annotations));
 }
+
+annotationsSubject.subscribe((ann) => console.log(ann));
 
 function interpolation(source, tags) {
 
