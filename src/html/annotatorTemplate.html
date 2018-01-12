@@ -41,12 +41,13 @@
     </div>
 
     <script type="text/javascript">
+      /*--------------------------------------------------------------------------------------------------------------------------------------------*/
       function initAutocomplete()
       {
         window.Google_API = google;
         change_coordinates();
       }
-
+      /*--------------------------------------------------------------------------------------------------------------------------------------------*/
       function change_coordinates() 
       {
         var map = new window.Google_API.maps.Map(document.getElementById("annotator-shadow-container").shadowRoot.getElementById("map"), {
@@ -78,6 +79,7 @@
           map.fitBounds(bounds);
         });
       }
+      /*--------------------------------------------------------------------------------------------------------------------------------------------*/
     </script>
 
     <div id="google-maps-loader"></div>

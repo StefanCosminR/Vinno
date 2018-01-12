@@ -33,12 +33,13 @@
     </div>
 
     <script type="text/javascript">
+      /*--------------------------------------------------------------------------------------------------------------------------------------------*/
       function initAutocomplete() 
       {
         window.Google_API = google;
         change_coordinates();
       }
-
+      /*--------------------------------------------------------------------------------------------------------------------------------------------*/
       function change_coordinates()
       {
         let map_lat = document.getElementById("annotator-shadow-container-display").shadowRoot.getElementById("map_lat").value;
@@ -55,11 +56,13 @@
           });
         }
       }
+      /*--------------------------------------------------------------------------------------------------------------------------------------------*/
     </script>
     
     <div id="google-maps-loader"></div>
 
     <script>
+      /*--------------------------------------------------------------------------------------------------------------------------------------------*/
       if (!window.Google_API) 
       {
         let new_script = document.createElement('script');
@@ -68,6 +71,7 @@
       }
       else
         setTimeout(change_coordinates, 0);
+      /*--------------------------------------------------------------------------------------------------------------------------------------------*/
     </script>
     <!-- <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDa-6m9meqJwiOFHRAo_M3l67pFlrjU5es&libraries=places&callback=initAutocomplete"></script> -->
 
