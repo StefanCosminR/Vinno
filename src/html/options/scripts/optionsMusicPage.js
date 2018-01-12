@@ -65,6 +65,7 @@ function readAllAnnotationsFromFirebase()
                     }
             }
         }
+        
         fill_with_annotations();
     });
 }

@@ -106,24 +106,25 @@ function readUserDataToFirebase(link, urlsite, sendResponse)
             for (let i = 0; i < keys.length; i++) 
             {
                 let this_key = keys[i];
-                let website = all_objects[this_key].website;
+                let website  = all_objects[this_key].website;
 
                 if (website.startsWith(urlsite))
                 {
                     let content_title = all_objects[this_key].content_title;
-                    let title = all_objects[this_key].title;
-                    let start_time = all_objects[this_key].start_time;
-                    let end_time = all_objects[this_key].end_time;
-                    let tags_list = all_objects[this_key].tags_list;
-                    let description = all_objects[this_key].description;
-                    let image_list  = all_objects[this_key].images_list;
-                    let music_list  = all_objects[this_key].music_list;
-                    let coordinates = all_objects[this_key].coordinates;
+                    let title         = all_objects[this_key].title;
+                    let start_time    = all_objects[this_key].start_time;
+                    let end_time      = all_objects[this_key].end_time;
+                    let tags_list     = all_objects[this_key].tags_list;
+                    let description   = all_objects[this_key].description;
+                    let image_list    = all_objects[this_key].images_list;
+                    let music_list    = all_objects[this_key].music_list;
+                    let coordinates   = all_objects[this_key].coordinates;
 
                     past_annotations.push(new AnnotationLayout(content_title, title, website, start_time, end_time, tags_list, description, image_list, music_list, coordinates));
                 }
             }
         }
+
         sendResponse(past_annotations);
     });
 }
@@ -135,7 +136,7 @@ function saveAttachmentToFirebase(content)
         let image_ref = storage.ref("image/" + uid + "/" + content.name);
         image_ref.putString(content.data, 'data_url');
     }
-    else if (content.name.endsWith(".mp3"))
+    if (content.name.endsWith(".mp3"))
     {
         let music_ref = storage.ref("music/" + uid + "/" + content.name);
         music_ref.putString(content.data, 'data_url');
@@ -151,7 +152,7 @@ function removeAttachmentToFirebase(content)
             let image_ref = storageRef.child("image/" + uid + "/" + content[i]);
             image_ref.delete();
         }
-        else if (content[i].endsWith(".mp3"))
+        if (content[i].endsWith(".mp3"))
         {
             let music_ref = storageRef.child("music/" + uid + "/" + content[i]);
             music_ref.delete();
@@ -190,15 +191,15 @@ function saveAnnotationToFirebase(link, content)
             let annotation_data = 
             {
                 content_title: content.content_title,
-                title: content.title,
-                website: content.website,
-                start_time: content.start_time,
-                end_time: content.end_time,
-                tags_list: content.tags_list,
-                description: content.description,
-                images_list: image_urls,
-                music_list: music_urls,
-                coordinates: content.coordinates
+                title:         content.title,
+                website:       content.website,
+                start_time:    content.start_time,
+                end_time:      content.end_time,
+                tags_list:     content.tags_list,
+                description:   content.description,
+                images_list:   image_urls,
+                music_list:    music_urls,
+                coordinates:   content.coordinates
             }
 
             annotation_ref.push(annotation_data);
