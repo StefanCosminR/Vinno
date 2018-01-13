@@ -75,7 +75,7 @@ function fill_with_annotations()
         if (all_annotations_websites.indexOf(all_websites[i]) != -1)
         {
             let new_website = document.createElement("div");
-            let innerHTML_string = "<div class=\"accordion\"><div class=\"section\"><input type=\"radio\" name=\"accordion-1\" id=\"section-" + 
+            let innerHTML_string = "<input class=\"slide-toggle\" type=\"radio\" name=\"accordion-1\" id=\"section-" + 
                                     i + "\"value=\"toggle\"/><label for=\"section-" + i + "\">";
 
             if (all_websites[i] == "TuneIn" || all_websites[i] == "MixCloud")
@@ -86,7 +86,7 @@ function fill_with_annotations()
                 innerHTML_string =  innerHTML_string + "<i class=\"fa fa-vimeo\"></i>";
 
             innerHTML_string = innerHTML_string + "<span>" + all_websites[i] + "</span></label>" + "<div class=\"content\"><ul id=\"all_annotations-" + 
-                               i +  "\"></ul></div></div></div></div>";
+                               i +  "\"></ul></div>";
 
             new_website.innerHTML = innerHTML_string;
             content.appendChild(new_website);
@@ -129,13 +129,6 @@ function main_function()
             document.getElementById("world").appendChild(holder);
             readAllAnnotationsFromFirebase();
         }
-        else
-            document.getElementById("display_content").remove();
-    };
-
-    document.getElementById("section-12").onclick = function() {
-        if (document.getElementById("display_content") != null)
-            document.getElementById("display_content").remove();
     };
 }
 /*--------------------------------------------------------------------------------------------------------------------------------------------*/
