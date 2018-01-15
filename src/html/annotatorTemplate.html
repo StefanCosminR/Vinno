@@ -48,7 +48,7 @@
         change_coordinates();
       }
       /*--------------------------------------------------------------------------------------------------------------------------------------------*/
-      function change_coordinates() 
+      function change_coordinates()
       {
         var map = new window.Google_API.maps.Map(document.getElementById("annotator-shadow-container").shadowRoot.getElementById("map"), {
           center: {lat: 47.1584549, lng: 27.601441799999975},
@@ -85,7 +85,7 @@
     <div id="google-maps-loader"></div>
 
     <script>
-      if (!window.Google_API) 
+      if (!window.Google_API)
       {
         let new_script = document.createElement('script');
         new_script.setAttribute("src", "https://maps.googleapis.com/maps/api/js?key=AIzaSyDa-6m9meqJwiOFHRAo_M3l67pFlrjU5es&libraries=places&callback=initAutocomplete");

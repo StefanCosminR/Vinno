@@ -53,6 +53,7 @@
       ],
       "js": [
         "src/scripts/classes/AnnotationLayout.js",
+        "src/scripts/classes/Subject.js",
         "src/scripts/content-utils.js",
         "src/scripts/database-utils.js",
         "src/scripts/dependenciesResolver.js",

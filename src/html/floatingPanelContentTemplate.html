@@ -1,20 +1,24 @@
 <div class="annotation-card">
     <div class="annotation-card__top">
         <div class="annotation-card__time-area">
-            <div class="chip">{{start_time}}</div>
+            <input type="time" class="chip" name="start_time" value="{{start_time}}" step="1" readonly/>
             <div class="annotation-card__time-delimiter">-</div>
-            <div class="chip">{{end_time}}</div>
+            <input type="time" class="chip" name="end_time" value="{{end_time}}" step="1" readonly/>
         </div>
         <button class="annotation-card__action-button">
-            Edit
+
         </button>
     </div>
     <div class="annotation-card__content">
-        <h2 class="annotation-card__title">{{content_title}}</h2>
-        <div class="annotation-card__text">
-            {{description}}
-        </div>
+        <input class="annotation-card__title" type="text" name="content_title" placeholder="Insert title" value="{{content_title}}" readonly/>
+        <div contenteditable="false" class="annotation-card__text" name="description" placeholder="Insert description" readonly>{{description}}</div>
         <div class="annotation-card__photos">
         </div>
+        <!--<div class="map-holder">-->
+            <!--<input id="pac-input" class="controls" type="text" placeholder="Search for address">-->
+            <!--<input type="hidden" id="map_lat" value="" />-->
+            <!--<input type="hidden" id="map_lng" value="" />-->
+            <!--<div class="search_map" id="map"></div>-->
+        <!--</div>-->
     </div>
 </div>
