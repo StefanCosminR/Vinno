@@ -100,13 +100,6 @@
 			</p>
 			<p> The extension button offers the user the posibility to navigate to the main page by clicking the <i>Options</i> button. On this page the user can see all the annotations sorted by website. User can see here the url of the video or audio resource and the comment that the user placed.
 			</p>
-			<figure typeof="sa:Image">
-                        <img src="../Mockups/mainPage.png" width="800" height="655">
-                        <figcaption>
-                            The main page where user can manage the annotations
-                        </figcaption>
-                    </figure>
-                </section>
                 <section id="implementation">
                     <h3>Implementation</h3>
 			<p> VANNO is created as a chrome extension in order to have access to the Chrome API. Through this API we can extend the functionlity of the websites the user is on making it for him to add annotation on different media players.
@@ -114,18 +107,33 @@
             </p>
             <p>
                 Initialy the team discused the main features that we want to provide through our extension like: adding annotations and viewing annotations. After that we went through a design phase where we tried to come up with intuitive design that provides
-                user friendly actions. 
+                user friendly actions. An important was the design of the popup were the user will introduce his notes. We decided to give the user to add an annotation at a specific point on the timeline or
+                an entire. Also the user has the possibility to add other media files.
             </p>
+            <p>In <i>Sketch1</i> shown below you can see different ideas for how the popup should look like. We agreed that the popup must have: title, start time, end time, an input area and media file selector. 
+            Later we came up with the idea to provide the user with the choise to select a <u>geo location</u></p>
             <figure typeof="sa:Image">
                     <img src="../Mockups/sketch1.jpg">
                     <figcaption>
                         Sketch1
                     </figcaption>
                 </figure>
+            <p>
+                First we wanted to store all this information about annotations in the local storage provided by the Chrome API. This was not possible due to limitation imposed by the way Chrome API store object in local memory.
+                It was very slowly and complicated to store large object with some media files inside them. We opted for a free and development friendly solution provided by <a href="https://firebase.google.com/">firebase</a>.
+                All the actions with the database are stored in <i>database-utils.js</i>. From here we took the generic functions and we used them inside other script files to provide the CRUD functionalities for
+                each independent website the extension supports.
+            </p>
+            <figure typeof="sa:Image">
+                    <img src="../Mockups/database.png">
+                    <figcaption>
+                        Information stored in cloud database.
+                    </figcaption>
+                </figure>
                 </section>
                 <section id="codeManagement">
                     <h3>Code management</h3>
-			<p>In order to work efficiently as a team we chose a Distributed Version Control Software called <i>Git</i>. Our repository can be viewed at the link <a href="https://github.com/StefanCosminR/Vinno">VANNO</a>. The project has a common part consisting of <i>manifest.json</i>, <i>background.js</i>, <i>content-utils.js</i>. This common part contains the abstractisation for adding/removing an annotation, viewing all annotations. Each member of the team was resposable for integrating the generic functions of adding annotations in the supported websites.</p>
+			<p>In order to work efficiently as a team we chose a Distributed Version Control Software called <i>Git</i>. Our repository can be viewed at the link <a href="https://github.com/StefanCosminR/Vinno">VANNO</a>. The project has a common part consisting of <i>manifest.json</i>, <i>background.js</i>, <i>content-utils.js</i>, <i>database-utils.js</i>. This common part contains the abstractisation for adding/removing an annotation, viewing all annotations. Each member of the team was resposable for integrating the generic functions of adding annotations in the supported websites.</p>
                 </section>
            </section>
            <section id="conclusion" typeof="sa:Conclusion"></section>
