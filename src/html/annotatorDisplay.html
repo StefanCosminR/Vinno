@@ -33,7 +33,14 @@
     </div>
 
     <script type="text/javascript">
+      /*--------------------------------------------------------------------------------------------------------------------------------------------*/
       function initAutocomplete() 
+      {
+        window.Google_API = google;
+        change_coordinates();
+      }
+      /*--------------------------------------------------------------------------------------------------------------------------------------------*/
+      function change_coordinates()
       {
         let map_lat = document.getElementById("annotator-shadow-container-display").shadowRoot.getElementById("map_lat").value;
         let map_lng = document.getElementById("annotator-shadow-container-display").shadowRoot.getElementById("map_lng").value;
@@ -42,17 +49,31 @@
           document.getElementById("annotator-shadow-container-display").shadowRoot.getElementById("delete_holder").remove();
         else
         {
-          var map = new google.maps.Map(document.getElementById("annotator-shadow-container-display").shadowRoot.getElementById("map"), {
+          var map = new window.Google_API.maps.Map(document.getElementById("annotator-shadow-container-display").shadowRoot.getElementById("map"), {
             center: {lat: parseFloat(map_lat), lng: parseFloat(map_lng)},
             zoom: 13,
             mapTypeId: "roadmap"
           });
         }
       }
+      /*--------------------------------------------------------------------------------------------------------------------------------------------*/
     </script>
     
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDa-6m9meqJwiOFHRAo_M3l67pFlrjU5es&libraries=places&callback=initAutocomplete"
-       async defer></script>
+    <div id="google-maps-loader"></div>
+
+    <script>
+      /*--------------------------------------------------------------------------------------------------------------------------------------------*/
+      if (!window.Google_API) 
+      {
+        let new_script = document.createElement('script');
+        new_script.setAttribute("src", "https://maps.googleapis.com/maps/api/js?key=AIzaSyDa-6m9meqJwiOFHRAo_M3l67pFlrjU5es&libraries=places&callback=initAutocomplete");
+        document.getElementById("annotator-shadow-container-display").shadowRoot.getElementById("google-maps-loader").appendChild(new_script);
+      }
+      else
+        setTimeout(change_coordinates, 0);
+      /*--------------------------------------------------------------------------------------------------------------------------------------------*/
+    </script>
+    <!-- <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDa-6m9meqJwiOFHRAo_M3l67pFlrjU5es&libraries=places&callback=initAutocomplete"></script> -->
 
     <!-- AM ADAUGAT ID-URI PENTRU FIECARE INPUT CA SA FIE USOR SET-UL SI GET-UL PENTRU VALORI -->
 

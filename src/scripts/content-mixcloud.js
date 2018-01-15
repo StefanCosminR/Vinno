@@ -34,6 +34,11 @@ getAllDependencies()
 
         function get_all_annotations()
         {
+
+					let showing_panel;
+					chrome.storage.local.get('show_floating_panel', function (result) {
+					    showing_panel = result.show_floating_panel;
+					});
             let annotations = load_annotations_from_database("https://www.mixcloud.com/");
 
             annotations.then(function(result) {
@@ -148,6 +153,7 @@ getAllDependencies()
                     if (verify_each_input(root))
                     {
 												let title_wrapper = document.getElementsByClassName("title-inner-wrapper");
+
 												let content_title = title_wrapper[0].firstChild.firstChild.innerHTML;
                         let title = root.getElementById("annotator-title").value;
                         let start_time = root.getElementById("annotator-start-time").value;
@@ -191,6 +197,9 @@ getAllDependencies()
             // display the popup
 						console.log("Adding annotation to the list...");
 
+						var full_time = document.getElementsByClassName("player-time end-time")[0].innerText;
+						full_time = full_time.substr(1, full_time.length);
+
             let full_time_bar = document.getElementsByClassName("player-scrubber-buffered")[0];
 
             let new_annotation = document.createElement("div");
@@ -205,6 +214,8 @@ getAllDependencies()
             let style_for_new_annotate = "position: absolute; height: 100%; transition: margin 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms; left: " + start_push_pixels + "px; background-color: rgb(255, 0, 0); width: calc(" + final_push_pixels +"%); ";
             new_annotation.setAttribute("style", style_for_new_annotate);
 
+						// debugger;
+
             full_time_bar.appendChild(new_annotation);
 
             let created_annotation = document.getElementById(title + "_" + iterator);
@@ -214,8 +225,10 @@ getAllDependencies()
 
         function add_listener_for_annotation(annotation, start_time, end_time, tags_list, description, images_list, music_list)
         {
+					// debugger;
             annotation.addEventListener("mouseover", function() {
                 // we start to hover a popup
+								// debugger;
 
                 let holder = document.getElementsByClassName("player-waveform")[0];
                 let [container, root] = insertAnnotatorDisplay(holder, dependencies.annotatorDisplay);
