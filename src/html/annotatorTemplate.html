@@ -40,6 +40,13 @@
       </div>
     </div>
 
+    <script>
+      if(!window.myGoogle) {
+          document.getElementById('google-maps-loader').innerHTML = `<script><\/script>`
+
+      }
+    </script>
+
     <script type="text/javascript">
       function initAutocomplete()
       {
@@ -48,7 +55,7 @@
           zoom: 13,
           mapTypeId: "roadmap"
         });
-
+        window.myGoogle = google;
         // Create the search box and link it to the UI element.
         var input = document.getElementById("annotator-shadow-container").shadowRoot.getElementById("pac-input");
         var searchBox = new google.maps.places.SearchBox(input);
@@ -74,14 +81,16 @@
       }
     </script>
 
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDa-6m9meqJwiOFHRAo_M3l67pFlrjU5es&libraries=places&callback=initAutocomplete"
-       async defer></script>
+    <div id="google-maps-loader"></div>
+
+
 
     <!-- AM ADAUGAT ID-URI PENTRU FIECARE INPUT CA SA FIE USOR SET-UL SI GET-UL PENTRU VALORI -->
 
     <style>
       .annotator-container{
-        float: left;
+        /*float: left;*/
+        display: flex;
       }
       #save-button {
         width: 49.44%;

@@ -50,15 +50,19 @@ function insertAnnotator(destionationElement, htmlTemplate) {
         return [container, shadowRoot];
     });
 
-    shadowRoot.getElementById('close-button').addEventListener('click', function () {
-        removeAnnotator("annotator-shadow-container");
+    let closeButton = shadowRoot.getElementById('close-button');
+    if(closeButton) {
+        closeButton.addEventListener('click', function () {
+            removeAnnotator("annotator-shadow-container");
 
-        removeAttachmentToFirebase("removeAttachment", image_names);
-        removeAttachmentToFirebase("removeAttachment", music_names);
+            removeAttachmentToFirebase("removeAttachment", image_names);
+            removeAttachmentToFirebase("removeAttachment", music_names);
 
-        image_names = [];
-        music_names = [];
-    });
+            image_names = [];
+            music_names = [];
+        });
+    }
+
 
     window.onbeforeunload = function () {
         removeAttachmentToFirebase("removeAttachment", image_names);
@@ -179,11 +183,17 @@ class FloatingPanel {
         this._root = undefined;
         this._data = undefined;
         this._contentTemplate = contentTemplate;
+        this._images = [];
+        this._music = [];
 
         let body = document.getElementsByTagName('body')[0];
         [this._container, this._root] = insertNode(body, template, 'floating-panel-template', 'floating-panel');
+
         this.renderPanelStyles();
         this.addMovement();
+        // console.log(window.myGoogle);
+        // setTimeout(() => {console.log("my google: ", window); console.log(document.test2);}, 4000);
+        // setTimeout(() => { this._placeMapAtCurrentLocation(); }, 18000);
     }
 
     renderPanelStyles() {
@@ -233,17 +243,271 @@ class FloatingPanel {
 
     updateView() {
         let annotations = '';
+
+        let documentFragment = document.createDocumentFragment();
+        let domParser = new DOMParser();
+
+        documentFragment.appendChild(this.getAnnotatorCreator());
+
         this._data.forEach(annotation => {
-            annotations += interpolation(this._contentTemplate, annotation);
+            annotation.description = this._augmentTextWithLinks(annotation.description);
+            let augmentedContent = interpolation(this._contentTemplate, annotation);
+            // augmentedContent = this._augmentTextWithLinks(augmentedContent)
+
+            let contentNode = domParser.parseFromString(augmentedContent, 'text/html');
+            if(annotation.images_list) {
+
+
+                let photosContainer = contentNode.getElementsByClassName('annotation-card__photos')[0];
+                let imagesHtml = '';
+                annotation.images_list.forEach(image => {
+                    imagesHtml += `
+                <div class="annotation-card__photo" style="background-image: url('${image}')"></div>
+                `;
+                });
+                photosContainer.innerHTML = imagesHtml;
+            }
+            documentFragment.appendChild(contentNode.body.firstChild);
+
         });
-        if(annotations === '') {
-            annotations = `
-                <h2>Let's get going with some annotations :) </h2>
-            `
-        }
-        this._root.querySelector('.floating-panel__content').innerHTML = annotations;
+
+        this._root.querySelector('.floating-panel__content').appendChild(documentFragment);
+
+        this.processContent();
     }
 
+    processContent() {
+        // let photosContainer = this._root.querySelectorAll('.annotation-card__photos');
+        // photosContainer.forEach(annotation => {
+        //     // if (annotation.childNodes.length <= 1) { // this number is very very very weird
+        //     //     annotation.style.display = 'none';
+        //     // }
+        // });
+
+        let descriptionInput = this._root.querySelector('.annotation-card__text');
+        descriptionInput.addEventListener('input', (e) => {
+            this._addColorHashtagsInInput(descriptionInput);
+        })
+    }
+
+    getAnnotatorCreator() {
+        let template = document.createElement('form');
+        template.setAttribute('id', 'annotator-creator-container');
+        template.innerHTML = interpolation(this._contentTemplate, {});
+
+        let inputs = template.querySelectorAll('input');
+        for (let i = 0; i < inputs.length; ++i) {
+            inputs[i].removeAttribute('readonly');
+        }
+
+        let descriptionArea = template.querySelector('.annotation-card__text');
+        descriptionArea.setAttribute('contenteditable', 'true');
+
+        let saveButton = template.querySelector('.annotation-card__action-button');
+        saveButton.textContent = 'Save';
+        saveButton.addEventListener('click', (event) => {
+            event.preventDefault();
+            let annotatorData = this.getAnnotatorCreatorContent();
+            let description = template.getElementsByClassName('annotation-card__text')[0].textContent;
+            let [tagsList, parsedDescription] = get_tags_from_description(description);
+            let videoTitle = document.querySelector('#info-contents h1.title').textContent;
+            let websiteUrl = window.location.href;
+            // console.log(videoTitle);
+            // console.log(annotatorData.title);
+
+            let newAnnotationData = new AnnotationLayout(
+                annotatorData.content_title || '',
+                videoTitle,
+                websiteUrl || '',
+                annotatorData.start_time || '',
+                annotatorData.end_time || '',
+                tagsList, parsedDescription, this._images, this._music, [0, 0]);
+
+            saveAnnotationToFirebase('annotations/', newAnnotationData);
+        });
+
+        let photoContainer = template.querySelector('.annotation-card__photos');
+        photoContainer.innerHTML = `
+        <input id="file-uploader" type="file" multiple style="display: none"/>
+        <label for="file-uploader" class="annotation-card__photo annotation-card__photo-insert"></label>
+`;
+        photoContainer.style.display = 'initial';
+        // console.log(photoContainer);
+        photoContainer.removeAttribute('style');
+        // console.log(photoContainer);
+
+        this._fileLoaderAction(photoContainer.querySelector('#file-uploader'), photoContainer);
+
+        return template;
+    }
+
+    getAnnotatorCreatorContent() {
+        let form = this._root.querySelector('form');
+        let data = {};
+        let formData = new FormData(form);
+        for (let pair of formData.entries()) {
+            data[pair[0]] = pair[1];
+        }
+
+        return data;
+    }
+
+    _addColorHashtagsInInput(element) {
+        let changedDescription = element.textContent;
+        let tags = changedDescription.match(/#\S+(?=\s)/g);
+
+        if (tags)
+            for (let i = 0; i < tags.length; i++) {
+                let tag = tags[i];
+                changedDescription = changedDescription.replace(tag, `<span class='tag'>${tag}</span>`);
+            }
+        element.innerHTML = changedDescription;
+        console.log(changedDescription);
+        this._placeCaretAtEnd(element);
+
+        console.log(tags);
+
+    }
+
+    _placeCaretAtEnd(el) {
+        el.focus();
+        if (typeof window.getSelection !== "undefined"
+            && typeof document.createRange !== "undefined") {
+            const range = document.createRange();
+            range.selectNodeContents(el);
+            range.collapse(false);
+            const sel = window.getSelection();
+            sel.removeAllRanges();
+            sel.addRange(range);
+        } else if (typeof document.body.createTextRange !== "undefined") {
+            const textRange = document.body.createTextRange();
+            textRange.moveToElementText(el);
+            textRange.collapse(false);
+            textRange.select();
+        }
+    }
+
+    _placeMapAtCurrentLocation() {
+        console.log(window.myGoogle);
+        let map = new window.myGoogle.maps.Map(this._root.querySelector("#map"), {
+            center: {lat: 47.1584549, lng: 27.601441799999975},
+            zoom: 13,
+            mapTypeId: "roadmap"
+        });
+        // window.myGoogle = google;
+        // Create the search box and link it to the UI element.
+        let input = this._root.querySelector("#pac-input");
+        let searchBox = new window.myGoogle.maps.places.SearchBox(input);
+        map.controls[window.myGoogle.maps.ControlPosition.TOP_LEFT].push(input);
+
+        // Bias the SearchBox results towards current map's viewport.
+        map.addListener("bounds_changed", function () {
+            searchBox.setBounds(map.getBounds());
+        });
+
+        searchBox.addListener("places_changed", function () {
+            let place = searchBox.getPlaces()[0];
+
+            // For each place, get the icon, name and location.
+            let bounds = new google.maps.LatLngBounds();
+
+            this._root.querySelector("#map_lat").value = place.geometry.location.lat();
+            this._root.querySelector("#map_lng").value = place.geometry.location.lng();
+
+            bounds.union(place.geometry.viewport);
+            map.fitBounds(bounds);
+        });
+    }
+
+    _augmentTextWithLinks(text) {
+        let augmentedText = text;
+
+        const regex = /((http[s]?|ftp):\/)?\/?([^:\/\s]+)((\/\w+)*\/)([\w\-\.]+[^#?\s]+)(.*)?(#[\w\-]+)?$/g;
+        let links = text.match(regex);
+
+        if(links) {
+            links.forEach(link => {
+                let linkArr = link.split(regex);
+                console.log(linkArr);
+                if(linkArr[3].indexOf('youtube') !== -1) {
+                    let videoId = linkArr[7].substring(3);
+                    console.log(videoId);
+                    augmentedText = augmentedText.replace(link, `<iframe class="embedded-video" src="https://www.youtube.com/embed/${videoId}" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>`);
+                } else if(linkArr[3].indexOf('wikipedia') !== -1) {
+                    let wikiName = linkArr[6].replace('_', ' ');
+                    augmentedText = augmentedText.replace(link, `
+                        <a href="${link}">${wikiName}</a>
+                    `);
+                }
+                // augmentedText = augmentedText.replace(tag, `<iframe class='tag'>${tag}</iframe>`);
+            })
+
+        }
+        return augmentedText;
+    }
+
+    _fileLoaderAction(fileLoader, photoContainer) {
+        fileLoader.addEventListener('change', () => {
+            let current_files = fileLoader.files;
+            let holder_images = photoContainer;
+
+
+            let self = this;
+
+            for (let i = 0; i < current_files.length; i++) {
+                let fileReader = new FileReader();
+
+
+                fileReader.onload = function (event) {
+
+                    console.log(event);
+
+                    if (current_files[i].name.endsWith(".img") || current_files[i].name.endsWith(".jpg") || current_files[i].name.endsWith(".jpeg"))
+                        self._images.push(current_files[i].name);
+                    else if (current_files[i].name.endsWith(".mp3"))
+                        self._music.push(current_files[i].name);
+
+                    console.log('saving to firebase');
+
+                    saveAttachmentToFirebase("saveAttachment", {data: event.target.result, name: current_files[i].name});
+
+                    let image = document.createElement('img');
+                    console.log(current_files[i]);
+                    if (current_files[i].name.endsWith(".img") || current_files[i].name.endsWith(".jpg") || current_files[i].name.endsWith(".jpeg") || current_files[i].name.endsWith('.png')) {
+                        image.src = window.URL.createObjectURL(current_files[i]);
+                        image.setAttribute("class", "annotation-card__photo");
+                    }
+                    else if (current_files[i].name.endsWith(".mp3"))
+                        image.setAttribute("class", "annotation-card__music");
+                    holder_images.appendChild(image);
+
+                    image.addEventListener("mouseover", function () {
+                        image.src = "http://www.endlessicons.com/wp-content/uploads/2012/12/trash-icon.png";
+
+                        image.addEventListener("click", function () {
+                            let to_delete_image_names = [];
+                            to_delete_image_names.push(self._images[i]);
+
+                            if (i > -1)
+                                if (image.class == "annotation-card__photo")
+                                    self._images.splice(i, 1);
+                                else
+                                    self._music.splice(i, 1);
+
+                            removeAttachmentToFirebase("removeAttachment", to_delete_image_names);
+                            image.remove();
+                        });
+                    });
+
+                    image.addEventListener("mouseout", function () {
+                        image.src = window.URL.createObjectURL(current_files[i]);
+                    });
+                };
+
+                fileReader.readAsDataURL(current_files[i]);
+            }
+        });
+    }
 
 }
 
@@ -283,6 +547,10 @@ function interpolation(source, tags) {
 // window.onhashchange = function () {
 //     alert("onhashchange = " + window.location.hash); // do something on click
 // };
+
+window.addEventListener('popstate', function() {
+    console.log('TRIGGERED POP STATE');
+});
 
 
 /** ----------------- GENERAL ----------------- */
