@@ -57,20 +57,13 @@ function readAllAnnotationsFromFirebase()
                 end_times.push(all_objects[uid][this_key].end_time);
                 tags.push(all_objects[uid][this_key].tags_list);
                 descriptions.push(all_objects[uid][this_key].description);
+                // let [tags, description] = get_tags_from_description(all_objects[uid][this_key].description);
+                // tags.push(tags);
+                // descriptions.push(description);
                 images.push(all_objects[uid][this_key].images_list);
                 music.push(all_objects[uid][this_key].music_list);
                 coordinates.push(all_objects[uid][this_key].coordinates);
             }
-
-            // console.log("Content titles: " + content_titles);
-            // console.log("Titles: " + titles);
-            // console.log("Descriptions: " + descriptions);
-            // console.log("Start times: " + start_times);
-            // console.log("End times: " + end_times);
-            // console.log("Tags: " + tags);
-            // console.log("Images: " + images);
-            // console.log("Music: " + music);
-            // console.log("Websites:" + websites);
         }
     });
 }
@@ -80,7 +73,6 @@ function exportToCsv()
     console.log("Exporting to csv...");
 
     var csvString = "";
-    // var csvString = 'Website, content title, title, description, start time, end time, tags, images, music, cordinates\n';
 
     for (let i = 0; i < websites.length; i++)
     {
@@ -230,123 +222,127 @@ function createJsonNode(data, tagName)
 {
     return "\"" + tagName + "\": " + "\"" + data + "\"";
 }
+
 function exportToJson()
 {
     console.log("Exporting to json...");
 
     var jsonString = "{\"annotations\": {\ ";
 
+    jsonString += "\t\"annotation\": [\ ";
+
     for (let i = 0; i < websites.length; i++)
     {
-        jsonString += "\t\"annotation" + i +"\": {\ ";
-
-        jsonString += "\t\t" + createJsonNode(websites[i], "website") + ",\ ";
-        jsonString += "\t\t" + createJsonNode(content_titles[i], "content-title") + ",\ ";
-        jsonString += "\t\t" + createJsonNode(titles[i], "title") + ",\ ";
-        jsonString += "\t\t" + createJsonNode(descriptions[i], "description") + ",\ ";
-        jsonString += "\t\t" + createJsonNode(start_times[i], "start-time") + ",\ ";
-        jsonString += "\t\t" + createJsonNode(end_times[i], "end-time") + ",\ ";
+        jsonString += "\t\t{";
+        jsonString += "\t\t\t" + createJsonNode(websites[i], "website") + ",\ ";
+        jsonString += "\t\t\t" + createJsonNode(content_titles[i], "content-title") + ",\ ";
+        jsonString += "\t\t\t" + createJsonNode(titles[i], "title") + ",\ ";
+        jsonString += "\t\t\t" + createJsonNode(descriptions[i], "description") + ",\ ";
+        jsonString += "\t\t\t" + createJsonNode(start_times[i], "start-time") + ",\ ";
+        jsonString += "\t\t\t" + createJsonNode(end_times[i], "end-time") + ",\ ";
 
         //Tags + images + music + coordinates
         if(tags[i] != undefined)
         {
             let tags_list = tags[i];
-            jsonString += "\t\t\"tags\": {\ ";
+            jsonString += "\t\t\t\"tags\": [\ ";
             for(let j = 0; j < tags_list.length; j++)
             {
                 if(j != tags_list.length - 1)
                 {
-                    jsonString += "\t\t\t" + createJsonNode(tags_list[j], "tag" + j) + ",\ ";
+                    jsonString += "\t\t\t\t{ " + createJsonNode(tags_list[j], "tag" + j) + " },\ ";
                 }
                 else
                 {
-                    jsonString += "\t\t\t" + createJsonNode(tags_list[j], "tag" + j) + "\ ";
+                    jsonString += "\t\t\t\t{ " + createJsonNode(tags_list[j], "tag" + j) + " }\ ";
                 }
             }
-            jsonString += "\t\t},\ ";
+            jsonString += "\t\t\t],\ ";
         }
         else
         {
-            jsonString += "\t\t\"tags\": {},\ ";
+            jsonString += "\t\t\t\"tags\": [],\ ";
         }
 
         if(images[i] != undefined)
         {
             let images_list = images[i];
-            jsonString += "\t\t\"images\": {\ ";
+            jsonString += "\t\t\t\"images\": [\ ";
             for(let j = 0; j < images_list.length; j++)
             {
                 if(j != images_list.length - 1)
                 {
-                    jsonString += "\t\t\t" + createJsonNode(images_list[j], "image" + j) + ",\ ";
+                    jsonString += "\t\t\t\t{ " + createJsonNode(images_list[j], "image" + j) + " },\ ";
                 }
                 else
                 {
-                    jsonString += "\t\t\t" + createJsonNode(images_list[j], "image" + j) + "\ ";
+                    jsonString += "\t\t\t\t{ " + createJsonNode(images_list[j], "image" + j) + " }\ ";
                 }
             }
-            jsonString += "\t\t},\ ";
+            jsonString += "\t\t\t],\ ";
         }
         else
         {
-            jsonString += "\t\t\"images\": {},\ ";
+            jsonString += "\t\t\t\"images\": [],\ ";
         }
 
         if(music[i] != undefined)
         {
             let music_list = music[i];
-            jsonString += "\t\t\"media-contents\": {\ ";
+            jsonString += "\t\t\t\"media-contents\": [\ ";
             for(let j = 0; j < music_list.length; j++)
             {
                 if(j != music_list.length - 1)
                 {
-                    jsonString += "\t\t\t" + createJsonNode(music_list[j], "media-content" + j) + ",\ ";
+                    jsonString += "\t\t\t\t{ " + createJsonNode(music_list[j], "media-content" + j) + "},\ ";
                 }
                 else
                 {
-                    jsonString += "\t\t\t" + createJsonNode(music_list[j], "media-content" + j) + "\ ";
+                    jsonString += "\t\t\t\t{ " + createJsonNode(music_list[j], "media-content" + j) + "}\ ";
                 }
             }
-            jsonString += "\t\t},\ ";
+            jsonString += "\t\t\t],\ ";
         }
         else
         {
-            jsonString += "\t\t\"media-contents\": {},\ ";
+            jsonString += "\t\t\t\"media-contents\": [],\ ";
         }
 
         if(coordinates[i] != undefined)
         {
             let coordinates_list = coordinates[i];
-            jsonString += "\t\t\"coordinates\": {\ ";
+            jsonString += "\t\t\t\"coordinates\": [\ ";
 
                 if(coordinates_list[0] != "" && coordinates_list[1] != "")
                 {
-                    jsonString += "\t\t\t" + createJsonNode(coordinates_list[0], "latitude") + ",\ ";
-                    jsonString += "\t\t\t" + createJsonNode(coordinates_list[1], "longitude") + "\ ";
+                    jsonString += "\t\t\t\t{ " + createJsonNode(coordinates_list[0], "latitude") + " },\ ";
+                    jsonString += "\t\t\t\t{ " + createJsonNode(coordinates_list[1], "longitude") + "}\ ";
 
                 }
                 else
                 {
-                    jsonString += "\t\t\t" + createJsonNode("47.151726", "latitude") + ",\ ";
-                    jsonString += "\t\t\t" + createJsonNode("27.587914", "longitude") + "\ ";
+                    jsonString += "\t\t\t\t{ " + createJsonNode("47.151726", "latitude") + "},\ ";
+                    jsonString += "\t\t\t\t{ " + createJsonNode("27.587914", "longitude") + "}\ ";
                 }
 
-            jsonString += "\t\t}\ ";
+            jsonString += "\t\t\t]\ ";
         }
         else
         {
-            jsonString += "\t\t\"cordinates\": {}\ ";
+            jsonString += "\t\t\t\"coordinates\": []\ ";
         }
 
         if(i == websites.length - 1)
         {
-            jsonString += "\t}";
+            jsonString += "\t\t}\ ";
         }
         else
         {
-            jsonString += "\t},\ ";
+            jsonString += "\t\t},\ ";
         }
     }
+
+    jsonString += "\t]\ ";
 
     jsonString += "}}";
 
@@ -464,6 +460,22 @@ function exportToXml()
     a.target = '_blank';
     a.download = 'annotations.xml';
     a.click();
+}
+
+function get_tags_from_description(description) {
+    let tags = [];
+    let new_description = description;
+    let all_words = description.match(/ #\S+/g);
+
+    if (all_words)
+        for (let i = 0; i < all_words.length; i++) {
+            let this_word = all_words[i];
+
+            tags.push(this_word);
+            new_description = new_description.replace(this_word, "{" + i + "}");
+        }
+
+    return [tags, new_description];
 }
 
 function main_function()

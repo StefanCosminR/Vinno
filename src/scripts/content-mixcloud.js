@@ -34,6 +34,11 @@ getAllDependencies()
 
         function get_all_annotations()
         {
+
+					let showing_panel;
+					chrome.storage.local.get('show_floating_panel', function (result) {
+					    showing_panel = result.show_floating_panel;
+					});
             let annotations = load_annotations_from_database("https://www.mixcloud.com/");
 
             annotations.then(function(result) {
