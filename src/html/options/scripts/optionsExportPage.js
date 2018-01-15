@@ -78,6 +78,45 @@ function readAllAnnotationsFromFirebase()
 function exportToCsv()
 {
     console.log("Exporting to csv...");
+
+    // var csvString = 'Website, content title, title, description, start time, end time, tags, images, music, cordinates\n';
+    var csvString = "";
+
+    for (let i = 0; i < websites.length; i++)
+    {
+        csvString += websites[i] + ",";
+        csvString += content_titles[i] + ",";
+        if(titles[i] != undefined)
+        {
+            csvString += titles[i] + ",";
+        }
+        else
+        {
+            csvString += "";
+        }
+        if(descriptions[i] != undefined)
+        {
+            csvString += descriptions[i] + ",";
+        }
+        else
+        {
+            csvString += "";
+        }
+        csvString += start_times[i] + ",";
+        csvString += end_times[i] + ",";
+
+        //Tags + images + music + coordinates
+        csvString += "[],[],[],[0,0],";
+
+    }
+
+    // console.log(csvString);
+
+    var a = document.createElement('a');
+    a.href = 'data:text/csv;charset=utf-8,' + encodeURI(csvString);
+    a.target = '_blank';
+    a.download = 'my_annotations.csv';
+    a.click();
 }
 
 function exportToJson()
@@ -92,7 +131,7 @@ function exportToXml()
 
 function main_function()
 {
-    // console.log("Executing main_function...");
+
     readAllAnnotationsFromFirebase();
 
     let csv = document.getElementById("exportToCsv");

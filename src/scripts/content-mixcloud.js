@@ -220,10 +220,10 @@ getAllDependencies()
 
         function add_listener_for_annotation(annotation, start_time, end_time, tags_list, description, images_list, music_list)
         {
-					debugger;
+					// debugger;
             annotation.addEventListener("mouseover", function() {
                 // we start to hover a popup
-								debugger;
+								// debugger;
 
                 let holder = document.getElementsByClassName("player-waveform")[0];
                 let [container, root] = insertAnnotatorDisplay(holder, dependencies.annotatorDisplay);
