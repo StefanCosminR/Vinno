@@ -226,154 +226,135 @@ function exportToCsv()
     a.click();
 }
 
+function createJsonNode(data, tagName)
+{
+    return "\"" + tagName + "\": " + "\"" + data + "\"";
+}
 function exportToJson()
 {
     console.log("Exporting to json...");
-    //
-    // var jsonString = "";
-    // // var csvString = 'Website, content title, title, description, start time, end time, tags, images, music, cordinates\n';
-    //
-    // for (let i = 0; i < websites.length; i++)
-    // {
-    //     jsonString += websites[i] + ",";
-    //     jsonString += content_titles[i] + ",";
-    //     if(titles[i] != undefined)
-    //     {
-    //         jsonString += titles[i] + ",";
-    //     }
-    //     else
-    //     {
-    //         jsonString += "";
-    //     }
-    //     if(descriptions[i] != undefined)
-    //     {
-    //         jsonString += descriptions[i] + ",";
-    //     }
-    //     else
-    //     {
-    //         jsonString += "";
-    //     }
-    //     jsonString += start_times[i] + ",";
-    //     jsonString += end_times[i] + ",";
-    //
-    //     //Tags + images + music + coordinates
-    //     if(tags[i] != undefined)
-    //     {
-    //         let tags_list = tags[i];
-    //         for(let j = 0; j < tags_list.length; j++)
-    //         {
-    //             if(j != tags_list.length - 1)
-    //             {
-    //                 jsonString += tags_list[j] + ";";
-    //             }
-    //             else
-    //             {
-    //                 jsonString += tags_list[j] + ",";
-    //             }
-    //         }
-    //     }
-    //     else
-    //     {
-    //       jsonString += "[],";
-    //     }
-    //
-    //     if(images[i] != undefined)
-    //     {
-    //         console.log("Images for record " + i +": ");
-    //         let images_list = images[i];
-    //         for(let j = 0; j < images_list.length; j++)
-    //         {
-    //             if(j != images_list.length - 1)
-    //             {
-    //                 jsonString += images_list[j] + ";";
-    //                 console.log(images_list[j] + ", ");
-    //             }
-    //             else
-    //             {
-    //                 jsonString += images_list[j] + ",";
-    //                 console.log(images_list[j] + ", ");
-    //             }
-    //         }
-    //     }
-    //     else
-    //     {
-    //       jsonString += "[],";
-    //     }
-    //
-    //     if(music[i] != undefined)
-    //     {
-    //         console.log("Music for record " + i +": ");
-    //         let music_list = music[i];
-    //         for(let j = 0; j < music_list.length; j++)
-    //         {
-    //             if( j != music_list.length - 1)
-    //             {
-    //                 jsonString += music_list[j] + ";";
-    //                 console.log(music_list[j] + ", ");
-    //             }
-    //             else {
-    //                 jsonString += music_list[j] + ",";
-    //                 console.log(music_list[j] + ", ");
-    //             }
-    //         }
-    //     }
-    //     else
-    //     {
-    //       jsonString += "[],";
-    //     }
-    //
-    //     if(coordinates[i] != undefined)
-    //     {
-    //         let coordinates_list = coordinates[i];
-    //         console.log("coordinates for record " + i + ": ");
-    //         for(let j = 0; j < coordinates_list.length; j++)
-    //         {
-    //             if(coordinates_list[j] != "")
-    //             {
-    //                 if(j != coordinates_list.length - 1)
-    //                 {
-    //                     jsonString += coordinates_list[j] + ";";
-    //                     console.log(coordinates_list[j] + ", ");
-    //                 }
-    //                 else if(i != websites.length - 1)
-    //                 {
-    //                     jsonString += coordinates_list[j] + ",";
-    //                     console.log(coordinates_list[j]);
-    //                 }
-    //                 else
-    //                 {
-    //                     jsonString += coordinates_list[j];
-    //                 }
-    //             }
-    //             else
-    //             {
-    //                 if(j != coordinates_list.length - 1)
-    //                 {
-    //                     jsonString += "47.151726;";
-    //                 }
-    //                 else if(i != websites.length - 1)
-    //                 {
-    //                     jsonString += "27.587914,";
-    //                 }
-    //                 else
-    //                 {
-    //                     jsonString += "27.587914";
-    //                 }
-    //             }
-    //         }
-    //     }
-    //     else
-    //     {
-    //       jsonString += "[0,0]";
-    //     }
-    //
-    // }
-    //
-    // var a = document.createElement('a');
-    // a.href = 'data:text/csv;charset=utf-8,' + encodeURI(jsonString);
-    // a.target = '_blank';
-    // a.download = 'annotations.json';
-    // a.click();
+
+    var jsonString = "{\"annotations\": {\ ";
+
+    for (let i = 0; i < websites.length; i++)
+    {
+        jsonString += "\t\"annotation" + i +"\": {\ ";
+
+        jsonString += "\t\t" + createJsonNode(websites[i], "website") + ",\ ";
+        jsonString += "\t\t" + createJsonNode(content_titles[i], "content-title") + ",\ ";
+        jsonString += "\t\t" + createJsonNode(titles[i], "title") + ",\ ";
+        jsonString += "\t\t" + createJsonNode(descriptions[i], "description") + ",\ ";
+        jsonString += "\t\t" + createJsonNode(start_times[i], "start-time") + ",\ ";
+        jsonString += "\t\t" + createJsonNode(end_times[i], "end-time") + ",\ ";
+
+        //Tags + images + music + coordinates
+        if(tags[i] != undefined)
+        {
+            let tags_list = tags[i];
+            jsonString += "\t\t\"tags\": {\ ";
+            for(let j = 0; j < tags_list.length; j++)
+            {
+                if(j != tags_list.length - 1)
+                {
+                    jsonString += "\t\t\t" + createJsonNode(tags_list[j], "tag" + j) + ",\ ";
+                }
+                else
+                {
+                    jsonString += "\t\t\t" + createJsonNode(tags_list[j], "tag" + j) + "\ ";
+                }
+            }
+            jsonString += "\t\t},\ ";
+        }
+        else
+        {
+            jsonString += "\t\t\"tags\": {},\ ";
+        }
+
+        if(images[i] != undefined)
+        {
+            let images_list = images[i];
+            jsonString += "\t\t\"images\": {\ ";
+            for(let j = 0; j < images_list.length; j++)
+            {
+                if(j != images_list.length - 1)
+                {
+                    jsonString += "\t\t\t" + createJsonNode(images_list[j], "image" + j) + ",\ ";
+                }
+                else
+                {
+                    jsonString += "\t\t\t" + createJsonNode(images_list[j], "image" + j) + "\ ";
+                }
+            }
+            jsonString += "\t\t},\ ";
+        }
+        else
+        {
+            jsonString += "\t\t\"images\": {},\ ";
+        }
+
+        if(music[i] != undefined)
+        {
+            let music_list = music[i];
+            jsonString += "\t\t\"media-contents\": {\ ";
+            for(let j = 0; j < music_list.length; j++)
+            {
+                if(j != music_list.length - 1)
+                {
+                    jsonString += "\t\t\t" + createJsonNode(music_list[j], "media-content" + j) + ",\ ";
+                }
+                else
+                {
+                    jsonString += "\t\t\t" + createJsonNode(music_list[j], "media-content" + j) + "\ ";
+                }
+            }
+            jsonString += "\t\t},\ ";
+        }
+        else
+        {
+            jsonString += "\t\t\"media-contents\": {},\ ";
+        }
+
+        if(coordinates[i] != undefined)
+        {
+            let coordinates_list = coordinates[i];
+            jsonString += "\t\t\"coordinates\": {\ ";
+
+                if(coordinates_list[0] != "" && coordinates_list[1] != "")
+                {
+                    jsonString += "\t\t\t" + createJsonNode(coordinates_list[0], "latitude") + ",\ ";
+                    jsonString += "\t\t\t" + createJsonNode(coordinates_list[1], "longitude") + "\ ";
+
+                }
+                else
+                {
+                    jsonString += "\t\t\t" + createJsonNode("47.151726", "latitude") + ",\ ";
+                    jsonString += "\t\t\t" + createJsonNode("27.587914", "longitude") + "\ ";
+                }
+
+            jsonString += "\t\t}\ ";
+        }
+        else
+        {
+            jsonString += "\t\t\"cordinates\": {}\ ";
+        }
+
+        if(i == websites.length - 1)
+        {
+            jsonString += "\t}";
+        }
+        else
+        {
+            jsonString += "\t},\ ";
+        }
+    }
+
+    jsonString += "}}";
+
+    var a = document.createElement('a');
+    a.href = 'data:text/csv;charset=utf-8,' + encodeURI(jsonString);
+    a.target = '_blank';
+    a.download = 'annotations.json';
+    a.click();
 }
 
 function createChildNode(data, tagName)
