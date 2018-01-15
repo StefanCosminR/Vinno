@@ -250,11 +250,11 @@ function exportToJson()
             {
                 if(j != tags_list.length - 1)
                 {
-                    jsonString += "\t\t\t\t{ " + createJsonNode(tags_list[j], "tag" + j) + " },\ ";
+                    jsonString += "\t\t\t\t{ " + createJsonNode(tags_list[j], "tag") + " },\ ";
                 }
                 else
                 {
-                    jsonString += "\t\t\t\t{ " + createJsonNode(tags_list[j], "tag" + j) + " }\ ";
+                    jsonString += "\t\t\t\t{ " + createJsonNode(tags_list[j], "tag") + " }\ ";
                 }
             }
             jsonString += "\t\t\t],\ ";
@@ -272,11 +272,11 @@ function exportToJson()
             {
                 if(j != images_list.length - 1)
                 {
-                    jsonString += "\t\t\t\t{ " + createJsonNode(images_list[j], "image" + j) + " },\ ";
+                    jsonString += "\t\t\t\t{ " + createJsonNode(images_list[j], "image") + " },\ ";
                 }
                 else
                 {
-                    jsonString += "\t\t\t\t{ " + createJsonNode(images_list[j], "image" + j) + " }\ ";
+                    jsonString += "\t\t\t\t{ " + createJsonNode(images_list[j], "image") + " }\ ";
                 }
             }
             jsonString += "\t\t\t],\ ";
@@ -294,11 +294,11 @@ function exportToJson()
             {
                 if(j != music_list.length - 1)
                 {
-                    jsonString += "\t\t\t\t{ " + createJsonNode(music_list[j], "media-content" + j) + "},\ ";
+                    jsonString += "\t\t\t\t{ " + createJsonNode(music_list[j], "media-content") + "},\ ";
                 }
                 else
                 {
-                    jsonString += "\t\t\t\t{ " + createJsonNode(music_list[j], "media-content" + j) + "}\ ";
+                    jsonString += "\t\t\t\t{ " + createJsonNode(music_list[j], "media-content") + "}\ ";
                 }
             }
             jsonString += "\t\t\t],\ ";
