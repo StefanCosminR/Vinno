@@ -79,8 +79,8 @@ function exportToCsv()
 {
     console.log("Exporting to csv...");
 
-    // var csvString = 'Website, content title, title, description, start time, end time, tags, images, music, cordinates\n';
     var csvString = "";
+    // var csvString = 'Website, content title, title, description, start time, end time, tags, images, music, cordinates\n';
 
     for (let i = 0; i < websites.length; i++)
     {
@@ -106,16 +106,122 @@ function exportToCsv()
         csvString += end_times[i] + ",";
 
         //Tags + images + music + coordinates
-        csvString += "[],[],[],[0,0],";
+        if(tags[i] != undefined)
+        {
+            let tags_list = tags[i];
+            for(let j = 0; j < tags_list.length; j++)
+            {
+                if(j != tags_list.length - 1)
+                {
+                    csvString += tags_list[j] + ";";
+                }
+                else
+                {
+                    csvString += tags_list[j] + ",";
+                }
+            }
+        }
+        else
+        {
+          csvString += "[],";
+        }
+
+        if(images[i] != undefined)
+        {
+            console.log("Images for record " + i +": ");
+            let images_list = images[i];
+            for(let j = 0; j < images_list.length; j++)
+            {
+                if(j != images_list.length - 1)
+                {
+                    csvString += images_list[j] + ";";
+                    console.log(images_list[j] + ", ");
+                }
+                else
+                {
+                    csvString += images_list[j] + ",";
+                    console.log(images_list[j] + ", ");
+                }
+            }
+        }
+        else
+        {
+          csvString += "[],";
+        }
+
+        if(music[i] != undefined)
+        {
+            console.log("Music for record " + i +": ");
+            let music_list = music[i];
+            for(let j = 0; j < music_list.length; j++)
+            {
+                if( j != music_list.length - 1)
+                {
+                    csvString += music_list[j] + ";";
+                    console.log(music_list[j] + ", ");
+                }
+                else {
+                    csvString += music_list[j] + ",";
+                    console.log(music_list[j] + ", ");
+                }
+            }
+        }
+        else
+        {
+          csvString += "[],";
+        }
+
+        if(coordinates[i] != undefined)
+        {
+            let coordinates_list = coordinates[i];
+            console.log("coordinates for record " + i + ": ");
+            for(let j = 0; j < coordinates_list.length; j++)
+            {
+                if(coordinates_list[j] != "")
+                {
+                    if(j != coordinates_list.length - 1)
+                    {
+                        csvString += coordinates_list[j] + ";";
+                        console.log(coordinates_list[j] + ", ");
+                    }
+                    else if(i != websites.length - 1)
+                    {
+                        csvString += coordinates_list[j] + ",";
+                        console.log(coordinates_list[j]);
+                    }
+                    else
+                    {
+                        csvString += coordinates_list[j];
+                    }
+                }
+                else
+                {
+                    if(j != coordinates_list.length - 1)
+                    {
+                        csvString += "47.151726;";
+                    }
+                    else if(i != websites.length - 1)
+                    {
+                        csvString += "27.587914,";
+                    }
+                    else
+                    {
+                        csvString += "27.587914";
+                    }
+                }
+            }
+        }
+        else
+        {
+          csvString += "[0,0]";
+        }
 
     }
-
-    // console.log(csvString);
 
     var a = document.createElement('a');
     a.href = 'data:text/csv;charset=utf-8,' + encodeURI(csvString);
     a.target = '_blank';
-    a.download = 'my_annotations.csv';
+    a.download = 'annotations.csv';
     a.click();
 }
 
