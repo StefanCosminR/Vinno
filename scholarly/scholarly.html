@@ -77,8 +77,25 @@
                 </section>
                 <section id="userInteraction">
                     <h3>User Interaction</h3>
-			<p> The action of adding an annotation is done by clicking an the button <i>Add Annotation</i> in the top right corner of a page. The button is displayed specific to the website the user is on. The annotation has a field with start time, end time, a text box where the user can write a comment and a save button. The start time is automatically filled with the timestamp of the video the user is playing. End time is filled by the user if he wants to highlight an interval.
-			</p>
+            <p> The action of adding an annotation is done by clicking an the button <i>Add Annotation</i> in the top right corner of a page. The button is displayed specific to the website the user is on. 
+            </p>
+            <figure typeof="sa:Image">
+                <img src="../Mockups/annButtonVimeo.png">
+                <img src="../Mockups/annButtonMixcloud.png">
+                <figcaption>
+                    Annotation button specific to <i><a href="https://vimeo.com">vimeo.com</a></i>(left) and <i><a href="https://www.mixcloud.com/">mixcloud.com</a></i>(right).
+                </figcaption>
+            </figure>
+            <p>
+                The annotation has a field with start time, end time, a text box where the user can write a comment and a save button. The start time is automatically filled with the timestamp of the video the user is playing. End time is filled by the user if he wants to highlight an interval.
+                Also the user has the possibility to add images or sound files to the annotation. On right side of the popup annotation, the user can select a location.
+            </p>
+            <figure typeof="sa:Image">
+                <img src="../Mockups/annMixcloud.png">
+                <figcaption>
+                    Adding an annotation.
+                </figcaption>
+            </figure>
 			<p> After adding an annotation, the user can see the annotations added on the current video by hovering on the playback bar of the media player.
 			</p>
 			<p> The extension button offers the user the posibility to navigate to the main page by clicking the <i>Options</i> button. On this page the user can see all the annotations sorted by website. User can see here the url of the video or audio resource and the comment that the user placed.
@@ -91,9 +108,20 @@
                     </figure>
                 </section>
                 <section id="implementation">
-                    <h3>Client side implementation</h3>
-			<p> VANNO is created as a chrome extension in order to have access to the Chrome API. The base of the extension is the <i>manifest.json</i> file that tells the browser what permissions our tool needs and what actions it is doing. All annotations of a user are stored localy using the Chrome API.
-			</p>
+                    <h3>Implementation</h3>
+			<p> VANNO is created as a chrome extension in order to have access to the Chrome API. Through this API we can extend the functionlity of the websites the user is on making it for him to add annotation on different media players.
+                The base of the extension is the <i>manifest.json</i> file that tells the browser what permissions our tool needs and what actions it is doing. 
+            </p>
+            <p>
+                Initialy the team discused the main features that we want to provide through our extension like: adding annotations and viewing annotations. After that we went through a design phase where we tried to come up with intuitive design that provides
+                user friendly actions. 
+            </p>
+            <figure typeof="sa:Image">
+                    <img src="../Mockups/sketch1.jpg">
+                    <figcaption>
+                        Sketch1
+                    </figcaption>
+                </figure>
                 </section>
                 <section id="codeManagement">
                     <h3>Code management</h3>
