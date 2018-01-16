@@ -55,6 +55,7 @@ insertAnnotationButton = function() {
         holder.style.display = "flex";
         holder.style.alignItems = "center";
         holder.style.justifyContent = "center";
+        holder.style.zIndex = "100";
 
         var interfaceHolder = document.getElementById("main").firstChild;
         var innerPlayer = document.getElementsByClassName("vp-player-inner")[0];

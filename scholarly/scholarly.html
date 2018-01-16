@@ -12,7 +12,7 @@
             <p class="subtitle">Smart bookmarking for video and audio resources</p>
         </header>
         <article id="main" typeof="schema:ScholarlyArticle" resource="#">
-           <h1>VINNO</h1>
+           <h1>VANNO</h1>
            <section>
                <ol>
                    <li property="schema:author" typeof="sa:ContributorRole">
@@ -103,8 +103,30 @@
             </figure>
 			<p> After adding an annotation, the user can see the annotations added on the current video by hovering on the playback bar of the media player.
 			</p>
-			<p> The extension button offers the user the posibility to navigate to the main page by clicking the <i>Options</i> button. On this page the user can see all the annotations sorted by website. User can see here the url of the video or audio resource and the comment that the user placed.
-			</p>
+            <p> The extension button offers the user the posibility to navigate to the main page by clicking the <i>Options</i> button. 
+                <i>Show floating panel</i> option allow the user to see all annotations placed at specifict URL when it is loaded. This way
+                it is easier for the user to see all the informations he added with a just a glance. <i>Show annotation on playbar</i> gives
+                the user a fast way to enable or disable the display of annotations on the website media player. <i>Automatic display of annotations</i>
+                enables the display of an annotation when the scrabber button reacheas a timestamp on the media player where an annotation exists.
+            </p>
+            <figure typeof="sa:Image">
+                <img src="../Mockups/options.png">
+                <figcaption>
+                    Options menu that appears after extension button is clicked.
+                </figcaption>
+            <p>
+                On this page the user can see all the annotations sorted by website. User can see here the url of the video or audio resource and the comment that the user placed.
+            </p>
+            <p>
+                On the main page, under the tab <i>Export</i>, the user has the possibility to export all his annotations as in a <i>csv format</i>, <i>json format</i> or <i>xml format</i>. Under
+                the <i>Attachments</i> tab you can see <i>photo</i> and <i>music</i> attachments and informations about the annotation where they were placed. From here, the user has the 
+                possibility to play a song.
+            </p>
+            <figure typeof="sa:Image">
+                <img src="../Mockups/musicAttch.png">
+                <figcaption>
+                    Music attachments tab on main page.
+                </figcaption>
                 <section id="implementation">
                     <h3>Implementation</h3>
 			<p> VANNO is created as a chrome extension in order to have access to the Chrome API. Through this API we can extend the functionlity of the websites the user is on making it for him to add annotation on different media players.
