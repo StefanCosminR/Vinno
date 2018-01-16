@@ -9,7 +9,11 @@ getAllDependencies()
         getTotalVideoTime();
         // addDotOnProgressBar();
         addAnnotatorActions(annotatorActions, annotatorPopupTemplate);
-        insertFloatingPanel(dependencies.floatingPanel, dependencies.floatingPanelContentTemplate);
+        chrome.storage.local.get('show_floating_panel', function (result) {
+            if(result.show_floating_panel) {
+                insertFloatingPanel(dependencies.floatingPanel, dependencies.floatingPanelContentTemplate);
+            }
+        });
     });
 
 
