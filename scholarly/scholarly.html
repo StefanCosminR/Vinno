@@ -77,27 +77,68 @@
                 </section>
                 <section id="userInteraction">
                     <h3>User Interaction</h3>
-			<p> The action of adding an annotation is done by clicking an the button <i>Add Annotation</i> in the top right corner of a page. The button is displayed specific to the website the user is on. The annotation has a field with start time, end time, a text box where the user can write a comment and a save button. The start time is automatically filled with the timestamp of the video the user is playing. End time is filled by the user if he wants to highlight an interval.
-			</p>
+            <p> The action of adding an annotation is done by clicking an the button <i>Add Annotation</i> in the top right corner of a page. The button is displayed specific to the website the user is on. 
+            </p>
+            <figure typeof="sa:Image">
+                <img src="../Mockups/annButtonVimeo.png">
+                <img src="../Mockups/annButtonMixcloud.png">
+                <figcaption>
+                    Annotation button specific to <i><a href="https://vimeo.com">vimeo.com</a></i>(left) and <i><a href="https://www.mixcloud.com/">mixcloud.com</a></i>(right).
+                </figcaption>
+            </figure>
+            <p>
+                The annotation has a field with start time, end time, a text box where the user can write a comment and a save button. The start time is automatically filled with the timestamp of the video the user is playing. End time is filled by the user if he wants to highlight an interval.
+                Also the user has the possibility to add images or sound files to the annotation. On right side of the popup annotation, the user can select a location.
+            </p>
+            <figure typeof="sa:Image">
+                <img src="../Mockups/annMixcloud.png">
+                <figcaption>
+                    Adding an annotation.
+                </figcaption>
+            <figure typeof="sa:Image">
+                    <img src="../Mockups/howTo.png">
+                    <figcaption>
+                        Adding an annotation 2.
+                    </figcaption>
+            </figure>
 			<p> After adding an annotation, the user can see the annotations added on the current video by hovering on the playback bar of the media player.
 			</p>
 			<p> The extension button offers the user the posibility to navigate to the main page by clicking the <i>Options</i> button. On this page the user can see all the annotations sorted by website. User can see here the url of the video or audio resource and the comment that the user placed.
 			</p>
-			<figure typeof="sa:Image">
-                        <img src="../Mockups/mainPage.png" width="800" height="655">
-                        <figcaption>
-                            The main page where user can manage the annotations
-                        </figcaption>
-                    </figure>
-                </section>
                 <section id="implementation">
-                    <h3>Client side implementation</h3>
-			<p> VANNO is created as a chrome extension in order to have access to the Chrome API. The base of the extension is the <i>manifest.json</i> file that tells the browser what permissions our tool needs and what actions it is doing. All annotations of a user are stored localy using the Chrome API.
-			</p>
+                    <h3>Implementation</h3>
+			<p> VANNO is created as a chrome extension in order to have access to the Chrome API. Through this API we can extend the functionlity of the websites the user is on making it for him to add annotation on different media players.
+                The base of the extension is the <i>manifest.json</i> file that tells the browser what permissions our tool needs and what actions it is doing. 
+            </p>
+            <p>
+                Initialy the team discused the main features that we want to provide through our extension like: adding annotations and viewing annotations. After that we went through a design phase where we tried to come up with intuitive design that provides
+                user friendly actions. An important was the design of the popup were the user will introduce his notes. We decided to give the user to add an annotation at a specific point on the timeline or
+                an entire. Also the user has the possibility to add other media files.
+            </p>
+            <p>In <i>Sketch1</i> shown below you can see different ideas for how the popup should look like. We agreed that the popup must have: title, start time, end time, an input area and media file selector. 
+            Later we came up with the idea to provide the user with the choise to select a <u>geo location</u></p>
+            <figure typeof="sa:Image">
+                    <img src="../Mockups/sketch1.jpg">
+                    <figcaption>
+                        Sketch1
+                    </figcaption>
+                </figure>
+            <p>
+                First we wanted to store all this information about annotations in the local storage provided by the Chrome API. This was not possible due to limitation imposed by the way Chrome API store object in local memory.
+                It was very slowly and complicated to store large object with some media files inside them. We opted for a free and development friendly solution provided by <a href="https://firebase.google.com/">firebase</a>.
+                All the actions with the database are stored in <i>database-utils.js</i>. From here we took the generic functions and we used them inside other script files to provide the CRUD functionalities for
+                each independent website the extension supports.
+            </p>
+            <figure typeof="sa:Image">
+                    <img src="../Mockups/database.png">
+                    <figcaption>
+                        Information stored in cloud database.
+                    </figcaption>
+                </figure>
                 </section>
                 <section id="codeManagement">
                     <h3>Code management</h3>
-			<p>In order to work efficiently as a team we chose a Distributed Version Control Software called <i>Git</i>. Our repository can be viewed at the link <a href="https://github.com/StefanCosminR/Vinno">VANNO</a>. The project has a common part consisting of <i>manifest.json</i>, <i>background.js</i>, <i>content-utils.js</i>. This common part contains the abstractisation for adding/removing an annotation, viewing all annotations. Each member of the team was resposable for integrating the generic functions of adding annotations in the supported websites.</p>
+			<p>In order to work efficiently as a team we chose a Distributed Version Control Software called <i>Git</i>. Our repository can be viewed at the link <a href="https://github.com/StefanCosminR/Vinno">VANNO</a>. The project has a common part consisting of <i>manifest.json</i>, <i>background.js</i>, <i>content-utils.js</i>, <i>database-utils.js</i>. This common part contains the abstractisation for adding/removing an annotation, viewing all annotations. Each member of the team was resposable for integrating the generic functions of adding annotations in the supported websites.</p>
                 </section>
            </section>
            <section id="conclusion" typeof="sa:Conclusion"></section>

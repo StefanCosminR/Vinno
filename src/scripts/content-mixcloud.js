@@ -13,6 +13,20 @@ getAllDependencies()
         let annotations_number = 0;
         let new_annotations = [];
 
+				var show_floating_panel;
+				var show_annotations;
+				var automatic_display;
+
+				chrome.storage.local.get('show_floating_panel', function (result) {
+						show_floating_panel = result.show_floating_panel;
+				});
+				chrome.storage.local.get('show_annotations', function (result) {
+						show_annotations = result.show_annotations;
+				});
+				chrome.storage.local.get('automatic_display', function (result) {
+						automatic_display = result.automatic_display;
+				});
+
         function main_function()
         {
             get_all_annotations();
@@ -27,18 +41,17 @@ getAllDependencies()
 										full_time = full_time.innerText.substr(1, full_time.length);
                     fill_with_annotations(full_time.innerHTML);
                     clearInterval(trigger);
-										// console.log("Full time: " + full_time);
                 }
+								console.clear();
             }, 1000);
         }
 
         function get_all_annotations()
         {
+						// console.log("Show floating panel: " + show_floating_panel);
+						// console.log("Show annotations: " + show_annotations);
+						// console.log("Automatic display: " + automatic_display);
 
-					let showing_panel;
-					chrome.storage.local.get('show_floating_panel', function (result) {
-					    showing_panel = result.show_floating_panel;
-					});
             let annotations = load_annotations_from_database("https://www.mixcloud.com/");
 
             annotations.then(function(result) {
@@ -80,19 +93,6 @@ getAllDependencies()
                 }
 
                 annotations_number = result.length;
-
-								// console.log("Finished getting annotations...");
-								// console.log("Annotations number:" + annotations_number);
-                //
-								// console.log("Content titles: " + annotations_content_title);
-								// console.log("Titles: " + annotations_title);
-								// console.log("Descriptions: " + annotations_description);
-								// console.log("Start times: " + annotations_start_time);
-								// console.log("End times: " + annotations_end_time);
-								// console.log("Tags: " + annotations_tags);
-								// console.log("Images: " + annotations_images);
-								// console.log("Music: " + annotations_music);
-
             });
         }
 
@@ -100,7 +100,6 @@ getAllDependencies()
         {
 						let auth_bars = document.getElementsByClassName("user-actions guest");
             let authentification_bar = auth_bars[0];
-						// console.log("Authentification bar: " + authentification_bar);
 
 						let or = document.createElement("em");
 						or.innerText = "or";
@@ -120,12 +119,11 @@ getAllDependencies()
 								document.getElementsByClassName("play-icon state")[0].click();
 
 								let holder = document.getElementsByClassName("player-waveform")[0];
-								// debugger;
                 let [container, root] = insertAnnotator(holder, dependencies.annotatorPopup);
 
                 container.style.position = "fixed";
-                container.style.bottom = "10%";
-                container.style.left = "25%";
+                container.style.bottom = "15%";
+                container.style.left = "35%";
                 container.style.zIndex = 100;
 
                 root.getElementById("annotator-start-time").value = "00:" + document.getElementsByClassName("player-time")[0].innerHTML;
@@ -159,12 +157,14 @@ getAllDependencies()
                         let start_time = root.getElementById("annotator-start-time").value;
                         let end_time = root.getElementById("annotator-finish-time").value;
                         let description = root.getElementById("annotator-description").value;
+												let coordinates = [root.getElementById("map_lat").value, root.getElementById("map_lng").value];
 
 												console.log("Content title:" + content_title);
 												console.log("Title: " + title);
 												console.log("Description: " + description);
 												console.log("Start time: " + start_time);
 												console.log("End time: " + end_time);
+												console.log("coordinates: " + coordinates[0] + "," + coordinates[1]); 
 
                         annotations_number = annotations_number + 1;
                         let [tags_list, new_description] = get_tags_from_description(description);
@@ -211,7 +211,7 @@ getAllDependencies()
             let start_push_pixels = new_annotate_start_time_in_seconds * full_time_bar.offsetWidth / estimate_time_in_seconds(full_time);
             let final_push_pixels = (new_annotate_finish_time_in_seconds - new_annotate_start_time_in_seconds) / estimate_time_in_seconds(full_time) * 100;
 
-            let style_for_new_annotate = "position: absolute; height: 100%; transition: margin 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms; left: " + start_push_pixels + "px; background-color: rgb(255, 0, 0); width: calc(" + final_push_pixels +"%); ";
+            let style_for_new_annotate = "position: absolute; height: 100%; left: " + start_push_pixels + "px; background-color: rgb(255, 0, 0); width: calc(" + final_push_pixels +"%); ";
             new_annotation.setAttribute("style", style_for_new_annotate);
 
 						// debugger;
@@ -227,15 +227,14 @@ getAllDependencies()
         {
 					// debugger;
             annotation.addEventListener("mouseover", function() {
-                // we start to hover a popup
 								// debugger;
 
                 let holder = document.getElementsByClassName("player-waveform")[0];
                 let [container, root] = insertAnnotatorDisplay(holder, dependencies.annotatorDisplay);
 
                 container.style.position = "fixed";
-                container.style.bottom = "10%";
-                container.style.left = "25%";
+                container.style.bottom = "15%";
+                container.style.left = "35%";
                 container.style.zIndex = 100;
 
                 // we set the title, start + finish time and description text for the annotator display
@@ -273,7 +272,6 @@ getAllDependencies()
             });
 
             annotation.addEventListener("mouseout", function() {
-                // we finish to hover a popup
                 removeAnnotator("annotator-shadow-container-display");
             });
         }
