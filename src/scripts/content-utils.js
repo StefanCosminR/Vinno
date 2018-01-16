@@ -170,6 +170,26 @@ class FloatingPanel {
         let body = document.getElementsByTagName('body')[0];
         [this._container, this._root] = insertNode(body, template, 'floating-panel-template', 'floating-panel');
 
+        let events = [];
+        for (let property in document.getElementsByTagName('body')[0]) {
+            let match = property.match(/^on(.*)/)
+            if (match) {
+                events.push(match[1]);
+            }
+        }
+
+        events.forEach(event => {
+            this._container.addEventListener(event, function(e) {
+                if(e.preventBubble) {
+                    e.preventBubble();
+                    e.preventDefault();
+                }
+                // console.log('something triggered');
+            });
+        });
+
+        console.log(events.join(' '));
+
         this.renderPanelStyles();
         this.addMovement();
         // console.log(window.myGoogle);
@@ -233,6 +253,11 @@ class FloatingPanel {
         this._data.forEach(annotation => {
             annotation.description = this._augmentTextWithLinks(annotation.description);
             let augmentedContent = interpolation(this._contentTemplate, annotation);
+            if(annotation.tags_list) {
+                for (let i = 0; i < annotation.tags_list.length; i++)
+                    augmentedContent = augmentedContent.replace("{" + i + "}", `<span class="tag">${annotation.tags_list[i]}<\/span>`);
+            }
+
             // augmentedContent = this._augmentTextWithLinks(augmentedContent)
 
             let contentNode = domParser.parseFromString(augmentedContent, 'text/html');
@@ -286,6 +311,7 @@ class FloatingPanel {
 
         let saveButton = template.querySelector('.annotation-card__action-button');
         saveButton.textContent = 'Save';
+        saveButton.removeAttribute('style');
         saveButton.addEventListener('click', (event) => {
             event.preventDefault();
             let annotatorData = this.getAnnotatorCreatorContent();
@@ -403,8 +429,9 @@ class FloatingPanel {
     _augmentTextWithLinks(text) {
         let augmentedText = text;
 
+        let linkRegex = /((http[s]?)(:\/\/)((\S)+))/g;
         const regex = /((http[s]?|ftp):\/)?\/?([^:\/\s]+)((\/\w+)*\/)([\w\-\.]+[^#?\s]+)(.*)?(#[\w\-]+)?$/g;
-        let links = text.match(regex);
+        let links = text.match(linkRegex);
 
         if(links) {
             links.forEach(link => {
